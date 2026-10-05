@@ -1,0 +1,882 @@
+{
+  "schemaVersion": 1,
+  "description": "Candidate content sources for Noor (Phase 0). Read by scripts/sources/fetch-sources.mjs, which downloads every file, records SHA-256 and writes SOURCES.lock.json. Paths are relative to data/sources/. Nothing here is approved yet: status stays 'candidate' until the owner approves an item.",
+  "userAgent": "NoorSourcesFetch/0.1 (Phase 0 source evaluation; contact: project owner)",
+  "sources": [
+    {
+      "id": "tanzil-quran-text",
+      "category": "quran-text",
+      "name": "Tanzil Quran Text (Uthmani + Simple Clean)",
+      "publisher": "Tanzil Project",
+      "homepage": "https://tanzil.net/download/",
+      "version": "1.1 (February 2021)",
+      "license": {
+        "name": "Tanzil Terms of Use; file header also states Creative Commons Attribution 3.0",
+        "url": "https://tanzil.net/download/",
+        "quote": "Permission is granted to copy and distribute verbatim copies of this text, but CHANGING IT IS NOT ALLOWED. This Quran text can be used in any website or application, provided that its source (Tanzil Project) is clearly indicated, and a link is made to tanzil.net to enable users to keep track of changes. This copyright notice shall be included in all verbatim copies of the text, and shall be reproduced appropriately in all files derived from or containing substantial portion of this text."
+      },
+      "attribution": "Quran text: Tanzil Project (https://tanzil.net)",
+      "notes": "Downloading requires agree=true (acceptance of the Terms of Use), approved by the owner with the Phase 0 plan. XML output keeps the Basmala of surahs 2-114 in a separate 'bismillah' attribute. Rub-el-hizb signs are excluded (quarters come from metadata); sequential tanween (me_quran-only) is off. The file header says Copyright (C) 2007-2026, i.e. the year changes, so a re-download next year will change the SHA-256 even if the text does not.",
+      "files": [
+        {
+          "path": "quran/tanzil/quran-uthmani.xml",
+          "url": "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&alef=true&tatweel=true&quranType=uthmani&outType=xml&agree=true",
+          "expect": "xml",
+          "role": "data",
+          "options": {
+            "quranType": "uthmani",
+            "outType": "xml",
+            "marks": true,
+            "sajdah": true,
+            "rub": false,
+            "alef": true,
+            "tatweel": true,
+            "laa": false,
+            "stanween": false
+          },
+          "approval": {
+            "use": "quran-display",
+            "approvedAt": "2026-10-04",
+            "approvedBy": "project owner (chat, Phase 2 kickoff)",
+            "decisions": [
+              "D-009",
+              "D-010"
+            ],
+            "note": "Tanzil default variant (tatweel=true). Surah-header Basmala taken verbatim from each surah's bismillah attribute (incl. the 95/97 shadda variant)."
+          }
+        },
+        {
+          "path": "quran/tanzil/quran-uthmani.no-tatweel.xml",
+          "url": "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&alef=true&quranType=uthmani&outType=xml&agree=true",
+          "expect": "xml",
+          "role": "data",
+          "options": {
+            "quranType": "uthmani",
+            "outType": "xml",
+            "marks": true,
+            "sajdah": true,
+            "rub": false,
+            "alef": true,
+            "tatweel": false,
+            "laa": false,
+            "stanween": false
+          }
+        },
+        {
+          "path": "quran/tanzil/quran-uthmani.txt",
+          "url": "https://tanzil.net/pub/download/index.php?marks=true&sajdah=true&alef=true&tatweel=true&quranType=uthmani&outType=txt-2&agree=true",
+          "expect": "text",
+          "role": "reference",
+          "options": {
+            "quranType": "uthmani",
+            "outType": "txt-2",
+            "marks": true,
+            "sajdah": true,
+            "rub": false,
+            "alef": true,
+            "tatweel": true,
+            "laa": false,
+            "stanween": false
+          },
+          "notes": "Downloaded only to document how the text format treats the Basmala; not an import candidate."
+        },
+        {
+          "path": "quran/tanzil/quran-simple-clean.xml",
+          "url": "https://tanzil.net/pub/download/index.php?quranType=simple-clean&outType=xml&agree=true",
+          "expect": "xml",
+          "role": "data",
+          "options": {
+            "quranType": "simple-clean",
+            "outType": "xml",
+            "marks": false,
+            "sajdah": false,
+            "rub": false
+          },
+          "notes": "Search-index input only (SPEC 2.4); never displayed as Quran. Downloaded without pause marks and sajdah signs (with marks=true Tanzil inserts U+06D6..U+06DC and U+06E9 into the clean text).",
+          "approval": {
+            "use": "quran-search",
+            "approvedAt": "2026-10-04",
+            "approvedBy": "project owner (chat, Phase 2 kickoff)",
+            "decisions": [
+              "D-013"
+            ],
+            "note": "Input of the normalized search index only; never displayed as Quran."
+          }
+        },
+        {
+          "path": "quran/tanzil/TERMS.download.txt",
+          "url": "https://tanzil.net/download/",
+          "expect": "html",
+          "role": "license-evidence",
+          "evidence": {
+            "start": "Terms of Use",
+            "end": "Download",
+            "endInclusive": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "tanzil-quran-data",
+      "category": "quran-metadata",
+      "name": "Tanzil Quran Metadata (quran-data.xml)",
+      "publisher": "Tanzil Project",
+      "homepage": "https://tanzil.net/docs/quran_metadata",
+      "version": "1.0",
+      "license": {
+        "name": "CC BY (as declared in the file)",
+        "url": "https://tanzil.net/docs/quran_metadata",
+        "quote": "<quran type=\"metadata\" version=\"1.0\" copyright=\"(C) 2008-2009 Tanzil.info\" license=\"cc-by\">"
+      },
+      "attribution": "Quran metadata: Tanzil Project (https://tanzil.net)",
+      "notes": "Surahs (names, types, order), juz, hizb quarters, manzil, ruku, Madani pages (604) and sajdas.",
+      "files": [
+        {
+          "path": "quran/tanzil/quran-data.xml",
+          "url": "https://tanzil.net/res/text/metadata/quran-data.xml",
+          "expect": "xml",
+          "role": "data",
+          "approval": {
+            "use": "quran-metadata",
+            "approvedAt": "2026-10-04",
+            "approvedBy": "project owner (chat, Phase 2 kickoff)",
+            "decisions": [
+              "D-004",
+              "D-024"
+            ],
+            "note": "Structure metadata; surah names used as-is until the curated names file (D-024)."
+          }
+        }
+      ]
+    },
+    {
+      "id": "font-amiri-quran",
+      "category": "quran-font",
+      "name": "Amiri Quran",
+      "publisher": "Khaled Hosny (aliftype)",
+      "homepage": "https://github.com/aliftype/amiri",
+      "version": "1.003",
+      "license": {
+        "name": "SIL Open Font License 1.1",
+        "spdx": "OFL-1.1",
+        "url": "https://openfontlicense.org",
+        "quote": "Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). This Font Software is licensed under the SIL Open Font License, Version 1.1."
+      },
+      "attribution": "Amiri Quran font by Khaled Hosny, SIL OFL 1.1",
+      "files": [
+        {
+          "url": "https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip",
+          "expect": "zip",
+          "role": "data",
+          "archive": {
+            "members": {
+              "Amiri-1.003/AmiriQuran.ttf": "fonts/amiri-quran/AmiriQuran.ttf",
+              "Amiri-1.003/AmiriQuranColored.ttf": "fonts/amiri-quran/AmiriQuranColored.ttf",
+              "Amiri-1.003/OFL.txt": "fonts/amiri-quran/OFL.txt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "font-scheherazade-new",
+      "category": "quran-font",
+      "name": "Scheherazade New",
+      "publisher": "SIL International",
+      "homepage": "https://software.sil.org/scheherazade/",
+      "version": "4.500",
+      "license": {
+        "name": "SIL Open Font License 1.1",
+        "spdx": "OFL-1.1",
+        "url": "https://openfontlicense.org",
+        "quote": "Copyright (c) 1994-2026, SIL Global (https://www.sil.org/), with Reserved Font Names \"Scheherazade\" and \"SIL\". This Font Software is licensed under the SIL Open Font License, Version 1.1."
+      },
+      "attribution": "Scheherazade New font by SIL International, SIL OFL 1.1",
+      "files": [
+        {
+          "url": "https://github.com/silnrsi/font-scheherazade/releases/download/v4.500/ScheherazadeNew-4.500.zip",
+          "expect": "zip",
+          "role": "data",
+          "checksums": {
+            "url": "https://github.com/silnrsi/font-scheherazade/releases/download/v4.500/SHA512SUMS.txt",
+            "algorithm": "sha512",
+            "name": "ScheherazadeNew-4.500.zip"
+          },
+          "archive": {
+            "members": {
+              "ScheherazadeNew-4.500/ScheherazadeNew-Regular.ttf": "fonts/scheherazade-new/ScheherazadeNew-Regular.ttf",
+              "ScheherazadeNew-4.500/OFL.txt": "fonts/scheherazade-new/OFL.txt",
+              "ScheherazadeNew-4.500/FONTLOG.txt": "fonts/scheherazade-new/FONTLOG.txt"
+            }
+          }
+        }
+      ],
+      "notes": "Reserved Font Names apply: a subset or otherwise modified build must not be called Scheherazade. The release zip also ships unmodified WOFF2 files (web/)."
+    },
+    {
+      "id": "font-kfgqpc-hafs-v30",
+      "category": "quran-font",
+      "name": "KFGQPC Hafs (Unicode) v3.0",
+      "publisher": "King Fahd Glorious Quran Printing Complex",
+      "homepage": "https://fonts.qurancomplex.gov.sa/hafs-reading/",
+      "version": "3.0",
+      "license": {
+        "name": "KFGQPC Electronic End-User License Agreement (embedded in the font, name IDs 0 and 13)",
+        "url": "https://fonts.qurancomplex.gov.sa/hafs-reading/",
+        "quote": "Permission is hereby granted, Free of Cost, to any person obtaining a copy of this Font accompanying this license, the rights to Use, Copy, Distribute, subject to the following conditions: 1. The Font Software cannot be Sold, Modified, Altered, Translated, Reverse Engineered, Decompiled, Disassembled, Reproduced or Attempted to discover the Source Code of this Font in no means. [...] This Font is the property of King Fahd Glorious Quran Printing Complex, and may not be reproduced, modified without the express written approval of King Fahd Glorious Quran Printing Complex."
+      },
+      "attribution": "KFGQPC Hafs font, King Fahd Glorious Quran Printing Complex",
+      "notes": "Evaluation only. The embedded EULA allows free use, copying and distribution but forbids modification (so no subsetting or WOFF2 conversion) without written approval. Suggest keeping this file out of git until the owner decides. The zip also contains a .docx (full Mushaf typeset in this font) which is not kept.",
+      "files": [
+        {
+          "url": "https://fonts.qurancomplex.gov.sa/fonts/KFGQPC-Hafs-V30.zip",
+          "expect": "zip",
+          "role": "data",
+          "archive": {
+            "members": {
+              "KFGQPC-Hafs-V30/KFGQPC Hafs V30.ttf": "fonts/kfgqpc-hafs-v30/KFGQPC-Hafs-V30.ttf"
+            }
+          }
+        },
+        {
+          "path": "fonts/kfgqpc-hafs-v30/PAGE.hafs-reading.txt",
+          "url": "https://fonts.qurancomplex.gov.sa/hafs-reading/",
+          "expect": "html",
+          "role": "license-evidence",
+          "evidence": {
+            "start": "الخط الحاسوبي (يونيكود) لرواية حفص",
+            "end": "جميع الحقوق محفوظة لمجمع الملك فهد لطباعة المصحف الشريف",
+            "endInclusive": true,
+            "tail": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "font-kfgqpc-hafs-v22",
+      "category": "quran-font",
+      "name": "KFGQPC Uthmanic Hafs v2.2 (legacy, widely used)",
+      "publisher": "King Fahd Glorious Quran Printing Complex",
+      "homepage": "https://fonts.qurancomplex.gov.sa/hafs-reading/",
+      "version": "2.2",
+      "license": {
+        "name": "KFGQPC Electronic End-User License Agreement (embedded in the font, name IDs 0 and 13)",
+        "url": "https://fonts.qurancomplex.gov.sa/hafs-reading/",
+        "quote": "Permission is hereby granted, Free of Cost, to any person obtaining a copy of this Font accompanying this license, the rights to Use, Copy, Distribute, subject to the following conditions: 1. The Font Software cannot be Sold, Modified, Altered, Translated, Reverse Engineered, Decompiled, Disassembled, Reproduced or Attempted to discover the Source Code of this Font in no means. [...] This Font is the property of King Fahd Glorious Quran Printing Complex, and may not be reproduced, modified without the express written approval of King Fahd Glorious Quran Printing Complex."
+      },
+      "attribution": "KFGQPC Uthmanic Hafs font, King Fahd Glorious Quran Printing Complex",
+      "notes": "Evaluation only (see font-kfgqpc-hafs-v30). The zip contains two TTF builds; both are kept for inspection.",
+      "files": [
+        {
+          "url": "https://fonts.qurancomplex.gov.sa/fonts/legacy/UthmanicHafs_v22.zip",
+          "expect": "zip",
+          "role": "data",
+          "archive": {
+            "members": {
+              "UthmanicHafs_V22.ttf": "fonts/kfgqpc-hafs-v22/UthmanicHafs_V22.ttf",
+              "uthmanic_hafs_v22.ttf": "fonts/kfgqpc-hafs-v22/uthmanic_hafs_v22.ttf"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "font-digitalkhatt-madina",
+      "category": "quran-font",
+      "name": "DigitalKhatt Madina (OpenType variable)",
+      "publisher": "Amine Anane / Tarteel Inc.",
+      "homepage": "https://github.com/DigitalKhatt/madinafont",
+      "version": "1.0.0",
+      "license": {
+        "name": "SIL Open Font License 1.1",
+        "spdx": "OFL-1.1",
+        "url": "https://openfontlicense.org",
+        "quote": "Copyright (c) 2020-2023 Amine Anane (https://github.com/DigitalKhatt) This Font Software is licensed under the SIL Open Font License, Version 1.1."
+      },
+      "attribution": "DigitalKhatt Madina font by Amine Anane and Tarteel Inc., SIL OFL 1.1",
+      "files": [
+        {
+          "path": "fonts/digitalkhatt-madina/madina.otf",
+          "url": "https://github.com/DigitalKhatt/madinafont/releases/download/v1.0.0/madina.otf",
+          "expect": "font",
+          "role": "data"
+        },
+        {
+          "path": "fonts/digitalkhatt-madina/LICENSE",
+          "url": "https://raw.githubusercontent.com/DigitalKhatt/madinafont/930c4075323905399d12ecd7ad2f9501b32aff15/LICENSE",
+          "expect": "text",
+          "role": "license"
+        }
+      ],
+      "notes": "Release tag v1.0.0 but the font name table says Version 0.1 and has no license description (name ID 14 points to the OFL). Designed for its own text/justification engine; with Tanzil text the spaces collapse in browsers (see font test)."
+    },
+    {
+      "id": "font-noto-naskh-arabic",
+      "category": "quran-font",
+      "name": "Noto Naskh Arabic (baseline for comparison)",
+      "publisher": "Google / Noto project",
+      "homepage": "https://github.com/notofonts/arabic",
+      "version": "2.021",
+      "license": {
+        "name": "SIL Open Font License 1.1",
+        "spdx": "OFL-1.1",
+        "url": "https://openfontlicense.org",
+        "quote": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic) This Font Software is licensed under the SIL Open Font License, Version 1.1."
+      },
+      "attribution": "Noto Naskh Arabic, SIL OFL 1.1",
+      "files": [
+        {
+          "url": "https://github.com/notofonts/arabic/releases/download/NotoNaskhArabic-v2.021/NotoNaskhArabic-v2.021.zip",
+          "expect": "zip",
+          "role": "data",
+          "archive": {
+            "members": {
+              "NotoNaskhArabic/full/ttf/NotoNaskhArabic-Regular.ttf": "fonts/noto-naskh-arabic/NotoNaskhArabic-Regular.ttf",
+              "OFL.txt": "fonts/noto-naskh-arabic/OFL.txt"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "font-ibm-plex-sans-arabic",
+      "category": "ui-font",
+      "name": "IBM Plex Sans Arabic",
+      "publisher": "IBM",
+      "homepage": "https://github.com/IBM/plex",
+      "version": "1.1.0",
+      "license": {
+        "name": "SIL Open Font License 1.1",
+        "spdx": "OFL-1.1",
+        "url": "https://openfontlicense.org",
+        "quote": "Copyright © 2017 IBM Corp. with Reserved Font Name \"Plex\" This Font Software is licensed under the SIL Open Font License, Version 1.1."
+      },
+      "attribution": "IBM Plex Sans Arabic, SIL OFL 1.1",
+      "files": [
+        {
+          "url": "https://github.com/IBM/plex/releases/download/%40ibm/plex-sans-arabic%401.1.0/ibm-plex-sans-arabic.zip",
+          "expect": "zip",
+          "role": "data",
+          "archive": {
+            "members": {
+              "ibm-plex-sans-arabic/fonts/complete/ttf/IBMPlexSansArabic-Regular.ttf": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Regular.ttf",
+              "ibm-plex-sans-arabic/fonts/complete/ttf/IBMPlexSansArabic-Medium.ttf": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Medium.ttf",
+              "ibm-plex-sans-arabic/fonts/complete/ttf/IBMPlexSansArabic-SemiBold.ttf": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-SemiBold.ttf",
+              "ibm-plex-sans-arabic/fonts/complete/ttf/IBMPlexSansArabic-Bold.ttf": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Bold.ttf",
+              "ibm-plex-sans-arabic/LICENSE.txt": "fonts/ibm-plex-sans-arabic/LICENSE.txt",
+              "ibm-plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Regular.woff2": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Regular.woff2",
+              "ibm-plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Medium.woff2": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Medium.woff2",
+              "ibm-plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-SemiBold.woff2": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-SemiBold.woff2",
+              "ibm-plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Bold.woff2": "fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Bold.woff2"
+            }
+          }
+        }
+      ],
+      "notes": "Reserved Font Name \"Plex\": a subset made by us would be a Modified Version and need renaming. The app therefore uses IBM's own, unmodified WOFF2 files from the release (fonts/complete/woff2), which cover Arabic and Latin."
+    },
+    {
+      "id": "tanzil-translations-en",
+      "category": "translation",
+      "name": "Tanzil English translations (Saheeh International, Pickthall, Yusuf Ali, Hilali & Khan, Itani)",
+      "publisher": "Tanzil Project (distribution); individual translators/publishers (rights)",
+      "homepage": "https://tanzil.net/trans/",
+      "version": "per-file header",
+      "license": {
+        "name": "Tanzil translations Terms of Use (non-commercial)",
+        "url": "https://tanzil.net/trans/",
+        "quote": "The translations provided at this page are for non-commercial purposes only. If used otherwise, you need to obtain necessary permission from the translator or the publisher. If you are using more than three of the following translations in a website or application, we require you to put a link back to this page to make sure that subsequent users have access to the latest updates."
+      },
+      "attribution": "Translation from Tanzil.net (https://tanzil.net/trans/) — translator named per translation",
+      "notes": "The page also says: redistributing the translations list on another website is not allowed without permission; only the Terms excerpt is stored.",
+      "files": [
+        {
+          "path": "translations/tanzil/en.sahih.xml",
+          "url": "https://tanzil.net/trans/?transID=en.sahih&type=xml",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/tanzil/en.pickthall.xml",
+          "url": "https://tanzil.net/trans/?transID=en.pickthall&type=xml",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/tanzil/en.yusufali.xml",
+          "url": "https://tanzil.net/trans/?transID=en.yusufali&type=xml",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/tanzil/en.hilali.xml",
+          "url": "https://tanzil.net/trans/?transID=en.hilali&type=xml",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/tanzil/en.itani.xml",
+          "url": "https://tanzil.net/trans/?transID=en.itani&type=xml",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/tanzil/TERMS.trans.txt",
+          "url": "https://tanzil.net/trans/",
+          "expect": "html",
+          "role": "license-evidence",
+          "evidence": {
+            "start": "Terms of Use",
+            "end": "File Format",
+            "endInclusive": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "quranenc-translations-en",
+      "category": "translation",
+      "name": "QuranEnc English translations (Saheeh International / Noor International, Rowwad Translation Center, Hilali & Khan)",
+      "publisher": "QuranEnc.com (Encyclopedia of Translations of the Meanings of the Holy Quran)",
+      "homepage": "https://quranenc.com/en/home",
+      "version": "english_saheeh 1.1.2; english_rwwad 1.0.19; english_hilali_khan 1.1.2 (as listed by the QuranEnc API on 2026-10-04)",
+      "license": {
+        "name": "QuranEnc re-publishing terms",
+        "url": "https://quranenc.com/en/home/api/",
+        "quote": "Contents of the translations can be downloaded and re-published, with the following terms and conditions: 1. No modification, addition, or deletion of the content. 2. Clearly referring to the publisher and the source (QuranEnc.com). 3. Mentioning the version number when re-publishing the translation. 4. Keeping the transcript information inside the document. 5. Notifying the source (QuranEnc.com) of any note on the translation. 6. Updating the translation according to the latest version issued from the source (QuranEnc.com). 7. Inappropriate advertisements must not be included when displaying translations of the meanings of the Noble Quran."
+      },
+      "attribution": "Translation: <translator> — QuranEnc.com, version <x.y.z>",
+      "files": [
+        {
+          "path": "translations/quranenc/english_saheeh.xml",
+          "url": "https://quranenc.com/en/home/d/xml/english_saheeh",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/quranenc/english_rwwad.xml",
+          "url": "https://quranenc.com/en/home/d/xml/english_rwwad",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/quranenc/english_hilali_khan.xml",
+          "url": "https://quranenc.com/en/home/d/xml/english_hilali_khan",
+          "expect": "xml",
+          "role": "data"
+        },
+        {
+          "path": "translations/quranenc/translations-list.en.json",
+          "url": "https://quranenc.com/api/v1/translations/list/en?localization=en",
+          "expect": "json",
+          "role": "reference",
+          "volatile": true
+        },
+        {
+          "path": "translations/quranenc/TERMS.txt",
+          "url": "https://quranenc.com/en/home/api/",
+          "expect": "html",
+          "role": "license-evidence",
+          "evidence": {
+            "start": "Contents of the translations can be downloaded and re-published",
+            "end": "Inappropriate advertisements must not be included when displaying translations of the meanings of the Noble Quran.",
+            "endInclusive": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "tanzil-tafsir-muyassar",
+      "category": "tafsir",
+      "name": "Tafsir al-Muyassar (King Fahd Quran Complex) — Tanzil distribution",
+      "publisher": "King Fahd Glorious Quran Printing Complex (author); Tanzil Project (distribution)",
+      "homepage": "https://tanzil.net/trans/",
+      "version": "per-file header",
+      "license": {
+        "name": "Tanzil translations Terms of Use (non-commercial)",
+        "url": "https://tanzil.net/trans/",
+        "quote": "The translations provided at this page are for non-commercial purposes only. If used otherwise, you need to obtain necessary permission from the translator or the publisher."
+      },
+      "attribution": "التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف (via Tanzil.net)",
+      "files": [
+        {
+          "path": "tafsir/tanzil/ar.muyassar.xml",
+          "url": "https://tanzil.net/trans/?transID=ar.muyassar&type=xml",
+          "expect": "xml",
+          "role": "data"
+        }
+      ]
+    },
+    {
+      "id": "quranenc-tafsir-muyassar",
+      "category": "tafsir",
+      "name": "Tafsir al-Muyassar — QuranEnc distribution (arabic_moyassar)",
+      "publisher": "King Fahd Glorious Quran Printing Complex (author); QuranEnc.com (distribution)",
+      "homepage": "https://quranenc.com/ar/browse/arabic_moyassar",
+      "version": "not published by QuranEnc for arabic_moyassar (identify by download date + SHA-256)",
+      "license": {
+        "name": "QuranEnc re-publishing terms",
+        "url": "https://quranenc.com/en/home/api/",
+        "quote": "Contents of the translations can be downloaded and re-published, with the following terms and conditions: 1. No modification, addition, or deletion of the content. 2. Clearly referring to the publisher and the source (QuranEnc.com). 3. Mentioning the version number when re-publishing the translation."
+      },
+      "attribution": "التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف، عبر QuranEnc.com",
+      "notes": "The QuranEnc XML endpoint returns nothing for arabic_moyassar; the SQLite file (table translations: id, sura, aya, translation, footnotes; 6,236 rows) is the downloadable form. It carries no version metadata.",
+      "files": [
+        {
+          "path": "tafsir/quranenc/arabic_moyassar.sqlite",
+          "url": "https://quranenc.com/downloads/sqlite/arabic_moyassar.sqlite",
+          "expect": "sqlite",
+          "role": "data"
+        }
+      ]
+    },
+    {
+      "id": "quranenc-kfgqpc-text-reference",
+      "category": "quran-text-reference",
+      "name": "Quran text in the KFGQPC Hafs encoding, as served by the QuranEnc API (arabic_text field)",
+      "publisher": "QuranEnc.com (distribution); text believed to originate from KFGQPC Hafs data (not stated by QuranEnc)",
+      "homepage": "https://quranenc.com/en/home/api/",
+      "version": "API responses as of download date",
+      "license": {
+        "name": "QuranEnc re-publishing terms (written for translations; no separate terms for the Arabic text)",
+        "url": "https://quranenc.com/en/home/api/",
+        "quote": "Contents of the translations can be downloaded and re-published, with the following terms and conditions: 1. No modification, addition, or deletion of the content. 2. Clearly referring to the publisher and the source (QuranEnc.com)."
+      },
+      "attribution": "QuranEnc.com",
+      "notes": "Reference only: used in the font test to show the KFGQPC fonts with the encoding they were designed for. Not an import candidate unless explicitly approved. Each per-surah response also contains the Muyassar tafsir text.",
+      "files": [
+        {
+          "series": {
+            "from": 1,
+            "to": 114
+          },
+          "path": "quran/quranenc-kfgqpc/sura/{n}.json",
+          "url": "https://quranenc.com/api/v1/translation/sura/arabic_moyassar/{n}",
+          "expect": "json",
+          "role": "reference"
+        }
+      ]
+    },
+    {
+      "id": "audio-islamic-network",
+      "category": "audio",
+      "name": "Islamic Network audio CDN (alquran.cloud) — verse-by-verse",
+      "publisher": "Islamic Network",
+      "homepage": "https://alquran.cloud/cdn",
+      "version": "edition list as of download date",
+      "license": {
+        "name": "Al Quran Cloud Terms & Conditions",
+        "url": "https://alquran.cloud/terms-and-conditions",
+        "quote": "Recitations are licensed to us by the reciters or their estates for free, non-commercial redistribution at the bitrates we publish. You may stream, embed and download them for personal and educational use. You may bundle them into a commercial product, but please note that copyrights lie with the reciters and they may ask you to remove the conent."
+      },
+      "attribution": "Recitation audio: Islamic Network / alquran.cloud — reciter named",
+      "notes": "Per-ayah MP3 at https://cdn.islamic.network/quran/audio/{bitrate}/{edition}/{globalAyahNumber}.mp3. No CORS header observed (fine for <audio>, not for Web Audio). Only the edition list and terms are stored; no audio is downloaded.",
+      "files": [
+        {
+          "path": "audio/islamic-network/editions.versebyverse.json",
+          "url": "https://api.alquran.cloud/v1/edition?format=audio&type=versebyverse",
+          "expect": "json",
+          "role": "reference",
+          "volatile": true
+        },
+        {
+          "path": "audio/islamic-network/TERMS.txt",
+          "url": "https://alquran.cloud/terms-and-conditions",
+          "expect": "html",
+          "role": "license-evidence",
+          "evidence": {
+            "start": "Terms and Conditions Original terms",
+            "end": "Section V No warranties",
+            "endInclusive": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "audio-everyayah",
+      "category": "audio",
+      "name": "EveryAyah.com — per-ayah MP3",
+      "publisher": "EveryAyah.com",
+      "homepage": "https://everyayah.com/",
+      "version": "recitations.js as of download date",
+      "license": {
+        "name": "No site-wide terms found; timing files carry a VerseByVerseQuran.com notice",
+        "url": "https://everyayah.com/data/timings_files/000_disclaimer.txt",
+        "quote": "(C) VerseByVerseQuran.com You must link back to our site from your product and web-site to use these timings."
+      },
+      "attribution": "Recitation audio: EveryAyah.com — reciter named",
+      "notes": "No site-wide terms found on the home page, recitations pages or 'old' index. The only explicit text is the timing-files disclaimer (stored). Files are served with Access-Control-Allow-Origin: *. URL pattern https://everyayah.com/data/{subfolder}/{SSSAAA}.mp3.",
+      "files": [
+        {
+          "path": "audio/everyayah/recitations.js",
+          "url": "https://everyayah.com/data/recitations.js",
+          "expect": "text",
+          "role": "reference",
+          "volatile": true
+        },
+        {
+          "path": "audio/everyayah/timings-disclaimer.txt",
+          "url": "https://everyayah.com/data/timings_files/000_disclaimer.txt",
+          "expect": "text",
+          "role": "license-evidence"
+        }
+      ]
+    },
+    {
+      "id": "audio-mp3quran",
+      "category": "audio",
+      "name": "mp3quran.net API v3 (surah-level MP3 + ayah timings for some reciters)",
+      "publisher": "mp3quran.net",
+      "homepage": "https://mp3quran.net/eng/api",
+      "version": "API v3 as of download date",
+      "license": {
+        "name": "No published terms found",
+        "url": "https://mp3quran.net/eng/api",
+        "quote": null
+      },
+      "attribution": "Recitation audio: mp3quran.net — reciter named",
+      "notes": "Surah-level files; per-ayah playback needs the ayat_timing API (only some reciters).",
+      "files": [
+        {
+          "path": "audio/mp3quran/reciters.ar.json",
+          "url": "https://mp3quran.net/api/v3/reciters?language=ar",
+          "expect": "json",
+          "role": "reference",
+          "volatile": true
+        },
+        {
+          "path": "audio/mp3quran/ayat_timing.reads.json",
+          "url": "https://mp3quran.net/api/v3/ayat_timing/reads",
+          "expect": "json",
+          "role": "reference",
+          "volatile": true
+        }
+      ]
+    },
+    {
+      "id": "audio-quran-foundation",
+      "category": "audio",
+      "name": "Quran Foundation (Quran.com) Content/Audio API",
+      "publisher": "Quran Foundation",
+      "homepage": "https://api-docs.quran.foundation/",
+      "version": "Developer Terms as published on download date",
+      "license": {
+        "name": "Quran Foundation Developer Terms of Service",
+        "url": "https://api-docs.quran.foundation/legal/developer-terms/",
+        "quote": "Cache or store QF Content longer than 1 week unless it is obtained and maintained through the Content Sync APIs [...] A Developer must obtain a signed commercial license before selling, sublicensing, or redistributing QF Content or raw API data [...]"
+      },
+      "attribution": "Quran Foundation",
+      "notes": "Requires a developer account and OAuth2 client credentials; nothing can be downloaded without them. Only the terms page hash and short quotes are recorded (hash-only evidence).",
+      "files": [
+        {
+          "path": "audio/quran-foundation/TERMS.excerpt.txt",
+          "url": "https://api-docs.quran.foundation/legal/developer-terms/",
+          "expect": "html",
+          "role": "license-evidence",
+          "volatile": true,
+          "evidence": {
+            "mode": "grep",
+            "patterns": [
+              "1 week",
+              "7 days",
+              "commercial license",
+              "Credits Quran Foundation",
+              "Developer Console",
+              "Last updated",
+              "Last Updated"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "adhkar-seen-arabic",
+      "category": "adhkar",
+      "name": "Morning-And-Evening-Adhkar-DB (Seen-Arabic)",
+      "publisher": "Seen-Arabic (GitHub)",
+      "homepage": "https://github.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB",
+      "version": "commit 29d7623fede52eca835a789025dfda866e8cfe44 (2026-02-14)",
+      "license": {
+        "name": "MIT (compilation)",
+        "spdx": "MIT",
+        "url": "https://github.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/blob/master/LICENSE",
+        "quote": "MIT License Copyright (c) 2024 Seen Arabic Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files [...]"
+      },
+      "attribution": "Seen-Arabic Morning-And-Evening-Adhkar-DB (MIT); content from Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani",
+      "notes": "Morning/Evening only. Fields: content, count, fadl, source (reference + grading as free text). README credits hisnmuslim.com, sunnah.com and the book. The MIT license covers the compilation; it cannot grant rights in the underlying book text or in the hisnmuslim.com/sunnah.com translations it credits.",
+      "files": [
+        {
+          "path": "adhkar/seen-arabic/ar.json",
+          "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/ar.json",
+          "expect": "json",
+          "role": "data"
+        },
+        {
+          "path": "adhkar/seen-arabic/en.json",
+          "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/en.json",
+          "expect": "json",
+          "role": "data"
+        },
+        {
+          "path": "adhkar/seen-arabic/LICENSE",
+          "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/LICENSE",
+          "expect": "text",
+          "role": "license"
+        },
+        {
+          "path": "adhkar/seen-arabic/README_EN.md",
+          "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/README_EN.md",
+          "expect": "text",
+          "role": "reference"
+        }
+      ]
+    },
+    {
+      "id": "adhkar-hisnmuslim-com",
+      "category": "adhkar",
+      "name": "hisnmuslim.com API (Hisn al-Muslim, Arabic + English)",
+      "publisher": "hisnmuslim.com",
+      "homepage": "https://www.hisnmuslim.com/",
+      "version": "API as of download date",
+      "license": {
+        "name": "No published terms found",
+        "url": "https://www.hisnmuslim.com/",
+        "quote": null
+      },
+      "attribution": "hisnmuslim.com — Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani",
+      "notes": "All chapters with ARABIC_TEXT, TRANSLATED_TEXT (en), REPEAT, AUDIO. No references and no gradings. robots.txt has no crawl directives (stored).",
+      "files": [
+        {
+          "path": "adhkar/hisnmuslim-com/ar/husn_ar.json",
+          "url": "https://www.hisnmuslim.com/api/ar/husn_ar.json",
+          "expect": "json-lenient",
+          "role": "data",
+          "expand": {
+            "type": "hisnmuslim",
+            "dir": "adhkar/hisnmuslim-com/ar"
+          }
+        },
+        {
+          "path": "adhkar/hisnmuslim-com/en/husn_en.json",
+          "url": "https://www.hisnmuslim.com/api/en/husn_en.json",
+          "expect": "json-lenient",
+          "role": "data",
+          "expand": {
+            "type": "hisnmuslim",
+            "dir": "adhkar/hisnmuslim-com/en"
+          }
+        },
+        {
+          "path": "adhkar/hisnmuslim-com/robots.txt",
+          "url": "https://www.hisnmuslim.com/robots.txt",
+          "expect": "text",
+          "role": "license-evidence"
+        }
+      ]
+    },
+    {
+      "id": "adhkar-rn0x-hisn-almuslim",
+      "category": "adhkar",
+      "name": "rn0x/hisn_almuslim_json (full book text + footnotes)",
+      "publisher": "rn0x (GitHub)",
+      "homepage": "https://github.com/rn0x/hisn_almuslim_json",
+      "version": "commit 0405ee1797c2ccadfe82cd41845338d54978ccb9 (2022-10-19)",
+      "license": {
+        "name": "No license file in repository",
+        "url": "https://github.com/rn0x/hisn_almuslim_json",
+        "quote": null
+      },
+      "attribution": "rn0x/hisn_almuslim_json — Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani",
+      "notes": "Per chapter: 'text' array and 'footnote' array (references + gradings) that are not linked item-by-item. Provenance of the digitization not stated.",
+      "files": [
+        {
+          "path": "adhkar/rn0x-hisn-almuslim/hisn_almuslim.json",
+          "url": "https://raw.githubusercontent.com/rn0x/hisn_almuslim_json/0405ee1797c2ccadfe82cd41845338d54978ccb9/hisn_almuslim.json",
+          "expect": "json",
+          "role": "data"
+        },
+        {
+          "path": "adhkar/rn0x-hisn-almuslim/README.md",
+          "url": "https://raw.githubusercontent.com/rn0x/hisn_almuslim_json/0405ee1797c2ccadfe82cd41845338d54978ccb9/README.md",
+          "expect": "text",
+          "role": "reference"
+        }
+      ]
+    },
+    {
+      "id": "adhkar-book-pdf-prh",
+      "category": "adhkar",
+      "name": "Hisn al-Muslim (Arabic) — PDF, Risala platform of the General Presidency for the Affairs of the Two Holy Mosques",
+      "publisher": "risala.prh.gov.sa (distribution); Sa'id ibn Wahf al-Qahtani (author)",
+      "homepage": "https://risala.prh.gov.sa/",
+      "version": "PDF Last-Modified 2025-02-13",
+      "license": {
+        "name": "Author's printing statement (see PDF)",
+        "url": "https://risala.prh.gov.sa/",
+        "quote": null
+      },
+      "attribution": "حصن المسلم من أذكار الكتاب والسنة — سعيد بن علي بن وهف القحطاني",
+      "notes": "Reference copy of the book with its footnotes (references and gradings), for verifying any dataset. Not an import source as-is (PDF text extraction is unreliable for vocalized Arabic). The author's printing/distribution statement inside the PDF has NOT been verified yet (the PDF could not be rendered in this environment); license.quote stays null until it is checked by eye.",
+      "files": [
+        {
+          "path": "adhkar/book-pdf-prh/hisn-almuslim-ar.pdf",
+          "url": "https://risala.prh.gov.sa/storage/contents/51/%D8%AD%D8%B5%D9%86%20%D8%A7%D9%84%D9%85%D8%B3%D9%84%D9%85%20-%20%D8%B9%D8%B1%D8%A8%D9%8A.pdf",
+          "expect": "pdf",
+          "role": "reference"
+        }
+      ]
+    },
+    {
+      "id": "geonames-cities15000",
+      "category": "cities",
+      "name": "GeoNames cities15000 + country info, admin1 codes, time zones",
+      "publisher": "GeoNames",
+      "homepage": "https://download.geonames.org/export/dump/",
+      "version": "daily dump as of download date",
+      "license": {
+        "name": "Creative Commons Attribution 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "quote": "This work is licensed under a Creative Commons Attribution 4.0 License, see https://creativecommons.org/licenses/by/4.0/"
+      },
+      "attribution": "City data © GeoNames (https://www.geonames.org), CC BY 4.0",
+      "notes": "alternateNamesV2.zip (~205 MB, language-tagged Arabic names) is NOT downloaded pending the owner's decision. Dumps are regenerated daily, so hashes change between runs.",
+      "files": [
+        {
+          "path": "cities/geonames/cities15000.zip",
+          "url": "https://download.geonames.org/export/dump/cities15000.zip",
+          "expect": "zip",
+          "role": "data",
+          "volatile": true
+        },
+        {
+          "path": "cities/geonames/countryInfo.txt",
+          "url": "https://download.geonames.org/export/dump/countryInfo.txt",
+          "expect": "text",
+          "role": "data",
+          "volatile": true
+        },
+        {
+          "path": "cities/geonames/admin1CodesASCII.txt",
+          "url": "https://download.geonames.org/export/dump/admin1CodesASCII.txt",
+          "expect": "text",
+          "role": "data",
+          "volatile": true
+        },
+        {
+          "path": "cities/geonames/timeZones.txt",
+          "url": "https://download.geonames.org/export/dump/timeZones.txt",
+          "expect": "text",
+          "role": "data",
+          "volatile": true
+        },
+        {
+          "path": "cities/geonames/readme.txt",
+          "url": "https://download.geonames.org/export/dump/readme.txt",
+          "expect": "text",
+          "role": "license",
+          "volatile": true
+        }
+      ]
+    }
+  ]
+}

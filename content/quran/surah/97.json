@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "surah": 97,
+  "source": {
+    "name": "Tanzil Quran Text",
+    "url": "https://tanzil.net",
+    "version": "Uthmani, Version 1.1",
+    "license": "Tanzil Terms of Use; file header also states Creative Commons Attribution 3.0",
+    "notice": "\n\n# PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK\n#====================================================================\n#\n#  Tanzil Quran Text (Uthmani, Version 1.1)\n#  Copyright (C) 2007-2026 Tanzil Project\n#  License: Creative Commons Attribution 3.0\n#\n#  This copy of the Quran text is carefully produced, highly \n#  verified and continuously monitored by a group of specialists \n#  at Tanzil Project.\n#\n#  TERMS OF USE:\n#\n#  - Permission is granted to copy and distribute verbatim copies \n#    of this text, but CHANGING IT IS NOT ALLOWED.\n#\n#  - This Quran text can be used in any website or application, \n#    provided that its source (Tanzil Project) is clearly indicated, \n#    and a link is made to tanzil.net to enable users to keep\n#    track of changes.\n#\n#  - This copyright notice shall be included in all verbatim copies \n#    of the text, and shall be reproduced appropriately in all files \n#    derived from or containing substantial portion of this text.\n#\n#  Please check updates at: http://tanzil.net/updates/\n#\n#====================================================================\n\t\n",
+    "files": [
+      {"path":"data/sources/quran/tanzil/quran-uthmani.xml","sha256":"8c5aeae20363a98f6963720d29fce040ca8b56a8e75f8b564c257fce7f6d0417"}
+    ]
+  },
+  "bismillah": "بِّسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+  "ayahs": [
+    {"number":1,"text":"إِنَّآ أَنزَلْنَـٰهُ فِى لَيْلَةِ ٱلْقَدْرِ","page":598,"juz":30,"hizb":60,"hizbQuarter":239},
+    {"number":2,"text":"وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ","page":598,"juz":30,"hizb":60,"hizbQuarter":239},
+    {"number":3,"text":"لَيْلَةُ ٱلْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ","page":598,"juz":30,"hizb":60,"hizbQuarter":239},
+    {"number":4,"text":"تَنَزَّلُ ٱلْمَلَـٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ","page":598,"juz":30,"hizb":60,"hizbQuarter":239},
+    {"number":5,"text":"سَلَـٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ","page":598,"juz":30,"hizb":60,"hizbQuarter":239}
+  ]
+}

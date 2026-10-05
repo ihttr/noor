@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "surah": 82,
+  "source": {
+    "name": "Tanzil Quran Text",
+    "url": "https://tanzil.net",
+    "version": "Uthmani, Version 1.1",
+    "license": "Tanzil Terms of Use; file header also states Creative Commons Attribution 3.0",
+    "notice": "\n\n# PLEASE DO NOT REMOVE OR CHANGE THIS COPYRIGHT BLOCK\n#====================================================================\n#\n#  Tanzil Quran Text (Uthmani, Version 1.1)\n#  Copyright (C) 2007-2026 Tanzil Project\n#  License: Creative Commons Attribution 3.0\n#\n#  This copy of the Quran text is carefully produced, highly \n#  verified and continuously monitored by a group of specialists \n#  at Tanzil Project.\n#\n#  TERMS OF USE:\n#\n#  - Permission is granted to copy and distribute verbatim copies \n#    of this text, but CHANGING IT IS NOT ALLOWED.\n#\n#  - This Quran text can be used in any website or application, \n#    provided that its source (Tanzil Project) is clearly indicated, \n#    and a link is made to tanzil.net to enable users to keep\n#    track of changes.\n#\n#  - This copyright notice shall be included in all verbatim copies \n#    of the text, and shall be reproduced appropriately in all files \n#    derived from or containing substantial portion of this text.\n#\n#  Please check updates at: http://tanzil.net/updates/\n#\n#====================================================================\n\t\n",
+    "files": [
+      {"path":"data/sources/quran/tanzil/quran-uthmani.xml","sha256":"8c5aeae20363a98f6963720d29fce040ca8b56a8e75f8b564c257fce7f6d0417"}
+    ]
+  },
+  "bismillah": "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+  "ayahs": [
+    {"number":1,"text":"إِذَا ٱلسَّمَآءُ ٱنفَطَرَتْ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":2,"text":"وَإِذَا ٱلْكَوَاكِبُ ٱنتَثَرَتْ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":3,"text":"وَإِذَا ٱلْبِحَارُ فُجِّرَتْ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":4,"text":"وَإِذَا ٱلْقُبُورُ بُعْثِرَتْ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":5,"text":"عَلِمَتْ نَفْسٌ مَّا قَدَّمَتْ وَأَخَّرَتْ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":6,"text":"يَـٰٓأَيُّهَا ٱلْإِنسَـٰنُ مَا غَرَّكَ بِرَبِّكَ ٱلْكَرِيمِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":7,"text":"ٱلَّذِى خَلَقَكَ فَسَوَّىٰكَ فَعَدَلَكَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":8,"text":"فِىٓ أَىِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":9,"text":"كَلَّا بَلْ تُكَذِّبُونَ بِٱلدِّينِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":10,"text":"وَإِنَّ عَلَيْكُمْ لَحَـٰفِظِينَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":11,"text":"كِرَامًا كَـٰتِبِينَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":12,"text":"يَعْلَمُونَ مَا تَفْعَلُونَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":13,"text":"إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":14,"text":"وَإِنَّ ٱلْفُجَّارَ لَفِى جَحِيمٍ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":15,"text":"يَصْلَوْنَهَا يَوْمَ ٱلدِّينِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":16,"text":"وَمَا هُمْ عَنْهَا بِغَآئِبِينَ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":17,"text":"وَمَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":18,"text":"ثُمَّ مَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235},
+    {"number":19,"text":"يَوْمَ لَا تَمْلِكُ نَفْسٌ لِّنَفْسٍ شَيْـًٔا ۖ وَٱلْأَمْرُ يَوْمَئِذٍ لِّلَّهِ","page":587,"juz":30,"hizb":59,"hizbQuarter":235}
+  ]
+}

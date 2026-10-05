@@ -1,0 +1,39 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# generated
+/src/generated/
+/.cache/
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+/blob-report/
+
+# env files (only the example is committed)
+.env*
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+.vercel
+
+# KFGQPC fonts: their EULA forbids reproduction/modification without written approval.
+# Kept locally for the Phase 0 font comparison only (DECISIONS D-011, D-018 — pending).
+/data/sources/fonts/kfgqpc-hafs-v30/*.ttf
+/data/sources/fonts/kfgqpc-hafs-v22/*.ttf
+
+# Candidate datasets whose license is unclear stay out of the PUBLIC repository (local only).
+# Recorded in SOURCES.lock.json; re-download with: node scripts/sources/fetch-sources.mjs --only <id>
+/data/sources/adhkar/hisnmuslim-com/
+/data/sources/adhkar/rn0x-hisn-almuslim/
+/data/sources/adhkar/book-pdf-prh/

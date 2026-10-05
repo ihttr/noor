@@ -1,0 +1,290 @@
+// Noor — user data only (SPEC §5). Quran content, translations and tafsir are static JSON in
+// content/ and never live in Postgres (DECISIONS D-002).
+//
+// Sync-ready shape (SPEC §5): every user record has a client-generated UUID, a client-supplied
+// `updatedAt` used for last-write-wins (deliberately NOT @updatedAt, which would overwrite it with
+// server time) and a `deletedAt` tombstone. Every record is scoped by `userId` and removed with
+// the user (account deletion, SPEC §7.19).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Better Auth core tables (D-006). Field set follows the Better Auth 1.7 core schema;
+// Phase 9 re-checks it with the Better Auth CLI before wiring auth.
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  sessions          Session[]
+  accounts          Account[]
+  preferences       UserPreferences?
+  readingPosition   ReadingPosition?
+  readingDays       ReadingDay[]
+  savedItems        SavedItem[]
+  collections       Collection[]
+  notes             Note[]
+  memorizationItems MemorizationItem[]
+  goals             Goal[]
+  adhkarDays        AdhkarDay[]
+  tasbihSessions    TasbihSession[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ---------------------------------------------------------------------------
+// User data (SPEC §5)
+// ---------------------------------------------------------------------------
+
+enum ReadingMode {
+  READING
+  MUSHAF
+}
+
+/// Target of a saved item or a note.
+enum ItemType {
+  AYAH
+  PAGE
+  SURAH
+  DHIKR
+  TAFSIR
+}
+
+enum MemorizationStatus {
+  NEW
+  LEARNING
+  REVIEWING
+  MEMORIZED
+}
+
+enum GoalUnit {
+  PAGES
+}
+
+/// Reading settings, theme, locale, numeral style, prayer method… as one JSON blob.
+/// The prayer location is only stored here if the user explicitly opts in (SPEC §5).
+model UserPreferences {
+  id        String    @id @db.Uuid
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      Json      @default("{}")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  deletedAt DateTime?
+
+  @@map("user_preferences")
+}
+
+model ReadingPosition {
+  id        String      @id @db.Uuid
+  userId    String      @unique
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  surah     Int
+  ayah      Int
+  page      Int
+  mode      ReadingMode
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  deletedAt DateTime?
+
+  @@map("reading_position")
+}
+
+/// One row per user and local calendar day. Merges by union (pagesRead) and max (secondsRead).
+model ReadingDay {
+  id          String    @id @db.Uuid
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime  @db.Date
+  pagesRead   Int[]     @default([])
+  secondsRead Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  deletedAt   DateTime?
+
+  @@unique([userId, date])
+  @@map("reading_day")
+}
+
+model Collection {
+  id         String      @id @db.Uuid
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  order      Int         @default(0)
+  savedItems SavedItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime
+  deletedAt  DateTime?
+
+  @@index([userId])
+  @@map("collection")
+}
+
+/// `ref` examples: "2:255" (ayah), "50" (page), "18" (surah), "morning:3" (dhikr).
+model SavedItem {
+  id           String      @id @db.Uuid
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         ItemType
+  ref          String
+  collectionId String?     @db.Uuid
+  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  note         String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime
+  deletedAt    DateTime?
+
+  @@index([userId, type, ref])
+  @@index([collectionId])
+  @@map("saved_item")
+}
+
+/// Private notes on an ayah, dhikr, page, surah or tafsir entry. Never public.
+model Note {
+  id         String    @id @db.Uuid
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetType ItemType
+  targetRef  String
+  body       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  deletedAt  DateTime?
+
+  @@index([userId, targetType, targetRef])
+  @@map("note")
+}
+
+/// SM-2-style scheduling (SPEC §7.12). `repetitions` counts consecutive successful reviews,
+/// needed for the "3 successful reviews with an interval of at least 7 days" rule.
+model MemorizationItem {
+  id             String             @id @db.Uuid
+  userId         String
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  surah          Int
+  ayah           Int
+  status         MemorizationStatus @default(NEW)
+  ease           Float              @default(2.5)
+  intervalDays   Int                @default(0)
+  repetitions    Int                @default(0)
+  dueAt          DateTime
+  lastReviewedAt DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime
+  deletedAt      DateTime?
+
+  @@unique([userId, surah, ayah])
+  @@index([userId, dueAt])
+  @@map("memorization_item")
+}
+
+model Goal {
+  id         String    @id @db.Uuid
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  unit       GoalUnit  @default(PAGES)
+  amount     Int
+  activeFrom DateTime  @db.Date
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  deletedAt  DateTime?
+
+  @@index([userId, activeFrom])
+  @@map("goal")
+}
+
+/// `counts` maps dhikr ids of the category to the count reached that day.
+model AdhkarDay {
+  id         String    @id @db.Uuid
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date       DateTime  @db.Date
+  categoryId String
+  counts     Json      @default("{}")
+  completed  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  deletedAt  DateTime?
+
+  @@unique([userId, date, categoryId])
+  @@map("adhkar_day")
+}
+
+/// `phrase` holds a preset key or the user's own custom phrase.
+model TasbihSession {
+  id        String    @id @db.Uuid
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phrase    String
+  count     Int       @default(0)
+  target    Int?
+  startedAt DateTime
+  endedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  deletedAt DateTime?
+
+  @@index([userId, startedAt])
+  @@map("tasbih_session")
+}

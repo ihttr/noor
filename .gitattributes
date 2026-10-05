@@ -1,0 +1,15 @@
+# Normalize line endings of source files to LF (Windows checkouts included).
+* text=auto eol=lf
+
+# Raw sources and generated content must stay byte-exact: their SHA-256 values are recorded
+# in data/sources/SOURCES.lock.json and checked by the content pipeline. No EOL conversion.
+/data/sources/** -text
+/content/** -text
+
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.zip binary
+*.pdf binary
+*.sqlite binary
+*.png binary

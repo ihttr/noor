@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقارنة خطوط المصحف — Noor</title>
+<link rel="icon" href="data:,">
+<style>
+  :root, body[data-theme="light"] {
+    --bg: #fbfaf7; --card: #ffffff; --fg: #1d1b16; --muted: #6b665c; --border: #e6e1d6;
+    --accent: #2f6b4f; --chip: #eef3ef; --bad: #a3271f; --good: #2f6b4f;
+  }
+  body[data-theme="dark"] {
+    --bg: #111311; --card: #1a1d1a; --fg: #ece8df; --muted: #a29d92; --border: #2d322d;
+    --accent: #7cc4a0; --chip: #233026; --bad: #ff8a80; --good: #7cc4a0;
+  }
+  body[data-theme="sepia"] {
+    --bg: #f4ecd8; --card: #faf3e3; --fg: #3b2f1e; --muted: #7a6a50; --border: #e2d5b8;
+    --accent: #8a5a2b; --chip: #efe3c8; --bad: #9b2c1c; --good: #5d6b2f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 15px/1.6 system-ui, "Segoe UI", Tahoma, sans-serif;
+    --qsize: 34px; --qlh: 2.2;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  header h1 { font-size: 1.35rem; margin: 0 0 4px; }
+  header p { margin: 4px 0; color: var(--muted); }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-weight: 600; font-size: .9rem; }
+  .badge.ok { background: var(--chip); color: var(--good); }
+  .badge.fail { background: var(--bad); color: #fff; }
+  details.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin: 12px 0; }
+  details.panel > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; }
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; padding: 0 14px 14px; }
+  .controls fieldset { border: 0; padding: 0; margin: 0; }
+  .controls legend { font-weight: 600; margin-bottom: 4px; }
+  .controls label { display: flex; gap: 8px; align-items: center; min-height: 32px; }
+  .controls input[type=range] { width: 100%; }
+  .lic { font-size: .75rem; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: start; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td.mono, .mono { font-family: ui-monospace, Consolas, monospace; direction: ltr; unicode-bidi: isolate; }
+  .scroll { overflow-x: auto; padding: 0 14px 14px; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  nav.toc a { text-decoration: none; color: var(--accent); background: var(--chip); padding: 2px 8px; border-radius: 6px; font-size: .85rem; }
+  article { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin: 14px 0; }
+  article h2 { font-size: 1.05rem; margin: 0; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .reasons { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
+  .reasons span { background: var(--chip); border-radius: 6px; padding: 1px 8px; font-size: .78rem; direction: ltr; unicode-bidi: isolate; }
+  .row { display: grid; grid-template-columns: 170px 1fr; gap: 12px; padding: 10px 0; border-top: 1px dashed var(--border); align-items: start; }
+  .row .fname { font-size: .8rem; color: var(--muted); padding-top: 8px; }
+  .row .fname b { display: block; color: var(--fg); font-weight: 600; }
+  .row.ref { background: color-mix(in srgb, var(--chip) 60%, transparent); border-radius: 8px; padding-inline: 8px; }
+  .quran { font-size: var(--qsize); line-height: var(--qlh); text-align: justify; word-wrap: break-word; }
+  .bism { font-size: var(--qsize); line-height: var(--qlh); text-align: center; }
+  .num { display: inline-block; margin-inline-start: .25em; }
+  .num.css { font-family: system-ui, sans-serif; font-size: .5em; line-height: 1; border: 1.5px solid var(--accent); color: var(--accent);
+             border-radius: 999px; min-width: 2em; padding: .25em .3em; text-align: center; vertical-align: middle; }
+  .cps { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+  .cps code { direction: ltr; unicode-bidi: isolate; }
+  .bad { outline: 2px solid var(--bad); }
+  footer { color: var(--muted); font-size: .85rem; padding: 24px 0 48px; }
+  a { color: var(--accent); }
+  @media (max-width: 640px) {
+    .wrap { padding: 12px; }
+    .row { grid-template-columns: 1fr; gap: 2px; }
+    .row .fname { padding-top: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<style id="font-faces"></style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <header>
+    <h1>مقارنة خطوط المصحف (المرحلة 0)</h1>
+    <p id="src"></p>
+    <p>سلامة النص المعروض: <span id="integrity" class="badge">…</span>
+      <span class="lic">(مقارنة textContent لكل عنصر نص قرآني مع النص المصدر، نقطة رمز بنقطة رمز؛ أرقام الآيات خارج النص)</span></p>
+  </header>
+
+  <details class="panel" open>
+    <summary>الإعدادات</summary>
+    <div class="controls">
+      <fieldset id="font-list"><legend>الخطوط</legend></fieldset>
+      <fieldset>
+        <legend>نسخة النص (Tanzil)</legend>
+        <label><input type="radio" name="variant" value="tatweel"> tatweel=true (افتراضي Tanzil)</label>
+        <label><input type="radio" name="variant" value="noTatweel"> tatweel=false</label>
+        <legend style="margin-top:8px">صف مرجعي</legend>
+        <label><input type="checkbox" id="ref"> نص بترميز المجمع (QuranEnc) بخطوط المجمع</label>
+        <legend style="margin-top:8px">علامة نهاية الآية</legend>
+        <label><input type="radio" name="marker" value="css"> دائرة CSS (خارج الخط)</label>
+        <label><input type="radio" name="marker" value="u06dd"> U+06DD + أرقام (يرسمها الخط)</label>
+      </fieldset>
+      <fieldset>
+        <legend>العرض</legend>
+        <label>الحجم <input type="range" id="size" min="20" max="60" step="1"> <span id="size-v" class="mono"></span></label>
+        <label>تباعد الأسطر <input type="range" id="lh" min="1.4" max="3.2" step="0.1"> <span id="lh-v" class="mono"></span></label>
+        <label>السمة
+          <select id="theme"><option value="light">فاتح</option><option value="dark">داكن</option><option value="sepia">سيبيا</option></select>
+        </label>
+        <label><input type="checkbox" id="cps"> إظهار نقاط الرموز الخاصة في كل آية</label>
+      </fieldset>
+    </div>
+  </details>
+
+  <details class="panel">
+    <summary>تغطية الخطوط (cmap) والتراخيص</summary>
+    <div class="scroll"><table id="coverage">
+      <thead><tr><th>الخط</th><th>الإصدار</th><th>الترخيص</th><th>الحجم</th><th>تحميل</th><th>ناقص لنص Tanzil</th><th>ناقص لنص المجمع</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="lic">التغطية تعني فقط وجود رسم للرمز في cmap؛ صحة تموضع العلامات تُحكم بالعين.</p></div>
+  </details>
+
+  <nav class="toc" id="toc" aria-label="الآيات"></nav>
+  <main id="items"></main>
+
+  <footer>
+    <p>نص القرآن: <a href="https://tanzil.net" rel="noopener">مشروع تنزيل (Tanzil Project)</a> — Uthmani, Version 1.1، نسخ حرفي دون تغيير.</p>
+    <p>الصف المرجعي: نص بترميز مجمع الملك فهد كما يقدّمه <a href="https://quranenc.com" rel="noopener">QuranEnc.com</a> — للمقارنة فقط.</p>
+    <p>هذه صفحة تقييم محلية للمرحلة 0، وليست جزءاً من التطبيق.</p>
+  </footer>
+</div>
+
+<script id="data" type="application/json">/*__DATA__*/null</script>
+<script>
+(() => {
+  const data = JSON.parse(document.getElementById('data').textContent);
+  const $ = (s, el = document) => el.querySelector(s);
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') el.className = v; else if (k === 'text') el.textContent = v; else el.setAttribute(k, v);
+    }
+    for (const kid of kids) if (kid != null) el.append(kid);
+    return el;
+  };
+  const arabicDigits = new Intl.NumberFormat('ar-u-nu-arab', { useGrouping: false });
+
+  // ---- persisted view state (per-viewer convenience only) ----
+  const defaults = {
+    fonts: data.fonts.filter((f) => f.defaultOn).map((f) => f.id),
+    variant: 'tatweel', ref: true, marker: 'css', size: 34, lh: 2.2, theme: 'light', cps: false,
+  };
+  let state = { ...defaults };
+  try { Object.assign(state, JSON.parse(localStorage.getItem('noor-font-test') || '{}')); } catch {}
+  const save = () => { try { localStorage.setItem('noor-font-test', JSON.stringify(state)); } catch {} };
+
+  // ---- fonts ----
+  $('#font-faces').textContent = data.fonts
+    .map((f) => `@font-face{font-family:"ft-${f.id}";src:url("${f.url}") format("${f.format}");font-display:block;}`)
+    .join('\n');
+  const loaded = new Map();
+  for (const f of data.fonts) {
+    document.fonts.load(`20px "ft-${f.id}"`, 'بسم').then(
+      (faces) => { loaded.set(f.id, faces.length > 0); renderCoverage(); },
+      () => { loaded.set(f.id, false); renderCoverage(); }
+    );
+  }
+
+  $('#src').append('النص: ', h('span', { class: 'mono', text: data.textSource }), ' — الصف المرجعي: ',
+    h('span', { class: 'mono', text: data.referenceSource }), ' — أُنشئت: ', h('span', { class: 'mono', text: data.generatedAt }));
+
+  // ---- controls ----
+  const list = $('#font-list');
+  for (const f of data.fonts) {
+    const cb = h('input', { type: 'checkbox', value: f.id });
+    cb.checked = state.fonts.includes(f.id);
+    cb.addEventListener('change', () => {
+      state.fonts = data.fonts.map((x) => x.id).filter((id) => id === f.id ? cb.checked : state.fonts.includes(id));
+      save(); render();
+    });
+    list.append(h('label', {}, cb, h('span', { text: f.label }), h('span', { class: 'lic', text: f.license })));
+  }
+  for (const r of document.querySelectorAll('input[name=variant]')) {
+    r.checked = r.value === state.variant;
+    r.addEventListener('change', () => { state.variant = r.value; save(); render(); });
+  }
+  for (const r of document.querySelectorAll('input[name=marker]')) {
+    r.checked = r.value === state.marker;
+    r.addEventListener('change', () => { state.marker = r.value; save(); render(); });
+  }
+  const ref = $('#ref'); ref.checked = state.ref;
+  ref.addEventListener('change', () => { state.ref = ref.checked; save(); render(); });
+  const cps = $('#cps'); cps.checked = state.cps;
+  cps.addEventListener('change', () => { state.cps = cps.checked; save(); render(); });
+  const size = $('#size'); size.value = state.size;
+  const lh = $('#lh'); lh.value = state.lh;
+  const theme = $('#theme'); theme.value = state.theme;
+  const applyView = () => {
+    document.body.style.setProperty('--qsize', `${state.size}px`);
+    document.body.style.setProperty('--qlh', state.lh);
+    document.body.dataset.theme = state.theme;
+    $('#size-v').textContent = `${state.size}px`;
+    $('#lh-v').textContent = Number(state.lh).toFixed(1);
+  };
+  size.addEventListener('input', () => { state.size = Number(size.value); save(); applyView(); });
+  lh.addEventListener('input', () => { state.lh = Number(lh.value); save(); applyView(); });
+  theme.addEventListener('change', () => { state.theme = theme.value; save(); applyView(); });
+
+  // ---- coverage table ----
+  function renderCoverage() {
+    const tb = $('#coverage tbody');
+    tb.replaceChildren(...data.fonts.map((f) => h('tr', {},
+      h('td', { text: f.label }),
+      h('td', { class: 'mono', text: f.version }),
+      h('td', { text: f.license }),
+      h('td', { class: 'mono', text: `${f.kb} KB` }),
+      h('td', { text: loaded.has(f.id) ? (loaded.get(f.id) ? '✓' : '✗') : '…' }),
+      h('td', { class: 'mono', text: f.missingTanzil.join(' ') || '—' }),
+      h('td', { class: 'mono', text: f.missingKfgqpc.join(' ') || '—' }),
+    )));
+  }
+
+  // ---- items ----
+  const expected = new Map();
+  let seq = 0;
+  const quranEl = (cls, text, fontId) => {
+    const id = `q${seq++}`;
+    expected.set(id, text);
+    const el = h('span', { class: cls, lang: 'ar', dir: 'rtl', 'data-qid': id });
+    el.style.fontFamily = `"ft-${fontId}", serif`;
+    el.textContent = text;
+    return el;
+  };
+  const marker = (aya, fontId) => {
+    const digits = arabicDigits.format(aya);
+    const el = h('span', { class: `num ${state.marker}`, 'aria-label': `آية ${digits}` });
+    if (state.marker === 'u06dd') { el.style.fontFamily = `"ft-${fontId}", serif`; el.textContent = '۝' + digits; }
+    else el.textContent = digits;
+    return el;
+  };
+  const specials = (text) => {
+    const seen = new Map();
+    for (const ch of text) {
+      const cp = ch.codePointAt(0);
+      const id = 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
+      if (data.names[id] && !seen.has(id)) seen.set(id, data.names[id]);
+    }
+    return [...seen.entries()].sort();
+  };
+
+  function row(label, sub, fontId, item, text, bism, isRef) {
+    const cell = h('div', {});
+    if (bism) cell.append(h('div', { class: 'bism' }, quranEl('bism-text', bism, fontId)));
+    const line = h('div', { class: 'quran' }, quranEl('ayah-text', text, fontId), marker(item.aya, fontId));
+    cell.append(line);
+    return h('div', { class: `row${isRef ? ' ref' : ''}` }, h('div', { class: 'fname' }, h('b', { text: label }), sub), cell);
+  }
+
+  function render() {
+    expected.clear(); seq = 0;
+    const fonts = data.fonts.filter((f) => state.fonts.includes(f.id));
+    const kfgqpcFonts = data.fonts.filter((f) => f.id === 'kfgqpc-hafs-v30' || f.id === 'kfgqpc-hafs-v22');
+    const main = $('#items');
+    const toc = $('#toc');
+    main.replaceChildren();
+    toc.replaceChildren();
+    for (const it of data.items) {
+      const anchor = `a-${it.sura}-${it.aya}`;
+      toc.append(h('a', { href: `#${anchor}`, text: it.key }));
+      const text = it.text[state.variant];
+      const bism = it.bismillah ? it.bismillah[state.variant] : null;
+      const art = h('article', { id: anchor },
+        h('h2', {}, h('span', { text: `سورة ${it.suraName}` }), h('span', { class: 'mono', text: it.key })),
+        h('div', { class: 'reasons' }, ...it.reasons.map((r) => h('span', { text: r }))));
+      for (const f of fonts) art.append(row(f.label, h('span', { class: 'lic', text: f.version }), f.id, it, text, bism, false));
+      if (state.ref && it.kfgqpc) {
+        for (const f of kfgqpcFonts) {
+          art.append(row(`مرجع: نص المجمع + ${f.label}`, h('span', { class: 'lic', text: 'QuranEnc arabic_text — للمقارنة فقط' }), f.id, it, it.kfgqpc, null, true));
+        }
+      }
+      if (state.cps) {
+        const list = specials(text);
+        art.append(h('div', { class: 'cps' }, `رموز خاصة في نص Tanzil (${list.length}): `,
+          ...list.flatMap(([id, name]) => [h('code', { text: `${id} ${name}` }), ' · '])));
+      }
+      main.append(art);
+    }
+    verify();
+  }
+
+  // ---- integrity: DOM textContent must equal the source string exactly ----
+  function verify() {
+    let okCount = 0, bad = 0;
+    for (const el of document.querySelectorAll('[data-qid]')) {
+      const same = el.textContent === expected.get(el.dataset.qid);
+      el.classList.toggle('bad', !same);
+      same ? okCount++ : bad++;
+    }
+    const badge = $('#integrity');
+    badge.className = `badge ${bad ? 'fail' : 'ok'}`;
+    badge.textContent = bad ? `✗ ${bad} مختلف من ${okCount + bad}` : `✓ ${okCount}/${okCount} مطابق`;
+    window.__integrity = { ok: okCount, bad };
+  }
+
+  applyView();
+  renderCoverage();
+  render();
+})();
+</script>
+</body>
+</html>

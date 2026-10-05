@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens (SPEC §6). Every color the UI uses comes from these variables, so a theme is
+ * just a different set of values. Contrast targets WCAG AA in every theme:
+ * ink and ink-muted on canvas/surface ≥ 4.5:1, accent text on surface ≥ 4.5:1.
+ */
+
+:root,
+[data-theme='light'] {
+  --canvas: #f8f6f1;
+  --surface: #ffffff;
+  --surface-raised: #f1eee6;
+  --ink: #1a1c19;
+  --ink-muted: #565b54;
+  --line: #e2ded4;
+  --accent: #1e6b52;
+  --on-accent: #ffffff;
+  --accent-soft: #e3efe9;
+  --focus: #1e6b52;
+}
+
+[data-theme='dark'] {
+  --canvas: #0e1210;
+  --surface: #161b18;
+  --surface-raised: #1d2420;
+  --ink: #e8e6e1;
+  --ink-muted: #a7aba4;
+  --line: #2a322d;
+  --accent: #7dd3ae;
+  --on-accent: #0b1f17;
+  --accent-soft: #1e3a2f;
+  --focus: #7dd3ae;
+}
+
+[data-theme='sepia'] {
+  --canvas: #f4ecd8;
+  --surface: #fbf5e6;
+  --surface-raised: #efe5cc;
+  --ink: #33291c;
+  --ink-muted: #6b5a42;
+  --line: #e0d3b6;
+  --accent: #2c5e47;
+  --on-accent: #ffffff;
+  --accent-soft: #e8e0c8;
+  --focus: #2c5e47;
+}
+
+[data-theme='black'] {
+  --canvas: #000000;
+  --surface: #0a0a0a;
+  --surface-raised: #141414;
+  --ink: #e6e6e6;
+  --ink-muted: #9e9e9e;
+  --line: #262626;
+  --accent: #7dd3ae;
+  --on-accent: #04140e;
+  --accent-soft: #10261d;
+  --focus: #7dd3ae;
+}
+
+/* Without JavaScript the boot script cannot run: follow the system preference. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --canvas: #0e1210;
+    --surface: #161b18;
+    --surface-raised: #1d2420;
+    --ink: #e8e6e1;
+    --ink-muted: #a7aba4;
+    --line: #2a322d;
+    --accent: #7dd3ae;
+    --on-accent: #0b1f17;
+    --accent-soft: #1e3a2f;
+    --focus: #7dd3ae;
+  }
+}
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, [data-theme='black'], [data-theme='black'] *));
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-focus: var(--focus);
+
+  --font-sans: var(--font-ui), 'Segoe UI', Tahoma, Arial, sans-serif;
+  /* The Quran font is not chosen yet (DECISIONS D-011); this is only a fallback slot. */
+  --font-quran: var(--font-quran-face, serif);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

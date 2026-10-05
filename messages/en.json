@@ -1,0 +1,95 @@
+{
+  "Shell": {
+    "brand": "Noor",
+    "tagline": "A calm companion for reading the Quran and daily adhkar",
+    "skipToContent": "Skip to main content",
+    "primaryNav": "Main navigation",
+    "switchLanguageLabel": "Switch to Arabic",
+    "otherLanguageName": "العربية"
+  },
+  "Nav": {
+    "home": "Home",
+    "quran": "Quran",
+    "adhkar": "Adhkar",
+    "tasbih": "Tasbih",
+    "prayer": "Prayer",
+    "qibla": "Qibla",
+    "calendar": "Calendar",
+    "saved": "Saved",
+    "stats": "Statistics",
+    "settings": "Settings",
+    "more": "More"
+  },
+  "Pages": {
+    "home": {
+      "title": "Noor",
+      "description": "Continue reading, today's adhkar and your daily progress."
+    },
+    "quran": {
+      "title": "Quran",
+      "description": "Surah list, reading mode and Mushaf mode."
+    },
+    "adhkar": {
+      "title": "Adhkar",
+      "description": "Morning, evening and other adhkar, with a counter and references."
+    },
+    "tasbih": {
+      "title": "Tasbih",
+      "description": "A tasbih counter with targets and session history."
+    },
+    "prayer": {
+      "title": "Prayer times",
+      "description": "Prayer times for your city, with a countdown to the next prayer."
+    },
+    "qibla": {
+      "title": "Qibla",
+      "description": "The Qibla bearing in degrees, with a live compass when sensors are available."
+    },
+    "calendar": {
+      "title": "Calendar",
+      "description": "Hijri and Gregorian dates, and expected important dates."
+    },
+    "saved": {
+      "title": "Saved",
+      "description": "Saved ayahs, pages and adhkar, with notes and collections."
+    },
+    "stats": {
+      "title": "Statistics",
+      "description": "Pages read, consistency and your personal statistics."
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Appearance, language and reading settings."
+    },
+    "more": {
+      "title": "More",
+      "description": "The rest of the app."
+    }
+  },
+  "Placeholder": {
+    "phase": "Phase {phase, number}",
+    "body": "This is a placeholder page. It will be built in Phase {phase, number}.",
+    "shellNotice": "Project shell (Phase {phase, number}): pages are placeholders with no content yet."
+  },
+  "Settings": {
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themes": {
+      "system": "Automatic (device)",
+      "light": "Light",
+      "dark": "Dark",
+      "sepia": "Sepia (reading)",
+      "black": "Black (OLED)"
+    },
+    "language": "Language",
+    "languages": {
+      "ar": "العربية",
+      "en": "English"
+    }
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "We couldn't find the page you were looking for.",
+    "backHome": "Back to home"
+  }
+}
