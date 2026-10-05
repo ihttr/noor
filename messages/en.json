@@ -18,7 +18,8 @@
     "saved": "Saved",
     "stats": "Statistics",
     "settings": "Settings",
-    "more": "More"
+    "more": "More",
+    "about": "About & sources"
   },
   "Pages": {
     "home": {
@@ -64,6 +65,10 @@
     "more": {
       "title": "More",
       "description": "The rest of the app."
+    },
+    "about": {
+      "title": "About & sources",
+      "description": "Sources of the Quran text, fonts and licenses."
     }
   },
   "Placeholder": {
@@ -91,5 +96,102 @@
     "title": "Page not found",
     "body": "We couldn't find the page you were looking for.",
     "backHome": "Back to home"
+  },
+  "Quran": {
+    "filterLabel": "Find a surah",
+    "filterPlaceholder": "Surah name or number",
+    "noMatches": "No surah matches.",
+    "tabsLabel": "Browse by",
+    "tabs": {
+      "surah": "Surah",
+      "juz": "Juz",
+      "hizb": "Hizb",
+      "page": "Page"
+    },
+    "surahTitle": "Surah {name}",
+    "ayahCount": "{count, plural, one {# ayah} other {# ayahs}}",
+    "revelation": {
+      "Meccan": "Meccan",
+      "Medinan": "Medinan"
+    },
+    "juz": "Juz {n, number}",
+    "hizb": "Hizb {n, number}",
+    "quarter": "Quarter {n, number}",
+    "hizbQuarter": "Hizb quarter {n, number}",
+    "page": "Page {n, number}",
+    "startsAt": "from {surah} — ayah {ayah, number}",
+    "pageCount": "{count, number} pages"
+  },
+  "Reader": {
+    "toolbarLabel": "Reading tools",
+    "readingMode": "Reading",
+    "mushafMode": "Mushaf",
+    "modeLabel": "View mode",
+    "settings": "Reading settings",
+    "jump": "Go to",
+    "close": "Close",
+    "backToList": "Surah index",
+    "ayahLabel": "Ayah {n, number}",
+    "sajdah": "Sajdah",
+    "sajdahLabel": "Place of prostration",
+    "quarterMark": "Start of hizb quarter {n, number}",
+    "prevSurah": "Previous surah",
+    "nextSurah": "Next surah",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "prevJuz": "Previous juz",
+    "nextJuz": "Next juz",
+    "pageOf": "Page {n, number} of {total, number}",
+    "source": "Quran text: Tanzil Project",
+    "approxNote": "Page boundaries follow the Madani Mushaf; the line layout is approximate.",
+    "swipeHint": "Swipe right for the next page, left for the previous one.",
+    "font": "Quran font",
+    "fonts": {
+      "amiri": "Amiri Quran",
+      "scheherazade": "Scheherazade New"
+    },
+    "fontSize": "Font size",
+    "decrease": "Smaller text",
+    "increase": "Larger text",
+    "lineHeight": "Line spacing",
+    "width": "Text width",
+    "widths": {
+      "narrow": "Narrow",
+      "normal": "Medium",
+      "wide": "Wide"
+    },
+    "numerals": "Digits",
+    "numeralStyles": {
+      "auto": "Follow language",
+      "arabic": "١٢٣",
+      "western": "123"
+    },
+    "theme": "Appearance",
+    "jumpRef": "Surah and ayah",
+    "jumpRefHint": "e.g. 2:255, Al-Baqara 255 or Kahf",
+    "jumpGo": "Go",
+    "jumpInvalid": "That reference was not recognised.",
+    "jumpOutOfRange": "That number is out of range.",
+    "jumpPage": "Page",
+    "jumpJuz": "Juz",
+    "jumpHizb": "Hizb",
+    "jumpQuarter": "Quarter",
+    "loading": "Loading…",
+    "surahNav": "Surah navigation",
+    "pageNav": "Page navigation",
+    "juzNav": "Juz navigation"
+  },
+  "About": {
+    "intro": "Noor is a free, Quran-first app. This page names the source and license of every piece of content.",
+    "quranText": "Quran text",
+    "quranTextBody": "The Uthmani text from the Tanzil Project ({version}), copied verbatim without any change; Tanzil’s full notice is below.",
+    "metadata": "Mushaf structure",
+    "metadataBody": "Surahs, juz, hizbs, pages and sajdah positions come from the Tanzil metadata (CC BY).",
+    "mushaf": "Mushaf mode",
+    "mushafBody": "Page boundaries follow the Madani Mushaf (604 pages); the line layout inside a page is approximate and may differ from the printed Mushaf.",
+    "fonts": "Fonts",
+    "fontsBody": "Amiri Quran and Scheherazade New for the Quran text, IBM Plex Sans Arabic for the interface — all under the SIL Open Font License 1.1.",
+    "notYet": "No translations, tafsir or adhkar yet; they will be added once their sources are approved.",
+    "notice": "Tanzil notice"
   }
 }

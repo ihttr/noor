@@ -83,7 +83,7 @@ Added later when their phase starts: better-auth, dexie, adhan, @serwist/turbopa
 **Status:** Accepted on 2026-10-04: **tatweel=true** (Tanzil's default, `quran-uthmani.xml`). 3,423 ayahs differ from the tatweel=false download; switching later is a re-approval plus a re-import.
 
 ## D-011 — Quran font + text pairing
-**Status:** Needs decision. Recommendation: an OFL font that renders the Tanzil encoding correctly (Amiri Quran or Scheherazade New), self-hosted.
+**Status:** Accepted on 2026-10-05: Amiri Quran (default) + Scheherazade New (selectable) — see D-036. Recommendation: an OFL font that renders the Tanzil encoding correctly (Amiri Quran or Scheherazade New), self-hosted.
 - KFGQPC Hafs fonts are designed for the KFGQPC encoding. With Tanzil text, Tanzil's sukun (U+0652) is drawn as a round circle and U+06DF renders as a broken mark with a dotted circle (seen in the font test, 20:28). Their EULA allows free use and distribution but forbids modification (no subsetting, no WOFF2 conversion) without written approval.
 - Choosing the KFGQPC look therefore means switching the **text source** to a KFGQPC-encoded text from an approved source (never converting Tanzil text — CLAUDE.md forbids transformation), plus written permission for any font modification.
 - DigitalKhatt Madina is OFL but expects its own text/justification; with Tanzil text, word spaces collapse. Not a drop-in candidate (see D-025).
@@ -97,7 +97,7 @@ Added later when their phase starts: better-auth, dexie, adhan, @serwist/turbopa
 - Word counts differ in 363 of 6,236 ayahs (5.8%) between Simple Clean and Uthmani (mark-only tokens ignored). The import builds a per-ayah alignment and records the mismatches; where words cannot be aligned 1:1, the result highlights the whole ayah instead of guessing.
 
 ## D-014 — Long surahs and text spans
-**Status:** Proposed.
+**Status:** Accepted on 2026-10-05 (content-visibility); implemented in Phase 3.
 - Use CSS `content-visibility: auto` (+ `contain-intrinsic-size`) instead of JS virtualization: all ayahs stay in the DOM, so the rendering-integrity test, browser find, SEO and screen readers keep working.
 - Any span wrapping (search highlight, audio highlight, memorization) wraps whole whitespace-delimited tokens only, never part of a word. Mark-only tokens (Tanzil writes pause marks and ۩ as separate space-delimited tokens: 4,379 such tokens; 2,640 ayahs have a pause mark after a space) stay outside "word" logic.
 
@@ -133,7 +133,7 @@ Added later when their phase starts: better-auth, dexie, adhan, @serwist/turbopa
 **Status:** Needs decision. Tanzil translations, Islamic Network audio and Hisn al-Muslim's distribution terms are tied to non-commercial use. Proposed: Noor is free, without ads or paid features; donations would need a fresh license review.
 
 ## D-024 — Surah names and URL slugs
-**Status:** Proposed. Create `data/curated/surah-names.json` (Arabic display name, English name, slug) reviewed by the owner; Tanzil metadata stays the structural source. Curated names are UI labels, not Quran text.
+**Status:** Slugs: generated, awaiting owner review (D-037). Display names: Tanzil's, until a curated names file is approved. Create `data/curated/surah-names.json` (Arabic display name, English name, slug) reviewed by the owner; Tanzil metadata stays the structural source. Curated names are UI labels, not Quran text.
 
 ## D-025 — Future line-exact Mushaf
 **Status:** Proposed (out of scope for v1). Prefer evaluating DigitalKhatt (OFL, Madina-style justification, sponsored by Tarteel) with its own matching text over QCF per-page fonts (604 fonts under the KFGQPC license).
@@ -184,3 +184,32 @@ No PostgreSQL exists on the development machine and Docker is not required. The 
 
 ## D-035 — "Stop and ask" in the import
 **Status:** Accepted (implemented). The import throws `SourceSurprise` instead of adapting when: a file hash differs from the lock; counts or per-surah ayah counts differ from the metadata; metadata divisions are missing, out of order or point to invalid ayahs; a Quran string contains `&`/an entity; the notice comment is missing; a Basmala attribute is missing, unexpected (1, 9) or differs from 1:1 other than the approved 95/97 shadda variant; an ayah 1 starts with the Basmala; or the search text contains marks. None of these occurred on 2026-10-04.
+
+---
+
+## Phase 3 — Quran reader (2026-10-05)
+
+## D-036 — Quran fonts in the reader
+**Status:** Accepted by the owner on 2026-10-05. Amiri Quran is the default, Scheherazade New is selectable in the reading settings. Both are self-hosted WOFF2 through `next/font/local`, loaded only by reader routes, and only Amiri is preloaded.
+- Amiri Quran: the approved TTF (1.003) converted by `scripts/build-fonts.ts` with wawoff2 (Google's woff2 in WASM) into `assets/fonts/AmiriQuran.woff2` (134 KB → 61 KB). The conversion is verified by a round trip (same cmap, same version) and recorded in `assets/fonts/fonts.lock.json`; CI checks it is up to date. Amiri has no Reserved Font Name.
+- Scheherazade New: SIL's own unmodified WOFF2 from the approved 4.500 release (RFN respected).
+
+## D-037 — Surah URL slugs
+**Status:** Accepted on 2026-10-05 (slugs from Tanzil transliterations); the file awaits the owner's review. `data/curated/surah-slugs.json` was generated once by `scripts/init-surah-slugs.ts` (e.g. `al-baqara`, `aal-i-imraan`) and is now hand-curated (the script never overwrites it). Surah pages live at `/quran/{slug}`; `/quran/{n}` redirects with 308. `/quran/{slug}/{ayah}` redirects temporarily (307) to `/quran/{slug}#ayah-{s}-{a}` until indexable ayah pages are built (SPEC §9, Phase 12).
+
+## D-038 — Reader rendering
+**Status:** Accepted (implemented).
+- Server-rendered text: each ayah string is placed verbatim in `[data-ayah-text]`. Ayah numbers come from a CSS counter after U+06DD (so digits follow the numeral setting without touching the DOM text). Hizb-quarter marks (۞) and the sajdah label are separate elements. The DOM integrity test (SPEC §2.6) runs on surahs 1, 2, 9, 18, 36, 112–114 and Mushaf pages 1, 2 and 604.
+- Ayahs are grouped by Madani page into sections with `content-visibility: auto` (D-014). Jumps re-scroll after the font loads until the target ayah settles, and stop when the reader interacts.
+- All 114 surahs (×2 locales), the 604 Mushaf pages and the 30 juz are prerendered (about 2,800 pages, roughly 10,800 build files). Vercel documents no limit on build output files.
+- The sajdah type in the Tanzil metadata (recommended/obligatory) is kept in the data but **not shown**, because it is a fiqh ruling the app should not assert. Only "سجدة" is shown.
+- The Mushaf is a right-to-left book in every UI language: a swipe to the right or PageDown goes to the next page, and the next-page link sits on the left. Arrow keys move by ayah (← and ↓ forward), PageUp/PageDown by page.
+
+## D-039 — Reading settings storage
+**Status:** Accepted for Phase 3 (Phase 4 moves user data to IndexedDB). Font, size (20–56 px), line spacing, width and numerals are kept in `localStorage` (`noor:reader`) and applied by the inline boot script before paint. "Numerals: automatic" means Arabic-Indic ayah numbers in the Arabic UI and Western in the English UI. UI numbers (page, juz, counts) follow the locale's default CLDR digits (Western for `ar` today); the numeral setting changes ayah numbers only — **decision needed** whether it should also cover all UI numbers.
+
+## D-040 — Precompiled messages (next-intl, experimental)
+**Status:** Accepted (implemented). `experimental.messages.precompile` compiles ICU messages at build time, so the ICU parser/formatter (~17 KB gzipped) is not shipped to the browser. Without it the reader route exceeded the 150 KB JS budget. Risk: the option is experimental in next-intl 4.14; `t.raw` is not available.
+
+## D-041 — No next-intl runtime in the browser
+**Status:** Proposed. The reader route ships 147.8 KiB of gzipped JS (gzip level 9), under 150 KiB but only ~2 KiB to spare; strictly in decimal kB it is 151.3 kB. React DOM and the Next.js runtime alone are ~134 KiB. Replacing next-intl's client APIs (`useTranslations`, `Link`, `useRouter`, `usePathname`, `NextIntlClientProvider`) with server-prepared labels and plain `next/link` + a small locale-prefix helper would save about 9 KiB, leaving room for the ayah menu (Phase 4) and the mini player (Phase 6). Server-side next-intl stays.

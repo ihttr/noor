@@ -18,7 +18,8 @@
     "saved": "المحفوظات",
     "stats": "الإحصاءات",
     "settings": "الإعدادات",
-    "more": "المزيد"
+    "more": "المزيد",
+    "about": "عن التطبيق والمصادر"
   },
   "Pages": {
     "home": {
@@ -64,6 +65,10 @@
     "more": {
       "title": "المزيد",
       "description": "بقية أقسام التطبيق."
+    },
+    "about": {
+      "title": "عن التطبيق والمصادر",
+      "description": "مصادر نص القرآن والخطوط والتراخيص."
     }
   },
   "Placeholder": {
@@ -91,5 +96,102 @@
     "title": "الصفحة غير موجودة",
     "body": "لم نجد الصفحة التي تبحث عنها.",
     "backHome": "العودة إلى الرئيسية"
+  },
+  "Quran": {
+    "filterLabel": "ابحث عن سورة",
+    "filterPlaceholder": "اسم السورة أو رقمها",
+    "noMatches": "لا توجد سورة مطابقة.",
+    "tabsLabel": "طريقة التصفّح",
+    "tabs": {
+      "surah": "السور",
+      "juz": "الأجزاء",
+      "hizb": "الأحزاب",
+      "page": "الصفحات"
+    },
+    "surahTitle": "سورة {name}",
+    "ayahCount": "{count, plural, one {آية واحدة} two {آيتان} few {# آيات} many {# آية} other {# آية}}",
+    "revelation": {
+      "Meccan": "مكية",
+      "Medinan": "مدنية"
+    },
+    "juz": "الجزء {n, number}",
+    "hizb": "الحزب {n, number}",
+    "quarter": "الربع {n, number}",
+    "hizbQuarter": "ربع الحزب {n, number}",
+    "page": "صفحة {n, number}",
+    "startsAt": "من {surah} — آية {ayah, number}",
+    "pageCount": "{count, number} صفحة"
+  },
+  "Reader": {
+    "toolbarLabel": "أدوات القراءة",
+    "readingMode": "وضع القراءة",
+    "mushafMode": "وضع المصحف",
+    "modeLabel": "وضع العرض",
+    "settings": "إعدادات القراءة",
+    "jump": "انتقال سريع",
+    "close": "إغلاق",
+    "backToList": "فهرس السور",
+    "ayahLabel": "آية {n, number}",
+    "sajdah": "سجدة",
+    "sajdahLabel": "موضع سجدة",
+    "quarterMark": "بداية ربع الحزب {n, number}",
+    "prevSurah": "السورة السابقة",
+    "nextSurah": "السورة التالية",
+    "prevPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "prevJuz": "الجزء السابق",
+    "nextJuz": "الجزء التالي",
+    "pageOf": "صفحة {n, number} من {total, number}",
+    "source": "نص القرآن: مشروع تنزيل",
+    "approxNote": "حدود الصفحات تتبع مصحف المدينة، أمّا توزيع الأسطر فتقريبي.",
+    "swipeHint": "اسحب يميناً للصفحة التالية، ويساراً للسابقة.",
+    "font": "خط المصحف",
+    "fonts": {
+      "amiri": "أميري قرآن",
+      "scheherazade": "شهرزاد الجديد"
+    },
+    "fontSize": "حجم الخط",
+    "decrease": "تصغير الخط",
+    "increase": "تكبير الخط",
+    "lineHeight": "تباعد الأسطر",
+    "width": "عرض النص",
+    "widths": {
+      "narrow": "ضيق",
+      "normal": "متوسط",
+      "wide": "واسع"
+    },
+    "numerals": "شكل الأرقام",
+    "numeralStyles": {
+      "auto": "حسب اللغة",
+      "arabic": "١٢٣",
+      "western": "123"
+    },
+    "theme": "المظهر",
+    "jumpRef": "سورة وآية",
+    "jumpRefHint": "مثال: ٢:٢٥٥ أو البقرة ٢٥٥ أو الكهف",
+    "jumpGo": "انتقال",
+    "jumpInvalid": "لم أتعرّف على هذا المرجع.",
+    "jumpOutOfRange": "الرقم خارج النطاق.",
+    "jumpPage": "صفحة",
+    "jumpJuz": "جزء",
+    "jumpHizb": "حزب",
+    "jumpQuarter": "ربع",
+    "loading": "جارٍ التحميل…",
+    "surahNav": "التنقل بين السور",
+    "pageNav": "التنقل بين الصفحات",
+    "juzNav": "التنقل بين الأجزاء"
+  },
+  "About": {
+    "intro": "نور تطبيق مجاني يضع القرآن أولاً. هذه الصفحة تذكر مصدر كل محتوى وترخيصه.",
+    "quranText": "نص القرآن",
+    "quranTextBody": "النص العثماني من مشروع تنزيل ({version})، منقول حرفياً دون أي تغيير، مع إشعار حقوق تنزيل الكامل أدناه.",
+    "metadata": "بيانات بنية المصحف",
+    "metadataBody": "السور والأجزاء والأحزاب والصفحات ومواضع السجود من بيانات تنزيل (ترخيص CC BY).",
+    "mushaf": "وضع المصحف",
+    "mushafBody": "حدود الصفحات تتبع مصحف المدينة (٦٠٤ صفحات)، أمّا توزيع الأسطر داخل الصفحة فتقريبي وقد يختلف عن المصحف المطبوع.",
+    "fonts": "الخطوط",
+    "fontsBody": "أميري قرآن وشهرزاد الجديد لنص القرآن، وIBM Plex Sans Arabic للواجهة؛ جميعها برخصة SIL Open Font License 1.1.",
+    "notYet": "لا تتوفر بعد ترجمات أو تفاسير أو أذكار؛ ستُضاف بعد اعتماد مصادرها.",
+    "notice": "إشعار حقوق تنزيل"
   }
 }

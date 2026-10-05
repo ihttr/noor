@@ -1,17 +1,4 @@
-import {
-  BookHeart,
-  BookOpen,
-  Bookmark,
-  CalendarDays,
-  ChartColumn,
-  CircleDot,
-  Clock,
-  Compass,
-  Ellipsis,
-  House,
-  Settings,
-  type LucideIcon,
-} from 'lucide-react';
+// Navigation data only (no icons: see nav-icons.tsx, rendered on the server).
 
 export type NavKey =
   | 'home'
@@ -24,12 +11,12 @@ export type NavKey =
   | 'saved'
   | 'stats'
   | 'settings'
+  | 'about'
   | 'more';
 
 export type NavItem = {
   key: NavKey;
   href: string;
-  icon: LucideIcon;
   /** Shown in the mobile bottom bar (max 5 items, thumb reach). */
   bottomBar: boolean;
   /** Shown in the desktop side navigation. */
@@ -38,20 +25,23 @@ export type NavItem = {
   inMore: boolean;
   /** SPEC §16 phase that builds the page; undefined for pure navigation pages. */
   phase?: number;
+  /** Other path prefixes that belong to this section (e.g. the Mushaf view belongs to Quran). */
+  activeFor?: readonly string[];
 };
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { key: 'home', href: '/', icon: House, bottomBar: true, sidebar: true, inMore: false, phase: 4 },
-  { key: 'quran', href: '/quran', icon: BookOpen, bottomBar: true, sidebar: true, inMore: false, phase: 3 },
-  { key: 'adhkar', href: '/adhkar', icon: BookHeart, bottomBar: true, sidebar: true, inMore: false, phase: 7 },
-  { key: 'prayer', href: '/prayer', icon: Clock, bottomBar: true, sidebar: true, inMore: false, phase: 8 },
-  { key: 'tasbih', href: '/tasbih', icon: CircleDot, bottomBar: false, sidebar: true, inMore: true, phase: 7 },
-  { key: 'qibla', href: '/qibla', icon: Compass, bottomBar: false, sidebar: true, inMore: true, phase: 8 },
-  { key: 'calendar', href: '/calendar', icon: CalendarDays, bottomBar: false, sidebar: true, inMore: true, phase: 8 },
-  { key: 'saved', href: '/saved', icon: Bookmark, bottomBar: false, sidebar: true, inMore: true, phase: 4 },
-  { key: 'stats', href: '/stats', icon: ChartColumn, bottomBar: false, sidebar: true, inMore: true, phase: 10 },
-  { key: 'settings', href: '/settings', icon: Settings, bottomBar: false, sidebar: true, inMore: true, phase: 4 },
-  { key: 'more', href: '/more', icon: Ellipsis, bottomBar: true, sidebar: false, inMore: false },
+  { key: 'home', href: '/', bottomBar: true, sidebar: true, inMore: false, phase: 4 },
+  { key: 'quran', href: '/quran', bottomBar: true, sidebar: true, inMore: false, phase: 3, activeFor: ['/mushaf', '/juz'] },
+  { key: 'adhkar', href: '/adhkar', bottomBar: true, sidebar: true, inMore: false, phase: 7 },
+  { key: 'prayer', href: '/prayer', bottomBar: true, sidebar: true, inMore: false, phase: 8 },
+  { key: 'tasbih', href: '/tasbih', bottomBar: false, sidebar: true, inMore: true, phase: 7 },
+  { key: 'qibla', href: '/qibla', bottomBar: false, sidebar: true, inMore: true, phase: 8 },
+  { key: 'calendar', href: '/calendar', bottomBar: false, sidebar: true, inMore: true, phase: 8 },
+  { key: 'saved', href: '/saved', bottomBar: false, sidebar: true, inMore: true, phase: 4 },
+  { key: 'stats', href: '/stats', bottomBar: false, sidebar: true, inMore: true, phase: 10 },
+  { key: 'settings', href: '/settings', bottomBar: false, sidebar: true, inMore: true, phase: 4 },
+  { key: 'about', href: '/about', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'more', href: '/more', bottomBar: true, sidebar: false, inMore: false },
 ];
 
 export function navItem(key: NavKey): NavItem {

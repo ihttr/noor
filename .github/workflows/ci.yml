@@ -30,6 +30,8 @@ jobs:
       - run: npm run db:validate
       - name: Quran content integrity (SPEC §2.6)
         run: npm run content:verify
+      - name: Web fonts up to date (built from approved sources)
+        run: node scripts/build-fonts.ts --check
       - run: npm test
       - name: Content sources sanity checks
         run: npm run sources:check

@@ -6,6 +6,7 @@ import { AppShell } from '@/components/shell/AppShell';
 import { ThemeSync } from '@/components/theme/ThemeSync';
 import { directions, routing } from '@/i18n/routing';
 import { uiFont } from '@/lib/fonts';
+import { readerBootScript } from '@/lib/reader/settings';
 import { themeBootScript } from '@/lib/theme';
 import '../globals.css';
 
@@ -41,7 +42,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
     // data-theme is set by the boot script before paint, so React must not complain about it.
     <html lang={locale} dir={directions[locale]} className={uiFont.variable} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript + readerBootScript }} />
       </head>
       <body>
         <NextIntlClientProvider>

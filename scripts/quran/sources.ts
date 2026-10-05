@@ -7,7 +7,9 @@ import path from 'node:path';
 export const ROOT = process.cwd();
 export const LOCK_PATH = 'data/sources/SOURCES.lock.json';
 
-export type ApprovedUse = 'quran-display' | 'quran-search' | 'quran-metadata';
+/** Uses of the Quran content pipeline (text, search text, structure metadata). */
+export type QuranUse = 'quran-display' | 'quran-search' | 'quran-metadata';
+export type ApprovedUse = QuranUse | 'quran-font-amiri' | 'quran-font-scheherazade';
 
 export interface LockApproval {
   use: string;
@@ -53,13 +55,20 @@ export async function readLock(): Promise<{ sources: LockSource[] }> {
   return JSON.parse(await readFile(path.join(ROOT, LOCK_PATH), 'utf8')) as { sources: LockSource[] };
 }
 
-export async function loadApproved(use: ApprovedUse): Promise<ApprovedFile> {
+/**
+ * Loads the approved file for `use`. Uses that cover several files (e.g. a font archive with its
+ * license) need `fileName` to pick one.
+ */
+export async function loadApproved(use: ApprovedUse, fileName?: string): Promise<ApprovedFile> {
   const lock = await readLock();
   const matches = lock.sources.flatMap((source) =>
-    source.files.filter((entry) => entry.approval?.use === use).map((entry) => ({ source, entry }))
+    source.files
+      .filter((entry) => entry.approval?.use === use && (!fileName || path.posix.basename(entry.path) === fileName))
+      .map((entry) => ({ source, entry }))
   );
   if (matches.length !== 1) {
-    throw new Error(`Expected exactly one approved file for "${use}" in ${LOCK_PATH}, found ${matches.length}.`);
+    const what = fileName ? `"${use}" / ${fileName}` : `"${use}"`;
+    throw new Error(`Expected exactly one approved file for ${what} in ${LOCK_PATH}, found ${matches.length}.`);
   }
   const { source, entry } = matches[0]!;
   const bytes = await readFile(path.join(ROOT, entry.path));
@@ -70,7 +79,7 @@ export async function loadApproved(use: ApprovedUse): Promise<ApprovedFile> {
   return { use, path: entry.path, sha256: entry.sha256, bytes, source, entry };
 }
 
-export async function loadAllApproved(): Promise<Record<ApprovedUse, ApprovedFile>> {
+export async function loadAllApproved(): Promise<Record<QuranUse, ApprovedFile>> {
   return {
     'quran-display': await loadApproved('quran-display'),
     'quran-search': await loadApproved('quran-search'),

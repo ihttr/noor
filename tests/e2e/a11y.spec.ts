@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 for (const theme of ['light', 'dark', 'sepia', 'black'] as const) {
-  for (const path of ['/', '/en', '/settings', '/en/more']) {
+  for (const path of ['/', '/en', '/settings', '/en/more', '/quran', '/quran/al-faatiha', '/en/quran/yaseen', '/mushaf/page/2', '/about']) {
     test(`axe: ${path} in ${theme} theme has no WCAG A/AA violations`, async ({ page }) => {
       await page.addInitScript((t) => window.localStorage.setItem('noor:theme', t), theme);
       await page.goto(path);

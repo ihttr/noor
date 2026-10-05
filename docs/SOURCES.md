@@ -79,7 +79,7 @@ Note: requesting Simple Clean with `marks=true` inserts pause marks (U+06D6–U+
 
 Caveat: the names are Tanzil's (e.g. `ابراهيم` without hamza; transliterations like `Al-Baqara`). Display names and URL slugs need a reviewed data file (SPEC 9).
 
-## 4. Quran font candidates (needs owner approval)
+## 4. Quran fonts — **APPROVED: Amiri Quran (default) + Scheherazade New** (2026-10-05)
 
 Compare them on the font test page: `node scripts/sources/serve.mjs` → <http://localhost:4173/font-test/>. Coverage = code points mapped in the font's cmap (it does not prove correct mark placement).
 

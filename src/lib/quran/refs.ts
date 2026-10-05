@@ -23,7 +23,7 @@ function arabicForms(name: string): string[] {
   return key.startsWith('ال') && key.length > 3 ? [key, key.slice(2)] : [key];
 }
 
-function latinKey(name: string): string {
+export function latinKey(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z]/g, '')

@@ -1,7 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
+import { Languages } from 'lucide-react';
 import { LanguageSwitch } from './LanguageSwitch';
+import { NavIcon } from './nav-icons';
 import { NavLink } from './NavLink';
 import { NAV_ITEMS } from './nav-items';
 
@@ -31,7 +33,10 @@ export async function AppShell({ children }: { children: ReactNode }) {
       </a>
 
       {/* Desktop / tablet: side navigation on the inline-start edge (right in RTL). */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-6 border-e border-line bg-surface px-4 py-6 md:flex">
+      <aside
+        data-chrome-part
+        className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-6 border-e border-line bg-surface px-4 py-6 md:flex"
+      >
         <Link href="/" className="flex min-h-11 items-center gap-3 rounded-xl px-2">
           <BrandMark />
           <span className="text-lg font-semibold">{tShell('brand')}</span>
@@ -40,30 +45,33 @@ export async function AppShell({ children }: { children: ReactNode }) {
           <ul className="flex flex-col gap-1">
             {NAV_ITEMS.filter((i) => i.sidebar).map((item) => (
               <li key={item.key}>
-                <NavLink navKey={item.key} label={tNav(item.key)} variant="side" />
+                <NavLink navKey={item.key} label={tNav(item.key)} icon={<NavIcon navKey={item.key} />} variant="side" />
               </li>
             ))}
           </ul>
         </nav>
-        <LanguageSwitch />
+        <LanguageSwitch icon={<Languages aria-hidden="true" className="size-5" strokeWidth={1.75} />} />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile: compact top bar. */}
-        <header className="sticky top-0 z-10 border-b border-line bg-canvas/90 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden">
+        <header
+          data-chrome-part
+          className="sticky top-0 z-20 border-b border-line bg-canvas/90 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
+        >
           <div className="flex h-14 items-center justify-between px-4">
             <Link href="/" className="flex min-h-11 items-center gap-2 rounded-xl">
               <BrandMark />
               <span className="text-base font-semibold">{tShell('brand')}</span>
             </Link>
-            <LanguageSwitch className="-me-2" />
+            <LanguageSwitch className="-me-2" icon={<Languages aria-hidden="true" className="size-5" strokeWidth={1.75} />} />
           </div>
         </header>
 
         <main
           id="main"
           tabIndex={-1}
-          className="w-full max-w-3xl flex-1 px-4 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] outline-none md:px-10 md:py-10"
+          className="w-full min-w-0 flex-1 px-4 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] outline-none md:px-10 md:py-10"
         >
           {children}
         </main>
@@ -71,6 +79,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
 
       {/* Mobile: bottom navigation within thumb reach (SPEC §6). */}
       <nav
+        data-chrome-part
         aria-label={tShell('primaryNav')}
         className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
       >
@@ -80,6 +89,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
               <NavLink
                 navKey={item.key}
                 label={tNav(item.key)}
+                icon={<NavIcon navKey={item.key} />}
                 variant="bottom"
                 alsoActiveFor={item.key === 'more' ? MORE_SECTION_PATHS : undefined}
               />

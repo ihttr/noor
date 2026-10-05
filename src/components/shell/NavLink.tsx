@@ -1,22 +1,23 @@
 'use client';
 
 import { Link, usePathname } from '@/i18n/navigation';
+import type { ReactNode } from 'react';
 import { isActivePath, navItem, type NavKey } from './nav-items';
 
 type Props = {
   navKey: NavKey;
   label: string;
+  /** Server-rendered icon element (no icon code in the client bundle). */
+  icon: ReactNode;
   variant: 'bottom' | 'side';
   /** Paths that should also mark this link active (e.g. "More" for its sub-pages). */
   alsoActiveFor?: readonly string[];
 };
 
-// Icons are looked up here (client side) because components cannot be passed as props from
-// Server Components.
-export function NavLink({ navKey, label, variant, alsoActiveFor = [] }: Props) {
-  const { href, icon: Icon } = navItem(navKey);
+export function NavLink({ navKey, label, icon, variant, alsoActiveFor = [] }: Props) {
+  const { href, activeFor = [] } = navItem(navKey);
   const pathname = usePathname();
-  const active = isActivePath(pathname, href) || alsoActiveFor.some((p) => isActivePath(pathname, p));
+  const active = [href, ...activeFor, ...alsoActiveFor].some((p) => isActivePath(pathname, p));
 
   if (variant === 'bottom') {
     return (
@@ -32,7 +33,7 @@ export function NavLink({ navKey, label, variant, alsoActiveFor = [] }: Props) {
             active ? 'bg-accent-soft' : ''
           }`}
         >
-          <Icon aria-hidden="true" className="size-5" strokeWidth={active ? 2.25 : 1.75} />
+          {icon}
         </span>
         <span className="leading-none">{label}</span>
       </Link>
@@ -47,7 +48,7 @@ export function NavLink({ navKey, label, variant, alsoActiveFor = [] }: Props) {
         active ? 'bg-accent-soft font-semibold text-accent' : 'text-ink-muted hover:bg-surface-raised hover:text-ink'
       }`}
     >
-      <Icon aria-hidden="true" className="size-5 shrink-0" strokeWidth={active ? 2.25 : 1.75} />
+      {icon}
       <span>{label}</span>
     </Link>
   );

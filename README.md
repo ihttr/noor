@@ -5,7 +5,7 @@ A Quran-first web app: a digital Mushaf, a daily adhkar companion, a reading tra
 - Specification: [docs/SPEC.md](docs/SPEC.md) · Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) · Content sources: [docs/SOURCES.md](docs/SOURCES.md)
 - Project rules (including the religious-content integrity rules): [CLAUDE.md](CLAUDE.md)
 
-**Status: Phase 2 — Quran content pipeline.** The app shell exists with placeholder pages; the Quran text, structure metadata and search index are imported into `content/` from the approved Tanzil files and verified. No translation, tafsir or adhkar content yet.
+**Status: Phase 3 — Quran reader.** Surah index (filter; Surah / Juz / Hizb / Page), reading mode, Mushaf mode (Madani page boundaries; line layout approximate), jumps, keyboard navigation, reading settings. Other sections are still placeholders. No translation, tafsir or adhkar content yet.
 
 ## Requirements
 
@@ -42,6 +42,7 @@ The same commands work in bash/zsh (`cp .env.example .env.local` instead of `Cop
 | `npm run sources:check` | Sanity checks on the downloaded sources |
 | `npm run content:import` | Regenerate `content/` from the **approved** source files (SHA-256 checked first) |
 | `npm run content:verify` | Quran content integrity checks (SPEC §2.6): counts, exact text, hash, Basmala, structure, notice, search index |
+| `node scripts/build-fonts.ts` | Rebuild the Quran web font (Amiri Quran WOFF2) from the approved TTF; `--check` verifies it (CI) |
 
 First-time setup for the end-to-end tests (downloads Chromium once):
 
@@ -64,6 +65,10 @@ PostgreSQL holds **user data only** (SPEC §5); Quran content is static JSON. Th
 ```
 src/app/[locale]/       routes (ar at /, en at /en) — placeholder pages for now
 src/components/shell/   app shell: side navigation (desktop), bottom bar (mobile)
+src/components/reader/  Quran reader: server-rendered QuranFlow, client ReaderShell (toolbar, keys, swipe, settings, jump)
+src/components/quran/   surah index
+assets/fonts/           web fonts built from approved sources (+ fonts.lock.json)
+data/curated/           hand-curated data (surah URL slugs)
 src/components/theme/   theme picker + system-theme sync
 src/i18n/               next-intl routing, navigation and request config
 src/lib/                fonts, theme helpers

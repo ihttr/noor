@@ -1,0 +1,577 @@
+{
+  "schemaVersion": 1,
+  "status": "generated — awaiting owner review",
+  "note": "URL slugs for /quran/{slug}. Generated from the Tanzil transliteration (`from`); edit `slug` freely. Rules: lowercase a-z, 0-9 and hyphens; unique.",
+  "surahs": [
+    {
+      "number": 1,
+      "slug": "al-faatiha",
+      "from": "Al-Faatiha"
+    },
+    {
+      "number": 2,
+      "slug": "al-baqara",
+      "from": "Al-Baqara"
+    },
+    {
+      "number": 3,
+      "slug": "aal-i-imraan",
+      "from": "Aal-i-Imraan"
+    },
+    {
+      "number": 4,
+      "slug": "an-nisaa",
+      "from": "An-Nisaa"
+    },
+    {
+      "number": 5,
+      "slug": "al-maaida",
+      "from": "Al-Maaida"
+    },
+    {
+      "number": 6,
+      "slug": "al-anaam",
+      "from": "Al-An'aam"
+    },
+    {
+      "number": 7,
+      "slug": "al-araaf",
+      "from": "Al-A'raaf"
+    },
+    {
+      "number": 8,
+      "slug": "al-anfaal",
+      "from": "Al-Anfaal"
+    },
+    {
+      "number": 9,
+      "slug": "at-tawba",
+      "from": "At-Tawba"
+    },
+    {
+      "number": 10,
+      "slug": "yunus",
+      "from": "Yunus"
+    },
+    {
+      "number": 11,
+      "slug": "hud",
+      "from": "Hud"
+    },
+    {
+      "number": 12,
+      "slug": "yusuf",
+      "from": "Yusuf"
+    },
+    {
+      "number": 13,
+      "slug": "ar-rad",
+      "from": "Ar-Ra'd"
+    },
+    {
+      "number": 14,
+      "slug": "ibrahim",
+      "from": "Ibrahim"
+    },
+    {
+      "number": 15,
+      "slug": "al-hijr",
+      "from": "Al-Hijr"
+    },
+    {
+      "number": 16,
+      "slug": "an-nahl",
+      "from": "An-Nahl"
+    },
+    {
+      "number": 17,
+      "slug": "al-israa",
+      "from": "Al-Israa"
+    },
+    {
+      "number": 18,
+      "slug": "al-kahf",
+      "from": "Al-Kahf"
+    },
+    {
+      "number": 19,
+      "slug": "maryam",
+      "from": "Maryam"
+    },
+    {
+      "number": 20,
+      "slug": "taa-haa",
+      "from": "Taa-Haa"
+    },
+    {
+      "number": 21,
+      "slug": "al-anbiyaa",
+      "from": "Al-Anbiyaa"
+    },
+    {
+      "number": 22,
+      "slug": "al-hajj",
+      "from": "Al-Hajj"
+    },
+    {
+      "number": 23,
+      "slug": "al-muminoon",
+      "from": "Al-Muminoon"
+    },
+    {
+      "number": 24,
+      "slug": "an-noor",
+      "from": "An-Noor"
+    },
+    {
+      "number": 25,
+      "slug": "al-furqaan",
+      "from": "Al-Furqaan"
+    },
+    {
+      "number": 26,
+      "slug": "ash-shuaraa",
+      "from": "Ash-Shu'araa"
+    },
+    {
+      "number": 27,
+      "slug": "an-naml",
+      "from": "An-Naml"
+    },
+    {
+      "number": 28,
+      "slug": "al-qasas",
+      "from": "Al-Qasas"
+    },
+    {
+      "number": 29,
+      "slug": "al-ankaboot",
+      "from": "Al-Ankaboot"
+    },
+    {
+      "number": 30,
+      "slug": "ar-room",
+      "from": "Ar-Room"
+    },
+    {
+      "number": 31,
+      "slug": "luqman",
+      "from": "Luqman"
+    },
+    {
+      "number": 32,
+      "slug": "as-sajda",
+      "from": "As-Sajda"
+    },
+    {
+      "number": 33,
+      "slug": "al-ahzaab",
+      "from": "Al-Ahzaab"
+    },
+    {
+      "number": 34,
+      "slug": "saba",
+      "from": "Saba"
+    },
+    {
+      "number": 35,
+      "slug": "faatir",
+      "from": "Faatir"
+    },
+    {
+      "number": 36,
+      "slug": "yaseen",
+      "from": "Yaseen"
+    },
+    {
+      "number": 37,
+      "slug": "as-saaffaat",
+      "from": "As-Saaffaat"
+    },
+    {
+      "number": 38,
+      "slug": "saad",
+      "from": "Saad"
+    },
+    {
+      "number": 39,
+      "slug": "az-zumar",
+      "from": "Az-Zumar"
+    },
+    {
+      "number": 40,
+      "slug": "al-ghaafir",
+      "from": "Al-Ghaafir"
+    },
+    {
+      "number": 41,
+      "slug": "fussilat",
+      "from": "Fussilat"
+    },
+    {
+      "number": 42,
+      "slug": "ash-shura",
+      "from": "Ash-Shura"
+    },
+    {
+      "number": 43,
+      "slug": "az-zukhruf",
+      "from": "Az-Zukhruf"
+    },
+    {
+      "number": 44,
+      "slug": "ad-dukhaan",
+      "from": "Ad-Dukhaan"
+    },
+    {
+      "number": 45,
+      "slug": "al-jaathiya",
+      "from": "Al-Jaathiya"
+    },
+    {
+      "number": 46,
+      "slug": "al-ahqaf",
+      "from": "Al-Ahqaf"
+    },
+    {
+      "number": 47,
+      "slug": "muhammad",
+      "from": "Muhammad"
+    },
+    {
+      "number": 48,
+      "slug": "al-fath",
+      "from": "Al-Fath"
+    },
+    {
+      "number": 49,
+      "slug": "al-hujuraat",
+      "from": "Al-Hujuraat"
+    },
+    {
+      "number": 50,
+      "slug": "qaaf",
+      "from": "Qaaf"
+    },
+    {
+      "number": 51,
+      "slug": "adh-dhaariyat",
+      "from": "Adh-Dhaariyat"
+    },
+    {
+      "number": 52,
+      "slug": "at-tur",
+      "from": "At-Tur"
+    },
+    {
+      "number": 53,
+      "slug": "an-najm",
+      "from": "An-Najm"
+    },
+    {
+      "number": 54,
+      "slug": "al-qamar",
+      "from": "Al-Qamar"
+    },
+    {
+      "number": 55,
+      "slug": "ar-rahmaan",
+      "from": "Ar-Rahmaan"
+    },
+    {
+      "number": 56,
+      "slug": "al-waaqia",
+      "from": "Al-Waaqia"
+    },
+    {
+      "number": 57,
+      "slug": "al-hadid",
+      "from": "Al-Hadid"
+    },
+    {
+      "number": 58,
+      "slug": "al-mujaadila",
+      "from": "Al-Mujaadila"
+    },
+    {
+      "number": 59,
+      "slug": "al-hashr",
+      "from": "Al-Hashr"
+    },
+    {
+      "number": 60,
+      "slug": "al-mumtahana",
+      "from": "Al-Mumtahana"
+    },
+    {
+      "number": 61,
+      "slug": "as-saff",
+      "from": "As-Saff"
+    },
+    {
+      "number": 62,
+      "slug": "al-jumua",
+      "from": "Al-Jumu'a"
+    },
+    {
+      "number": 63,
+      "slug": "al-munaafiqoon",
+      "from": "Al-Munaafiqoon"
+    },
+    {
+      "number": 64,
+      "slug": "at-taghaabun",
+      "from": "At-Taghaabun"
+    },
+    {
+      "number": 65,
+      "slug": "at-talaaq",
+      "from": "At-Talaaq"
+    },
+    {
+      "number": 66,
+      "slug": "at-tahrim",
+      "from": "At-Tahrim"
+    },
+    {
+      "number": 67,
+      "slug": "al-mulk",
+      "from": "Al-Mulk"
+    },
+    {
+      "number": 68,
+      "slug": "al-qalam",
+      "from": "Al-Qalam"
+    },
+    {
+      "number": 69,
+      "slug": "al-haaqqa",
+      "from": "Al-Haaqqa"
+    },
+    {
+      "number": 70,
+      "slug": "al-maaarij",
+      "from": "Al-Ma'aarij"
+    },
+    {
+      "number": 71,
+      "slug": "nooh",
+      "from": "Nooh"
+    },
+    {
+      "number": 72,
+      "slug": "al-jinn",
+      "from": "Al-Jinn"
+    },
+    {
+      "number": 73,
+      "slug": "al-muzzammil",
+      "from": "Al-Muzzammil"
+    },
+    {
+      "number": 74,
+      "slug": "al-muddaththir",
+      "from": "Al-Muddaththir"
+    },
+    {
+      "number": 75,
+      "slug": "al-qiyaama",
+      "from": "Al-Qiyaama"
+    },
+    {
+      "number": 76,
+      "slug": "al-insaan",
+      "from": "Al-Insaan"
+    },
+    {
+      "number": 77,
+      "slug": "al-mursalaat",
+      "from": "Al-Mursalaat"
+    },
+    {
+      "number": 78,
+      "slug": "an-naba",
+      "from": "An-Naba"
+    },
+    {
+      "number": 79,
+      "slug": "an-naaziaat",
+      "from": "An-Naazi'aat"
+    },
+    {
+      "number": 80,
+      "slug": "abasa",
+      "from": "Abasa"
+    },
+    {
+      "number": 81,
+      "slug": "at-takwir",
+      "from": "At-Takwir"
+    },
+    {
+      "number": 82,
+      "slug": "al-infitaar",
+      "from": "Al-Infitaar"
+    },
+    {
+      "number": 83,
+      "slug": "al-mutaffifin",
+      "from": "Al-Mutaffifin"
+    },
+    {
+      "number": 84,
+      "slug": "al-inshiqaaq",
+      "from": "Al-Inshiqaaq"
+    },
+    {
+      "number": 85,
+      "slug": "al-burooj",
+      "from": "Al-Burooj"
+    },
+    {
+      "number": 86,
+      "slug": "at-taariq",
+      "from": "At-Taariq"
+    },
+    {
+      "number": 87,
+      "slug": "al-alaa",
+      "from": "Al-A'laa"
+    },
+    {
+      "number": 88,
+      "slug": "al-ghaashiya",
+      "from": "Al-Ghaashiya"
+    },
+    {
+      "number": 89,
+      "slug": "al-fajr",
+      "from": "Al-Fajr"
+    },
+    {
+      "number": 90,
+      "slug": "al-balad",
+      "from": "Al-Balad"
+    },
+    {
+      "number": 91,
+      "slug": "ash-shams",
+      "from": "Ash-Shams"
+    },
+    {
+      "number": 92,
+      "slug": "al-lail",
+      "from": "Al-Lail"
+    },
+    {
+      "number": 93,
+      "slug": "ad-dhuhaa",
+      "from": "Ad-Dhuhaa"
+    },
+    {
+      "number": 94,
+      "slug": "ash-sharh",
+      "from": "Ash-Sharh"
+    },
+    {
+      "number": 95,
+      "slug": "at-tin",
+      "from": "At-Tin"
+    },
+    {
+      "number": 96,
+      "slug": "al-alaq",
+      "from": "Al-Alaq"
+    },
+    {
+      "number": 97,
+      "slug": "al-qadr",
+      "from": "Al-Qadr"
+    },
+    {
+      "number": 98,
+      "slug": "al-bayyina",
+      "from": "Al-Bayyina"
+    },
+    {
+      "number": 99,
+      "slug": "az-zalzala",
+      "from": "Az-Zalzala"
+    },
+    {
+      "number": 100,
+      "slug": "al-aadiyaat",
+      "from": "Al-Aadiyaat"
+    },
+    {
+      "number": 101,
+      "slug": "al-qaaria",
+      "from": "Al-Qaari'a"
+    },
+    {
+      "number": 102,
+      "slug": "at-takaathur",
+      "from": "At-Takaathur"
+    },
+    {
+      "number": 103,
+      "slug": "al-asr",
+      "from": "Al-Asr"
+    },
+    {
+      "number": 104,
+      "slug": "al-humaza",
+      "from": "Al-Humaza"
+    },
+    {
+      "number": 105,
+      "slug": "al-fil",
+      "from": "Al-Fil"
+    },
+    {
+      "number": 106,
+      "slug": "quraish",
+      "from": "Quraish"
+    },
+    {
+      "number": 107,
+      "slug": "al-maaun",
+      "from": "Al-Maa'un"
+    },
+    {
+      "number": 108,
+      "slug": "al-kawthar",
+      "from": "Al-Kawthar"
+    },
+    {
+      "number": 109,
+      "slug": "al-kaafiroon",
+      "from": "Al-Kaafiroon"
+    },
+    {
+      "number": 110,
+      "slug": "an-nasr",
+      "from": "An-Nasr"
+    },
+    {
+      "number": 111,
+      "slug": "al-masad",
+      "from": "Al-Masad"
+    },
+    {
+      "number": 112,
+      "slug": "al-ikhlaas",
+      "from": "Al-Ikhlaas"
+    },
+    {
+      "number": 113,
+      "slug": "al-falaq",
+      "from": "Al-Falaq"
+    },
+    {
+      "number": 114,
+      "slug": "an-naas",
+      "from": "An-Naas"
+    }
+  ]
+}

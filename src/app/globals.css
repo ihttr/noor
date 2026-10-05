@@ -123,3 +123,239 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------------------------------
+ * Shared controls
+ * ------------------------------------------------------------------------------------------ */
+@layer components {
+  .icon-button {
+    display: inline-flex;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    color: var(--ink-muted);
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .icon-button:hover:not(:disabled) {
+    background: var(--surface-raised);
+    color: var(--ink);
+  }
+  .icon-button:disabled {
+    opacity: 0.4;
+  }
+  .text-field {
+    min-height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding-inline: 0.75rem;
+    color: var(--ink);
+  }
+  .text-field::placeholder {
+    color: var(--ink-muted);
+  }
+  .primary-button {
+    min-height: 2.75rem;
+    border-radius: 0.75rem;
+    background: var(--accent);
+    padding-inline: 1rem;
+    font-weight: 600;
+    color: var(--on-accent);
+  }
+  .reader-dialog {
+    margin: auto;
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: 1.25rem;
+    background: var(--surface);
+    padding: 1.25rem;
+    color: var(--ink);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.25);
+  }
+  .reader-dialog::backdrop {
+    background: rgb(0 0 0 / 0.45);
+  }
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Quran reader (SPEC §6, §7.3, §7.4). The Quran text is never styled by changing it: digits,
+ * marks and frames are separate elements or generated content.
+ * ------------------------------------------------------------------------------------------ */
+.quran-root {
+  --quran-family: var(--font-amiri-quran), 'Amiri Quran', serif;
+  --reader-width: 44rem;
+}
+html[data-quran-font='scheherazade'] .quran-root {
+  --quran-family: var(--font-scheherazade), 'Scheherazade New', serif;
+}
+html[data-quran-width='narrow'] .quran-root {
+  --reader-width: 36rem;
+}
+html[data-quran-width='wide'] .quran-root {
+  --reader-width: 60rem;
+}
+
+.reader-column {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--reader-width);
+}
+
+.quran-flow {
+  font-family: var(--quran-family);
+  font-size: var(--quran-size, 32px);
+  line-height: var(--quran-lh, 2.2);
+  color: var(--ink);
+}
+
+/* Long surahs: every page stays in the DOM, off-screen pages skip layout and paint (D-014). */
+.quran-page {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1400px;
+}
+
+.quran-text {
+  margin: 0;
+  text-align: justify;
+}
+
+.ayah {
+  border-radius: 0.35em;
+  scroll-margin-block: 7rem;
+  transition: background-color 0.2s;
+}
+.ayah:target,
+.ayah[data-highlight] {
+  background: var(--accent-soft);
+}
+.ayah:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 0.1em;
+}
+
+/* Ayah number: U+06DD END OF AYAH followed by digits from a CSS counter (not in the text). */
+.ayah-end {
+  font-family: var(--quran-family);
+  color: var(--accent);
+  white-space: nowrap;
+}
+.ayah-end::before {
+  content: '\06DD' counter(ayah, arabic-indic);
+}
+html[lang='en'] .ayah-end::before,
+html[data-numerals='western'] .ayah-end::before {
+  content: '\06DD' counter(ayah, decimal);
+}
+html[data-numerals='arabic'] .ayah-end::before {
+  content: '\06DD' counter(ayah, arabic-indic);
+}
+
+.quarter-mark {
+  color: var(--accent);
+  margin-inline-end: 0.2em;
+}
+
+.sajdah-mark {
+  display: inline-block;
+  margin-inline-start: 0.3em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 0.6em;
+  font-family: var(--font-sans);
+  font-size: max(0.75rem, 0.38em);
+  line-height: 1.8;
+  vertical-align: middle;
+  color: var(--accent);
+}
+
+.basmala {
+  margin: 0.4em 0 0.6em;
+  text-align: center;
+}
+
+.surah-header {
+  margin: 0.6em 0 0.3em;
+  border-block: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 0.7rem 1rem;
+  text-align: center;
+  outline: 1px solid var(--line);
+  outline-offset: 4px;
+}
+.surah-header-title {
+  font-family: var(--quran-family);
+  font-size: max(1.5rem, calc(var(--quran-size, 32px) * 0.9));
+  font-weight: 400;
+  line-height: 1.6;
+}
+.surah-header-meta {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.page-marker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+.page-marker::before,
+.page-marker::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+
+/* Mushaf mode: one framed page. */
+.mushaf-page {
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  padding: 0.75rem 1rem 0.5rem;
+}
+.mushaf-page .quran-page {
+  content-visibility: visible;
+}
+.mushaf-page .quran-text {
+  text-align-last: center;
+}
+.mushaf-head,
+.mushaf-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+.mushaf-foot {
+  justify-content: center;
+  border-top: 1px solid var(--line);
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+}
+/* Horizontal swipes turn pages; vertical panning and zoom stay with the browser. */
+.mushaf-swipe {
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Tap the text to hide or show everything but the Quran (SPEC §6). */
+html[data-chrome='hidden'] [data-chrome-part] {
+  display: none !important;
+}
+
+/* Active navigation icon (icons are server-rendered SVG). */
+[aria-current='page'] > svg,
+[aria-current='page'] > span > svg {
+  stroke-width: 2.25;
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/build-fonts.ts",
+  "note": "Derived web fonts. Only approved sources (SOURCES.lock.json) are used; outputs are verified by a WOFF2 round trip.",
+  "files": [
+    {
+      "path": "assets/fonts/AmiriQuran.woff2",
+      "sha256": "094a26257581be6bcae0bda374f6ee3d968196e13ae011afd12d71d6c448835c",
+      "bytes": 62248,
+      "from": {
+        "path": "data/sources/fonts/amiri-quran/AmiriQuran.ttf",
+        "sha256": "e2a47644762d16bdfb6d33e0d8db8c6ff30beae84150ef5a705316bbd829455c",
+        "version": "Version 1.003"
+      },
+      "tool": "wawoff2@2.0.1 (Google woff2, WASM)",
+      "license": "SIL Open Font License 1.1 (see data/sources/fonts/amiri-quran/OFL.txt)"
+    }
+  ]
+}

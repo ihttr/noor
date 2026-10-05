@@ -12,7 +12,7 @@ import type {
   SurahMeta,
 } from '../../src/lib/quran/types.ts';
 import { SourceSurprise, checkBasmala, parseMetadata, parseText, type TanzilMetadata, type TanzilText } from './parse.ts';
-import { sha256, type ApprovedFile, type ApprovedUse } from './sources.ts';
+import { sha256, type ApprovedFile, type QuranUse } from './sources.ts';
 
 export const CANONICAL_FORM = 'For every ayah in Mushaf order: `${surah}|${ayah}|${text}\\n`, UTF-8, SHA-256.';
 
@@ -34,7 +34,7 @@ export interface ParsedSources {
   metadata: TanzilMetadata;
 }
 
-export function parseSources(files: Record<ApprovedUse, ApprovedFile>): ParsedSources {
+export function parseSources(files: Record<QuranUse, ApprovedFile>): ParsedSources {
   const metadata = parseMetadata(files['quran-metadata']);
   const display = parseText(files['quran-display'], metadata);
   const search = parseText(files['quran-search'], metadata);
@@ -84,7 +84,7 @@ export interface BuiltContent {
   searchIndex: SearchIndexFile;
 }
 
-export function buildContent(files: Record<ApprovedUse, ApprovedFile>, parsed = parseSources(files)): BuiltContent {
+export function buildContent(files: Record<QuranUse, ApprovedFile>, parsed = parseSources(files)): BuiltContent {
   const { display, search, metadata } = parsed;
   const structure = structureOf(metadata);
 

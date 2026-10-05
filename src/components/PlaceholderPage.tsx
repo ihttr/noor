@@ -21,7 +21,7 @@ export async function PlaceholderPage({ pageKey, children }: { pageKey: PageKey;
   const phase = navItem(pageKey).phase;
 
   return (
-    <article className="flex flex-col gap-6">
+    <article className="mx-auto flex w-full max-w-3xl flex-col gap-6">
       <header className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-semibold md:text-3xl">{t(`${pageKey}.title`)}</h1>

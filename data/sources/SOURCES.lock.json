@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/sources/fetch-sources.mjs",
-  "generatedAt": "2026-10-04T15:46:02.306Z",
+  "generatedAt": "2026-10-05T13:49:17.315Z",
   "note": "Content sources. A file may be imported only if it carries an `approval` from the project owner; source status: candidate | partially-approved | approved. Paths are relative to the repository root. downloadedAt = first download of this exact content (same SHA-256); verifiedAt = last re-download.",
   "sources": [
     {
@@ -198,7 +198,7 @@
         "quote": "Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). This Font Software is licensed under the SIL Open Font License, Version 1.1."
       },
       "attribution": "Amiri Quran font by Khaled Hosny, SIL OFL 1.1",
-      "status": "candidate",
+      "status": "approved",
       "files": [
         {
           "path": "data/sources/fonts/amiri-quran/AmiriQuran.ttf",
@@ -216,7 +216,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Fri, 13 Jun 2025 13:45:08 GMT",
-          "etag": "\"0x8DDAA80831CBC0B\""
+          "etag": "\"0x8DDAA80831CBC0B\"",
+          "approval": {
+            "use": "quran-font-amiri",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Default Quran font. Converted to WOFF2 for the web (Amiri has no Reserved Font Name, so a converted copy may keep its name under the OFL)."
+          }
         },
         {
           "path": "data/sources/fonts/amiri-quran/AmiriQuranColored.ttf",
@@ -234,7 +244,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Fri, 13 Jun 2025 13:45:08 GMT",
-          "etag": "\"0x8DDAA80831CBC0B\""
+          "etag": "\"0x8DDAA80831CBC0B\"",
+          "approval": {
+            "use": "quran-font-amiri",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Default Quran font. Converted to WOFF2 for the web (Amiri has no Reserved Font Name, so a converted copy may keep its name under the OFL)."
+          }
         },
         {
           "path": "data/sources/fonts/amiri-quran/OFL.txt",
@@ -252,7 +272,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Fri, 13 Jun 2025 13:45:08 GMT",
-          "etag": "\"0x8DDAA80831CBC0B\""
+          "etag": "\"0x8DDAA80831CBC0B\"",
+          "approval": {
+            "use": "quran-font-amiri",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Default Quran font. Converted to WOFF2 for the web (Amiri has no Reserved Font Name, so a converted copy may keep its name under the OFL)."
+          }
         }
       ]
     },
@@ -271,7 +301,7 @@
       },
       "attribution": "Scheherazade New font by SIL International, SIL OFL 1.1",
       "notes": "Reserved Font Names apply: a subset or otherwise modified build must not be called Scheherazade. The release zip also ships unmodified WOFF2 files (web/).",
-      "status": "candidate",
+      "status": "approved",
       "files": [
         {
           "path": "data/sources/fonts/scheherazade-new/ScheherazadeNew-Regular.ttf",
@@ -292,10 +322,20 @@
             "member": "ScheherazadeNew-4.500/ScheherazadeNew-Regular.ttf"
           },
           "downloadedAt": "2026-10-04T07:45:18.501Z",
-          "verifiedAt": "2026-10-04T15:42:23.280Z",
+          "verifiedAt": "2026-10-05T13:49:12.983Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Wed, 15 Apr 2026 16:52:09 GMT",
-          "etag": "\"0x8DE9B0F557338DE\""
+          "etag": "\"0x8DE9B0F557338DE\"",
+          "approval": {
+            "use": "quran-font-scheherazade",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Selectable Quran font. SIL's own unmodified WOFF2 from the release is served (Reserved Font Names: no self-made subset)."
+          }
         },
         {
           "path": "data/sources/fonts/scheherazade-new/OFL.txt",
@@ -316,10 +356,20 @@
             "member": "ScheherazadeNew-4.500/OFL.txt"
           },
           "downloadedAt": "2026-10-04T07:45:18.501Z",
-          "verifiedAt": "2026-10-04T15:42:23.280Z",
+          "verifiedAt": "2026-10-05T13:49:12.983Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Wed, 15 Apr 2026 16:52:09 GMT",
-          "etag": "\"0x8DE9B0F557338DE\""
+          "etag": "\"0x8DE9B0F557338DE\"",
+          "approval": {
+            "use": "quran-font-scheherazade",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Selectable Quran font. SIL's own unmodified WOFF2 from the release is served (Reserved Font Names: no self-made subset)."
+          }
         },
         {
           "path": "data/sources/fonts/scheherazade-new/FONTLOG.txt",
@@ -340,10 +390,54 @@
             "member": "ScheherazadeNew-4.500/FONTLOG.txt"
           },
           "downloadedAt": "2026-10-04T07:45:18.501Z",
-          "verifiedAt": "2026-10-04T15:42:23.280Z",
+          "verifiedAt": "2026-10-05T13:49:12.983Z",
           "contentType": "application/octet-stream",
           "httpLastModified": "Wed, 15 Apr 2026 16:52:09 GMT",
-          "etag": "\"0x8DE9B0F557338DE\""
+          "etag": "\"0x8DE9B0F557338DE\"",
+          "approval": {
+            "use": "quran-font-scheherazade",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Selectable Quran font. SIL's own unmodified WOFF2 from the release is served (Reserved Font Names: no self-made subset)."
+          }
+        },
+        {
+          "path": "data/sources/fonts/scheherazade-new/ScheherazadeNew-Regular.woff2",
+          "url": "https://github.com/silnrsi/font-scheherazade/releases/download/v4.500/ScheherazadeNew-4.500.zip",
+          "role": "data",
+          "sha256": "fd12c322cd8a0033d5c30b0a9fc0432e1d51288cd065f3f04a85a7974f1de3b7",
+          "bytes": 124783,
+          "archive": {
+            "url": "https://github.com/silnrsi/font-scheherazade/releases/download/v4.500/ScheherazadeNew-4.500.zip",
+            "sha256": "49c789c21305bed13d90d7500877b50d62db1e8e4d6f7715178e556319ddbda9",
+            "bytes": 2996290,
+            "publishedChecksum": {
+              "url": "https://github.com/silnrsi/font-scheherazade/releases/download/v4.500/SHA512SUMS.txt",
+              "algorithm": "sha512",
+              "value": "4ff5d859618b884e89d8a4a0c93c1823eec471b101bf6e3c4548e2493863b25e843a7ce63a12be772ac305b2dee49c2f7b1609ecea4a5208b6b5fa88198cd19c",
+              "verified": true
+            },
+            "member": "ScheherazadeNew-4.500/web/ScheherazadeNew-Regular.woff2"
+          },
+          "downloadedAt": "2026-10-05T13:49:12.983Z",
+          "verifiedAt": "2026-10-05T13:49:12.983Z",
+          "contentType": "application/octet-stream",
+          "httpLastModified": "Wed, 15 Apr 2026 16:52:09 GMT",
+          "etag": "\"0x8DE9B0F557338DE\"",
+          "approval": {
+            "use": "quran-font-scheherazade",
+            "approvedAt": "2026-10-05",
+            "approvedBy": "project owner (chat, Phase 3 kickoff)",
+            "decisions": [
+              "D-011",
+              "D-036"
+            ],
+            "note": "Selectable Quran font. SIL's own unmodified WOFF2 from the release is served (Reserved Font Names: no self-made subset)."
+          }
         }
       ]
     },
