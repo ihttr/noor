@@ -21,7 +21,7 @@ export function StepNav({ prev, next, label, bookOrder = false }: { prev?: StepL
       <Link
         href={link.href}
         rel={kind}
-        className={`flex min-h-14 flex-1 items-center gap-2 rounded-2xl border border-line bg-surface px-4 transition-colors hover:bg-surface-raised ${
+        className={`flex min-h-14 min-w-[min(10rem,100%)] flex-1 items-center gap-2 rounded-2xl border border-line bg-surface px-4 transition-colors hover:bg-surface-raised ${
           kind === 'next' ? 'justify-end text-end' : ''
         }`}
       >
@@ -35,7 +35,7 @@ export function StepNav({ prev, next, label, bookOrder = false }: { prev?: StepL
     );
   };
   return (
-    <nav aria-label={label} className="mt-10 flex gap-3" dir={bookOrder ? 'rtl' : undefined}>
+    <nav aria-label={label} className="mt-10 flex flex-wrap gap-3" dir={bookOrder ? 'rtl' : undefined}>
       {item(prev, 'prev')}
       {item(next, 'next')}
     </nav>

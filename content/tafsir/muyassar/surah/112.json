@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "muyassar",
+  "surah": 112,
+  "source": {
+    "name": {
+      "ar": "التفسير الميسر",
+      "en": "Tafsir al-Muyassar"
+    },
+    "author": {
+      "ar": "مجمع الملك فهد لطباعة المصحف الشريف",
+      "en": "King Fahd Glorious Quran Printing Complex"
+    },
+    "distribution": {
+      "name": "QuranEnc.com",
+      "url": "https://quranenc.com/ar/browse/arabic_moyassar"
+    },
+    "version": null,
+    "downloadedAt": "2026-10-04",
+    "license": {
+      "name": "QuranEnc re-publishing terms",
+      "url": "https://quranenc.com/en/home/api/"
+    },
+    "files": [
+      {"path":"data/sources/tafsir/quranenc/arabic_moyassar.sqlite","sha256":"eb384e586487b089b826375d3f705d07e775e0019325da405e0337a9f6b3da04"}
+    ]
+  },
+  "entries": [
+    {"ayah":1,"text":"قل -أيها الرسول-: هو الله المتفرد بالألوهية والربوبية والأسماء والصفات، لا يشاركه أحد فيها."},
+    {"ayah":2,"text":"الله الذي كَمُل في صفات الشَّرَف والمجد والعظمة، الذي يقصده الخلائق في قضاء الحوائج والرغائب."},
+    {"ayah":3,"text":"ليس له ولد ولا والد ولا صاحبة."},
+    {"ayah":4,"text":"ولم يكن له مماثلا ولا مشابهًا أحد من خلقه، لا في أسمائه ولا في صفاته، ولا في أفعاله، تبارك وتعالى وتقدَّس."}
+  ]
+}

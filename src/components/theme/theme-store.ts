@@ -1,5 +1,6 @@
 'use client';
 
+import { persistPreferences } from '@/components/prefs/preferences';
 import {
   THEME_STORAGE_KEY,
   applyTheme,
@@ -9,7 +10,8 @@ import {
 } from '@/lib/theme';
 
 // A tiny external store over <html data-theme-preference>, which the boot script sets before
-// hydration. Components read it with useSyncExternalStore, so there is no hydration mismatch.
+// hydration from the boot copy in localStorage. Components read it with useSyncExternalStore, so
+// there is no hydration mismatch. Changes are also saved to the local store (D-044).
 
 const CHANGE_EVENT = 'noor:themechange';
 
@@ -22,6 +24,15 @@ export function getThemePreference(): ThemePreference {
   return isThemePreference(value) ? value : 'system';
 }
 
+/** Whether a theme was ever chosen on this device (a boot copy exists). */
+export function hasThemePreference(): boolean {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
 export function getServerThemePreference(): ThemePreference {
   return 'system';
 }
@@ -31,15 +42,22 @@ export function subscribeThemePreference(onChange: () => void): () => void {
   return () => window.removeEventListener(CHANGE_EVENT, onChange);
 }
 
-export function setThemePreference(preference: ThemePreference): void {
+/** Applies a theme and refreshes the boot copy, without saving it to the store. */
+export function applyThemePreference(preference: ThemePreference): void {
   try {
     if (preference === 'system') localStorage.removeItem(THEME_STORAGE_KEY);
     else localStorage.setItem(THEME_STORAGE_KEY, preference);
   } catch {
     // Storage may be unavailable (private mode); the theme still applies for this page view.
   }
+  if (preference === getThemePreference()) return;
   applyTheme(document.documentElement, preference, resolveTheme(preference, systemPrefersDark()));
   window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function setThemePreference(preference: ThemePreference): void {
+  applyThemePreference(preference);
+  persistPreferences({ theme: preference });
 }
 
 /** Re-applies the "system" preference when the OS color scheme changes. */

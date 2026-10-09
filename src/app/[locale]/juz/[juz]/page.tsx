@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { QuranFlow } from '@/components/reader/QuranFlow';
@@ -21,7 +22,8 @@ function parseJuz(param: string): number | null {
 export async function generateMetadata({ params }: PageProps<'/[locale]/juz/[juz]'>): Promise<Metadata> {
   const n = parseJuz((await params).juz);
   if (!n) return {};
-  return { title: (await getTranslations('Quran'))('juz', { n }) };
+  const t = await getTranslations('Quran');
+  return pageMetadata({ title: t('juz', { n }), description: t('juzDescription', { n }), path: `/juz/${n}`, locale: await getLocale() });
 }
 
 export default async function JuzPage({ params }: PageProps<'/[locale]/juz/[juz]'>) {
@@ -51,6 +53,7 @@ export default async function JuzPage({ params }: PageProps<'/[locale]/juz/[juz]
           quarterStarts={view.quarterStarts}
           surahHeading="h2"
           pageMarkers
+          pageAyahCounts={view.pageAyahCounts}
         />
         <StepNav
           label={t('juzNav')}

@@ -1,0 +1,31 @@
+{
+  "description": "Bitrates available on cdn.islamic.network per verse-by-verse edition, found with HTTP HEAD requests for ayah 1 (no audio downloaded). Re-probe when the reciter list changes.",
+  "probedAt": "2026-10-09",
+  "method": "HEAD https://cdn.islamic.network/quran/audio/{bitrate}/{edition}/1.mp3 for bitrates 192, 128, 64, 48, 40, 32 (HTTP 200 = available)",
+  "bitrates": {
+    "ar.abdullahbasfar": [192, 64, 32],
+    "ar.abdurrahmaansudais": [192, 64],
+    "ar.abdulsamad": [64],
+    "ar.shaatree": [128, 64],
+    "ar.ahmedajamy": [128, 64],
+    "ar.alafasy": [128, 64],
+    "ar.hanirifai": [192, 64],
+    "ar.husary": [128, 64],
+    "ar.husarymujawwad": [128, 64],
+    "ar.hudhaify": [128, 64, 32],
+    "ar.ibrahimakhbar": [32],
+    "ar.mahermuaiqly": [128, 64],
+    "ar.muhammadayyoub": [128],
+    "ar.muhammadjibreel": [128],
+    "ar.saoodshuraym": [64],
+    "ar.parhizgar": [48],
+    "ar.aymanswoaid": [64],
+    "ar.alafasy-2": [128, 64],
+    "ar.husary-2": [128, 64],
+    "ar.mahermuaiqly-2": [128, 64],
+    "ar.hudhaify-2": [128, 64, 32],
+    "ar.husarymujawwad-2": [128, 64],
+    "ar.muhammadayyoub-2": [128],
+    "ar.muhammadjibreel-2": [128]
+  }
+}

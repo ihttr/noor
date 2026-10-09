@@ -9,9 +9,12 @@ export type NavKey =
   | 'qibla'
   | 'calendar'
   | 'saved'
+  | 'memorize'
+  | 'search'
   | 'stats'
   | 'settings'
   | 'about'
+  | 'privacy'
   | 'more';
 
 export type NavItem = {
@@ -30,17 +33,21 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { key: 'home', href: '/', bottomBar: true, sidebar: true, inMore: false, phase: 4 },
-  { key: 'quran', href: '/quran', bottomBar: true, sidebar: true, inMore: false, phase: 3, activeFor: ['/mushaf', '/juz'] },
-  { key: 'adhkar', href: '/adhkar', bottomBar: true, sidebar: true, inMore: false, phase: 7 },
-  { key: 'prayer', href: '/prayer', bottomBar: true, sidebar: true, inMore: false, phase: 8 },
-  { key: 'tasbih', href: '/tasbih', bottomBar: false, sidebar: true, inMore: true, phase: 7 },
-  { key: 'qibla', href: '/qibla', bottomBar: false, sidebar: true, inMore: true, phase: 8 },
-  { key: 'calendar', href: '/calendar', bottomBar: false, sidebar: true, inMore: true, phase: 8 },
-  { key: 'saved', href: '/saved', bottomBar: false, sidebar: true, inMore: true, phase: 4 },
-  { key: 'stats', href: '/stats', bottomBar: false, sidebar: true, inMore: true, phase: 10 },
-  { key: 'settings', href: '/settings', bottomBar: false, sidebar: true, inMore: true, phase: 4 },
+  { key: 'home', href: '/', bottomBar: true, sidebar: true, inMore: false },
+  { key: 'quran', href: '/quran', bottomBar: true, sidebar: true, inMore: false, activeFor: ['/mushaf', '/juz'] },
+  { key: 'adhkar', href: '/adhkar', bottomBar: true, sidebar: true, inMore: false },
+  { key: 'prayer', href: '/prayer', bottomBar: true, sidebar: true, inMore: false },
+  { key: 'tasbih', href: '/tasbih', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'qibla', href: '/qibla', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'calendar', href: '/calendar', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'saved', href: '/saved', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'memorize', href: '/memorize', bottomBar: false, sidebar: true, inMore: true },
+  // The sidebar and the mobile header have their own search button (it opens the palette).
+  { key: 'search', href: '/search', bottomBar: false, sidebar: false, inMore: true },
+  { key: 'stats', href: '/stats', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'settings', href: '/settings', bottomBar: false, sidebar: true, inMore: true },
   { key: 'about', href: '/about', bottomBar: false, sidebar: true, inMore: true },
+  { key: 'privacy', href: '/privacy', bottomBar: false, sidebar: false, inMore: true },
   { key: 'more', href: '/more', bottomBar: true, sidebar: false, inMore: false },
 ];
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { persistPreferences } from '@/components/prefs/preferences';
 import {
   DEFAULT_READER_SETTINGS,
   READER_STORAGE_KEY,
@@ -8,8 +9,9 @@ import {
   type ReaderSettings,
 } from '@/lib/reader/settings';
 
-// External store over localStorage; the boot script already applied the stored values to <html>
-// before paint, so components only need it to show and change the current values.
+// External store over the boot copy in localStorage; the boot script already applied it to
+// <html> before paint. Changes are also saved to the local store (IndexedDB, D-044), which wins
+// when the two differ (see PreferencesSync).
 
 const CHANGE_EVENT = 'noor:readerchange';
 let cachedRaw: string | null | undefined;
@@ -36,6 +38,9 @@ export function getReaderSettings(): ReaderSettings {
   return cached;
 }
 
+/** Whether reading settings were ever chosen on this device (a boot copy exists). */
+export const hasReaderSettings = () => readRaw() !== null;
+
 export const getServerReaderSettings = (): ReaderSettings => DEFAULT_READER_SETTINGS;
 
 export function subscribeReaderSettings(onChange: () => void): () => void {
@@ -47,8 +52,10 @@ export function subscribeReaderSettings(onChange: () => void): () => void {
   };
 }
 
-export function updateReaderSettings(patch: Partial<ReaderSettings>): void {
-  const next = parseReaderSettings({ ...getReaderSettings(), ...patch });
+/** Applies settings and refreshes the boot copy, without saving them to the store. */
+export function applyStoredReaderSettings(value: unknown): void {
+  const next = parseReaderSettings(value);
+  if (JSON.stringify(next) === JSON.stringify(getReaderSettings()) && hasReaderSettings()) return;
   try {
     localStorage.setItem(READER_STORAGE_KEY, JSON.stringify(next));
   } catch {
@@ -58,4 +65,10 @@ export function updateReaderSettings(patch: Partial<ReaderSettings>): void {
   }
   applyReaderSettings(document.documentElement, next);
   window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function updateReaderSettings(patch: Partial<ReaderSettings>): void {
+  const next = parseReaderSettings({ ...getReaderSettings(), ...patch });
+  applyStoredReaderSettings(next);
+  persistPreferences({ reader: next });
 }

@@ -131,7 +131,10 @@ model UserPreferences {
   createdAt DateTime  @default(now())
   updatedAt DateTime
   deletedAt DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq BigInt    @default(autoincrement())
 
+  @@index([userId, serverSeq])
   @@map("user_preferences")
 }
 
@@ -146,7 +149,10 @@ model ReadingPosition {
   createdAt DateTime    @default(now())
   updatedAt DateTime
   deletedAt DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq BigInt      @default(autoincrement())
 
+  @@index([userId, serverSeq])
   @@map("reading_position")
 }
 
@@ -161,8 +167,11 @@ model ReadingDay {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime
   deletedAt   DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq   BigInt    @default(autoincrement())
 
   @@unique([userId, date])
+  @@index([userId, serverSeq])
   @@map("reading_day")
 }
 
@@ -176,12 +185,16 @@ model Collection {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime
   deletedAt  DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq  BigInt      @default(autoincrement())
 
   @@index([userId])
+  @@index([userId, serverSeq])
   @@map("collection")
 }
 
-/// `ref` examples: "2:255" (ayah), "50" (page), "18" (surah), "morning:3" (dhikr).
+/// `ref` examples: "2:255" (ayah), "50" (page), "18" (surah), "morning:3" (dhikr), "muyassar:2:255" (tafsir).
+/// Notes are separate `Note` records, one per target (D-046).
 model SavedItem {
   id           String      @id @db.Uuid
   userId       String
@@ -190,13 +203,15 @@ model SavedItem {
   ref          String
   collectionId String?     @db.Uuid
   collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
-  note         String?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime
   deletedAt    DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq    BigInt      @default(autoincrement())
 
   @@index([userId, type, ref])
   @@index([collectionId])
+  @@index([userId, serverSeq])
   @@map("saved_item")
 }
 
@@ -211,8 +226,11 @@ model Note {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime
   deletedAt  DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq  BigInt    @default(autoincrement())
 
   @@index([userId, targetType, targetRef])
+  @@index([userId, serverSeq])
   @@map("note")
 }
 
@@ -233,9 +251,12 @@ model MemorizationItem {
   createdAt      DateTime           @default(now())
   updatedAt      DateTime
   deletedAt      DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq      BigInt             @default(autoincrement())
 
   @@unique([userId, surah, ayah])
   @@index([userId, dueAt])
+  @@index([userId, serverSeq])
   @@map("memorization_item")
 }
 
@@ -249,8 +270,11 @@ model Goal {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime
   deletedAt  DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq  BigInt    @default(autoincrement())
 
-  @@index([userId, activeFrom])
+  @@unique([userId, activeFrom])
+  @@index([userId, serverSeq])
   @@map("goal")
 }
 
@@ -266,8 +290,11 @@ model AdhkarDay {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime
   deletedAt  DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq  BigInt    @default(autoincrement())
 
   @@unique([userId, date, categoryId])
+  @@index([userId, serverSeq])
   @@map("adhkar_day")
 }
 
@@ -284,7 +311,10 @@ model TasbihSession {
   createdAt DateTime  @default(now())
   updatedAt DateTime
   deletedAt DateTime?
+  /// Server-assigned sync order (D-016): set from sync_seq by a trigger on every insert and update.
+  serverSeq BigInt    @default(autoincrement())
 
   @@index([userId, startedAt])
+  @@index([userId, serverSeq])
   @@map("tasbih_session")
 }

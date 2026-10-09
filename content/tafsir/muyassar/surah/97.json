@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "muyassar",
+  "surah": 97,
+  "source": {
+    "name": {
+      "ar": "التفسير الميسر",
+      "en": "Tafsir al-Muyassar"
+    },
+    "author": {
+      "ar": "مجمع الملك فهد لطباعة المصحف الشريف",
+      "en": "King Fahd Glorious Quran Printing Complex"
+    },
+    "distribution": {
+      "name": "QuranEnc.com",
+      "url": "https://quranenc.com/ar/browse/arabic_moyassar"
+    },
+    "version": null,
+    "downloadedAt": "2026-10-04",
+    "license": {
+      "name": "QuranEnc re-publishing terms",
+      "url": "https://quranenc.com/en/home/api/"
+    },
+    "files": [
+      {"path":"data/sources/tafsir/quranenc/arabic_moyassar.sqlite","sha256":"eb384e586487b089b826375d3f705d07e775e0019325da405e0337a9f6b3da04"}
+    ]
+  },
+  "entries": [
+    {"ayah":1,"text":"إنا أنزلنا القرآن في ليلة الشرف والفضل، وهي إحدى ليالي شهر رمضان."},
+    {"ayah":2,"text":"وما أدراك -أيها النبي- ما ليلة القدر والشرف؟"},
+    {"ayah":3,"text":"ليلة القدر ليلة مباركة، العمل الصالح فيها خير من عمل ألف شهر ليس فيها ليلة قدر."},
+    {"ayah":4,"text":"يكثر نزول الملائكة وجبريل عليه السلام فيها، بإذن ربهم من كل أمر قضاه في تلك السنة."},
+    {"ayah":5,"text":"هي أمن كلها، لا شرَّ فيها إلى مطلع الفجر."}
+  ]
+}

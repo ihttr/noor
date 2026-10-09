@@ -1,5 +1,7 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 import { PlaceholderPage, placeholderMetadata } from '@/components/PlaceholderPage';
+import { AccountPanel } from '@/components/account/AccountPanel';
+import { OfflinePanel } from '@/components/pwa/OfflinePanel';
 import { ThemePicker } from '@/components/theme/ThemePicker';
 import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
@@ -12,6 +14,20 @@ export default async function SettingsPage() {
 
   return (
     <PlaceholderPage pageKey="settings">
+      <section aria-labelledby="account" className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5">
+        <h2 id="account" className="text-lg font-semibold">
+          {t('account')}
+        </h2>
+        <AccountPanel />
+      </section>
+
+      <section aria-labelledby="offline" className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5">
+        <h2 id="offline" className="text-lg font-semibold">
+          {t('offline')}
+        </h2>
+        <OfflinePanel />
+      </section>
+
       <section aria-labelledby="appearance" className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-5">
         <h2 id="appearance" className="text-lg font-semibold">
           {t('appearance')}

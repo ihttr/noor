@@ -10,6 +10,9 @@ test('Al-Baqarah scrolls smoothly under 4× CPU throttling', async ({ page, brow
   test.setTimeout(120_000);
   await page.goto(`/quran/${slugs.surahs[1]!.slug}`);
   await page.evaluate(() => document.fonts.ready);
+  // Measure scrolling only: wait until hydration and the lazily loaded reader extras are done.
+  await expect(page.getByRole('button', { name: /^حفظ سورة/ })).toBeEnabled();
+  await page.evaluate(() => new Promise((r) => requestIdleCallback(r, { timeout: 3000 })));
   const cdp = await page.context().newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
 

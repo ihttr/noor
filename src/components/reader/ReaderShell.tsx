@@ -1,15 +1,29 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useRouter } from '@/i18n/navigation';
 import type { ReaderMode } from '@/lib/quran/nav';
 import { mushafKeyTurn, mushafSwipe } from '@/lib/reader/swipe';
-import { JumpDialog } from './JumpDialog';
-import { ReaderSettingsDialog } from './ReaderSettingsDialog';
+import { whenIdle } from '@/lib/store';
+import type { AyahMenuIcons, AyahTarget } from './AyahMenu';
+import type { TranslationChoice } from './reader-extras';
+import type { TafsirChoice } from './TafsirPanel';
 import { quranFontVariables } from './fonts';
 
-export interface ReaderIcons {
+// Loaded when the reader is idle (or on first use), never as part of the first paint (D-048).
+const loadAyahMenu = () => import('./AyahMenu');
+const AyahMenu = lazy(loadAyahMenu);
+const loadTafsirPanel = () => import('./TafsirPanel');
+const TafsirPanel = lazy(loadTafsirPanel);
+const loadSettingsDialog = () => import('./ReaderSettingsDialog').then((m) => ({ default: m.ReaderSettingsDialog }));
+const ReaderSettingsDialog = lazy(loadSettingsDialog);
+const loadJumpDialog = () => import('./JumpDialog').then((m) => ({ default: m.JumpDialog }));
+const JumpDialog = lazy(loadJumpDialog);
+let extrasModule: Promise<typeof import('./reader-extras')> | undefined;
+const loadExtras = () => (extrasModule ??= import('./reader-extras'));
+
+export interface ReaderIcons extends AyahMenuIcons {
   list: ReactNode;
   reading: ReactNode;
   mushaf: ReactNode;
@@ -18,6 +32,8 @@ export interface ReaderIcons {
   close: ReactNode;
   minus: ReactNode;
   plus: ReactNode;
+  previous: ReactNode;
+  next: ReactNode;
 }
 
 export interface PositionInfo {
@@ -39,6 +55,10 @@ interface Props {
   pageTurn?: { prev?: string; next?: string };
   /** Server-rendered icons (see Reader.tsx). */
   icons: ReaderIcons;
+  /** Imported tafsirs (registry), for the ayah menu. */
+  tafsirs: readonly TafsirChoice[];
+  /** Imported translations (registry), for the settings and reading mode. */
+  translations: readonly TranslationChoice[];
   children: ReactNode;
 }
 
@@ -77,6 +97,22 @@ function focusAyah(container: HTMLElement, ayah: HTMLElement, scroll: boolean): 
   ayah.tabIndex = 0;
   ayah.focus({ preventScroll: !scroll });
   if (scroll) ayah.scrollIntoView({ block: 'nearest' });
+}
+
+type DialogName = 'settings' | 'jump';
+interface DialogSlots {
+  settings: HTMLDialogElement | null;
+  jump: HTMLDialogElement | null;
+  pending: DialogName | null;
+}
+
+/** Callback-ref body: remembers a lazily mounted dialog and opens it if it was requested. */
+function attachDialog(slots: DialogSlots, which: DialogName, el: HTMLDialogElement | null): void {
+  slots[which] = el;
+  if (el && slots.pending === which) {
+    slots.pending = null;
+    el.showModal();
+  }
 }
 
 const nextFrames = () => new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
@@ -126,16 +162,90 @@ function readInfo(section: HTMLElement): PositionInfo {
  * swipe right/left turns Mushaf pages; position line (surah · juz · hizb · page).
  * The Quran text itself is server-rendered and never touched here.
  */
-export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, pageTurn, icons, children }: Props) {
+export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, pageTurn, icons, tafsirs, translations, children }: Props) {
   const t = useTranslations('Reader');
   const tq = useTranslations('Quran');
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-  const settingsRef = useRef<HTMLDialogElement>(null);
-  const jumpRef = useRef<HTMLDialogElement>(null);
+  // The settings and jump dialogs are loaded on first use; a callback ref opens them once mounted.
+  const dialogs = useRef<DialogSlots>({
+    settings: null,
+    jump: null,
+    pending: null,
+  });
+  const [mounted, setMounted] = useState({ settings: false, jump: false });
+  const settingsRef = useCallback((el: HTMLDialogElement | null) => attachDialog(dialogs.current, 'settings', el), []);
+  const jumpRef = useCallback((el: HTMLDialogElement | null) => attachDialog(dialogs.current, 'jump', el), []);
+  function openDialog(which: DialogName) {
+    const el = dialogs.current[which];
+    if (el) return el.showModal();
+    dialogs.current.pending = which;
+    setMounted((m) => ({ ...m, [which]: true }));
+  }
+  const [tafsir, setTafsir] = useState<AyahTarget | null>(null);
   const swipeStart = useRef<{ x: number; y: number; t: number } | null>(null);
   const suppressClick = useRef(false);
   const [info, setInfo] = useState<PositionInfo>(initialInfo);
+  const [menu, setMenu] = useState<AyahTarget | null>(null);
+  const [bookmarked, setBookmarked] = useState<boolean | null>(null);
+  const bookmark = mode === 'mushaf' ? { type: 'PAGE' as const, ref: String(info.page) } : { type: 'SURAH' as const, ref: String(info.surah) };
+
+  /** Opens the ayah menu (SPEC §7.5) for an ayah, anchored at its number. */
+  function openMenu(ayah: HTMLElement) {
+    const [surah, number] = (ayah.dataset.ayah ?? '').split(':').map(Number);
+    const end = ayah.querySelector('.ayah-end') ?? ayah;
+    if (surah && number) setMenu({ element: ayah, key: `${surah}:${number}`, surah, ayah: number, anchor: end.getBoundingClientRect() });
+  }
+
+  function closeMenu() {
+    const container = containerRef.current;
+    if (container && menu && container.contains(menu.element)) focusAyah(container, menu.element, false);
+    setMenu(null);
+  }
+
+  // Reading position, pages read, reading time and saved/note marks start once the reader is idle.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    let stop: (() => void) | undefined;
+    let cancelled = false;
+    const cancelIdle = whenIdle(() => {
+      void loadAyahMenu();
+      void loadSettingsDialog();
+      void loadJumpDialog();
+      void loadExtras().then((m) => {
+        if (cancelled) return;
+        const stops = [
+          m.startTracking(container, mode),
+          m.decorateAyahs(container),
+          m.startTranslations(container, mode, translations),
+          m.followAudio(container),
+        ];
+        stop = () => stops.forEach((s) => s());
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelIdle();
+      stop?.();
+    };
+  }, [mode, translations]);
+
+  // Toolbar bookmark: the page in Mushaf mode, the surah in reading mode.
+  useEffect(() => {
+    let off: (() => void) | undefined;
+    let cancelled = false;
+    const cancelIdle = whenIdle(() => {
+      void loadExtras().then((m) => {
+        if (!cancelled) off = m.watchSaved(bookmark.type, bookmark.ref, setBookmarked);
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelIdle();
+      off?.();
+    };
+  }, [bookmark.type, bookmark.ref]);
 
   // Chrome is shown again when the reader is left.
   useEffect(() => () => void delete document.documentElement.dataset.chrome, []);
@@ -180,8 +290,18 @@ export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const container = containerRef.current;
-      if (!container || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (!container || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       if ((e.target as Element).closest('input, textarea, select, [contenteditable="true"], dialog')) return;
+
+      // Enter, Space, the context-menu key or Shift+F10 on an ayah open its menu.
+      const ayah = (e.target as Element).closest<HTMLElement>('.ayah');
+      const menuKey = (!e.shiftKey && (e.key === 'Enter' || e.key === ' ' || e.key === 'ContextMenu')) || (e.shiftKey && e.key === 'F10');
+      if (ayah && container.contains(ayah) && menuKey) {
+        e.preventDefault();
+        openMenu(ayah);
+        return;
+      }
+      if (e.shiftKey) return;
 
       if (e.key === 'Escape') {
         delete document.documentElement.dataset.chrome;
@@ -236,6 +356,9 @@ export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, 
       suppressClick.current = false;
       return;
     }
+    const end = (e.target as Element).closest('.ayah-end');
+    const ayah = end?.closest<HTMLElement>('.ayah');
+    if (ayah) return openMenu(ayah);
     if ((e.target as Element).closest('a, button, input, label, dialog')) return;
     if (window.getSelection()?.toString()) return;
     const root = document.documentElement;
@@ -263,7 +386,7 @@ export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, 
         role="toolbar"
         aria-label={t('toolbarLabel')}
         data-chrome-part
-        className="reader-toolbar sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-10 -mx-4 mb-4 flex items-center gap-1 border-b border-line bg-canvas/95 px-2 py-1 backdrop-blur md:top-0 md:-mx-10 md:px-6"
+        className="reader-toolbar sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-10 -mx-4 mb-4 flex items-center gap-1 border-b border-line bg-canvas/95 px-2 py-1 backdrop-blur md:top-0 md:-mx-10 md:px-6 flex-wrap"
       >
         <Link href="/quran" className="icon-button" aria-label={t('backToList')}>
           {icons.list}
@@ -285,14 +408,24 @@ export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, 
           {modeButton('reading', t('readingMode'), icons.reading)}
           {modeButton('mushaf', t('mushafMode'), icons.mushaf)}
         </div>
-        <button type="button" className="icon-button" aria-label={t('jump')} onClick={() => jumpRef.current?.showModal()}>
+        <button
+          type="button"
+          className="icon-button"
+          aria-label={mode === 'mushaf' ? t('savePage', { n: info.page }) : t('saveSurah', { name: surahNames[info.surah] ?? '' })}
+          aria-pressed={bookmarked === true}
+          disabled={bookmarked === null}
+          onClick={() => void loadExtras().then((m) => m.toggleSaved(bookmark.type, bookmark.ref))}
+        >
+          {bookmarked ? icons.saved : icons.save}
+        </button>
+        <button type="button" className="icon-button" aria-label={t('jump')} onClick={() => openDialog('jump')}>
           {icons.jump}
         </button>
         <button
           type="button"
           className="icon-button"
           aria-label={t('settings')}
-          onClick={() => settingsRef.current?.showModal()}
+          onClick={() => openDialog('settings')}
         >
           {icons.settings}
         </button>
@@ -319,13 +452,51 @@ export function ReaderShell({ mode, title, initialInfo, surahNames, surahSlugs, 
         {children}
       </div>
 
-      <ReaderSettingsDialog ref={settingsRef} icons={icons} />
-      <JumpDialog
-        ref={jumpRef}
-        mode={mode}
-        closeIcon={icons.close}
-        onSamePage={(id) => containerRef.current && showAyah(containerRef.current, id)}
-      />
+      {menu && (
+        <Suspense fallback={null}>
+          <AyahMenu
+            key={menu.key}
+            target={menu}
+            surahName={surahNames[menu.surah] ?? ''}
+            slug={surahSlugs[menu.surah] ?? ''}
+            icons={icons}
+            tafsirAvailable={tafsirs.length > 0}
+            onTafsir={() => {
+              const target = menu;
+              setMenu(null);
+              setTafsir(target);
+            }}
+            onClose={closeMenu}
+          />
+        </Suspense>
+      )}
+      {tafsir && (
+        <Suspense fallback={null}>
+          <TafsirPanel
+            key={tafsir.key}
+            target={tafsir}
+            surahName={surahNames[tafsir.surah] ?? ''}
+            tafsirs={tafsirs}
+            icons={icons}
+            onClose={() => {
+              const container = containerRef.current;
+              if (container && container.contains(tafsir.element)) focusAyah(container, tafsir.element, false);
+              setTafsir(null);
+            }}
+          />
+        </Suspense>
+      )}
+      <Suspense fallback={null}>
+        {mounted.settings && <ReaderSettingsDialog ref={settingsRef} icons={icons} translations={translations} />}
+        {mounted.jump && (
+          <JumpDialog
+            ref={jumpRef}
+            mode={mode}
+            closeIcon={icons.close}
+            onSamePage={(id) => containerRef.current && showAyah(containerRef.current, id)}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

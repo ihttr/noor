@@ -18,6 +18,7 @@
   --on-accent: #ffffff;
   --accent-soft: #e3efe9;
   --focus: #1e6b52;
+  --danger: #a3261f;
 }
 
 [data-theme='dark'] {
@@ -31,6 +32,7 @@
   --on-accent: #0b1f17;
   --accent-soft: #1e3a2f;
   --focus: #7dd3ae;
+  --danger: #f19a92;
 }
 
 [data-theme='sepia'] {
@@ -44,6 +46,7 @@
   --on-accent: #ffffff;
   --accent-soft: #e8e0c8;
   --focus: #2c5e47;
+  --danger: #9a2a1f;
 }
 
 [data-theme='black'] {
@@ -57,6 +60,7 @@
   --on-accent: #04140e;
   --accent-soft: #10261d;
   --focus: #7dd3ae;
+  --danger: #f19a92;
 }
 
 /* Without JavaScript the boot script cannot run: follow the system preference. */
@@ -72,6 +76,7 @@
     --on-accent: #0b1f17;
     --accent-soft: #1e3a2f;
     --focus: #7dd3ae;
+    --danger: #f19a92;
   }
 }
 
@@ -88,6 +93,7 @@
   --color-on-accent: var(--on-accent);
   --color-accent-soft: var(--accent-soft);
   --color-focus: var(--focus);
+  --color-danger: var(--danger);
 
   --font-sans: var(--font-ui), 'Segoe UI', Tahoma, Arial, sans-serif;
   /* The Quran font is not chosen yet (DECISIONS D-011); this is only a fallback slot. */
@@ -105,6 +111,8 @@
     color: var(--ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Long words, e-mail addresses and host names wrap instead of widening the page. */
+    overflow-wrap: break-word;
   }
 
   :focus-visible {
@@ -146,6 +154,8 @@
     opacity: 0.4;
   }
   .text-field {
+    /* Percentage max-width makes inputs and selects shrinkable in flex/grid rows (200 % text). */
+    max-width: 100%;
     min-height: 2.75rem;
     border-radius: 0.75rem;
     border: 1px solid var(--line);
@@ -178,6 +188,52 @@
   }
   .reader-dialog::backdrop {
     background: rgb(0 0 0 / 0.45);
+  }
+  .secondary-button {
+    min-height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding-inline: 1rem;
+    color: var(--ink);
+    transition: background-color 0.15s;
+  }
+  .secondary-button:hover:not(:disabled) {
+    background: var(--surface-raised);
+  }
+  .danger-button {
+    min-height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--danger);
+    background: var(--surface);
+    padding-inline: 1rem;
+    font-weight: 600;
+    color: var(--danger);
+  }
+  .primary-button:disabled,
+  .secondary-button:disabled,
+  .danger-button:disabled {
+    opacity: 0.5;
+  }
+  .choice-chip {
+    display: inline-flex;
+    min-height: 2.75rem;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding-inline: 0.9rem;
+    font-size: 0.875rem;
+  }
+  .choice-chip:has(:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+  .choice-chip:has(:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
   }
 }
 
@@ -237,11 +293,535 @@ html[data-quran-width='wide'] .quran-root {
   outline-offset: 0.1em;
 }
 
-/* Ayah number: U+06DD END OF AYAH followed by digits from a CSS counter (not in the text). */
+/* Ayah number: U+06DD END OF AYAH followed by digits from a CSS counter (not in the text).
+ * It opens the ayah menu (D-045): padding enlarges the touch target, the equal negative margin
+ * keeps the line layout unchanged. */
 .ayah-end {
+  --hit-x: max(0.2em, 8px);
+  --hit-y: max(0.3em, 10px);
+  position: relative;
+  margin: calc(-1 * var(--hit-y)) calc(-1 * var(--hit-x));
+  border-radius: 999px;
+  padding: var(--hit-y) var(--hit-x);
   font-family: var(--quran-family);
   color: var(--accent);
   white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) {
+  .ayah-end:hover {
+    background: var(--accent-soft);
+  }
+}
+/* Saved ayah: ● after its number; ayah with a note: ○; both: ◉. Zero width, so the line layout
+ * does not change when the marks appear. */
+.ayah[data-saved] > .ayah-end::after,
+.ayah[data-noted] > .ayah-end::after {
+  display: inline-block;
+  width: 0;
+  overflow: visible;
+  content: '\25CB';
+  font-family: var(--font-sans);
+  font-size: 0.42em;
+  line-height: 0;
+  vertical-align: super;
+  color: var(--accent);
+}
+.ayah[data-saved] > .ayah-end::after {
+  content: '\25CF';
+}
+.ayah[data-saved][data-noted] > .ayah-end::after {
+  content: '\25C9';
+}
+.ayah[data-selected] {
+  background: var(--accent-soft);
+}
+
+/* Ayah menu (SPEC §7.5): popover on wide screens, bottom sheet on phones. */
+.ayah-menu {
+  max-height: calc(100dvh - 1rem);
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 1rem;
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.25);
+}
+.ayah-popover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  width: min(21rem, calc(100vw - 1rem));
+  border-radius: 1rem;
+}
+.ayah-popover::backdrop {
+  background: transparent;
+}
+.ayah-sheet {
+  margin: auto 0 0;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 1.25rem 1.25rem 0 0;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  animation: sheet-in 0.2s ease-out;
+}
+.ayah-sheet::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(1.5rem);
+    opacity: 0;
+  }
+}
+.ayah-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+.ayah-action {
+  display: flex;
+  min-height: 4.25rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--ink);
+}
+.ayah-action:hover:not(:disabled) {
+  background: var(--surface-raised);
+}
+.ayah-action[aria-pressed='true'] {
+  font-weight: 600;
+  color: var(--accent);
+}
+.ayah-action:disabled {
+  color: var(--ink-muted);
+}
+.ayah-action-soon {
+  display: block;
+  font-size: 0.7rem;
+}
+.ayah-popover .ayah-actions {
+  grid-template-columns: 1fr;
+}
+.ayah-popover .ayah-action {
+  min-height: 2.75rem;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding-inline: 0.75rem;
+  font-size: 0.9rem;
+  text-align: start;
+}
+.ayah-popover .ayah-action-soon {
+  display: inline;
+  margin-inline-start: 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Translation under each ayah (reading mode, SPEC §7.3): one block per ayah. */
+.reader-body[data-translation] .ayah {
+  display: block;
+  margin-block-end: 1rem;
+}
+.ayah-translation {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: start;
+  color: var(--ink-muted);
+}
+.translation-credit {
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+/* Persistent mini player (SPEC §7.11): above the bottom navigation on phones. */
+.mini-player {
+  position: fixed;
+  z-index: 25;
+  inset-inline: 0.5rem;
+  bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  max-height: 70dvh;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 0.35rem 0.5rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.2);
+}
+@media (min-width: 48rem) {
+  .mini-player {
+    inset-inline: calc(16rem + 1.5rem) 1.5rem;
+    bottom: 1rem;
+  }
+}
+html[data-chrome='hidden'] .mini-player {
+  bottom: calc(0.5rem + env(safe-area-inset-bottom));
+}
+.mini-player-main {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 999px;
+}
+.mini-player-main:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+html[data-player] main {
+  padding-bottom: calc(11rem + env(safe-area-inset-bottom));
+}
+.ayah[data-playing] {
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Counter (adhkar cards and tasbih, SPEC §7.14–7.15). */
+.counter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.counter-main {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+.counter-card .counter-main {
+  width: min(5.5rem, 40vw);
+  height: min(5.5rem, 40vw);
+}
+.counter-large {
+  flex-direction: column;
+  gap: 1rem;
+}
+.counter-large .counter-main {
+  width: min(16rem, 70vw);
+  height: min(16rem, 70vw);
+}
+.counter-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.counter-track,
+.counter-progress {
+  fill: var(--surface);
+  stroke-width: 6;
+}
+.counter-track {
+  stroke: var(--line);
+}
+.counter-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.2s;
+}
+.counter-value {
+  position: relative;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.counter-large .counter-value {
+  font-size: 2.25rem;
+}
+.counter-done {
+  position: absolute;
+  bottom: 18%;
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+.counter-main:active .counter-track {
+  fill: var(--accent-soft);
+}
+.counter-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Dhikr card: the whole card counts a tap (SPEC §7.14). */
+.dhikr-card {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  padding: 1rem;
+  scroll-margin-top: 5rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.dhikr-card[data-done] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface));
+}
+.dhikr-text {
+  font-family: var(--font-scheherazade), 'Scheherazade New', serif;
+  font-size: 1.45rem;
+  line-height: 2;
+}
+.dhikr-quran {
+  margin: 0.25rem 0;
+  border-inline-start: 3px solid var(--accent-soft);
+  padding-inline-start: 0.75rem;
+}
+.dhikr-quran p {
+  font-family: var(--quran-family);
+  font-size: 1.55rem;
+  line-height: 2.1;
+}
+.ayah-number {
+  font-family: var(--quran-family);
+  color: var(--accent);
+  white-space: nowrap;
+}
+.ayah-number::before {
+  content: '\06DD' counter(ayah, arabic-indic);
+}
+html[lang='en'] .ayah-number::before {
+  content: '\06DD' counter(ayah, decimal);
+}
+.dhikr-translation {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+.dhikr-reference {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+/* Qibla dial (SPEC §7.17). */
+.qibla-dial {
+  width: min(16rem, 70vw);
+  height: auto;
+}
+.qibla-ring {
+  fill: var(--canvas);
+  stroke: var(--line);
+  stroke-width: 3;
+}
+.qibla-north {
+  fill: var(--ink-muted);
+  font-size: 16px;
+  font-weight: 700;
+}
+.qibla-arrow {
+  stroke: var(--accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.qibla-arrow-head,
+.qibla-center {
+  fill: var(--accent);
+}
+.qibla-dial g {
+  transition: transform 0.2s;
+}
+tr[data-current] {
+  background: var(--accent-soft);
+}
+
+/* Tafsir (SPEC §7.10): side panel from 48rem, bottom sheet below. */
+.tafsir-panel {
+  max-height: 88dvh;
+  width: 100%;
+  max-width: 100%;
+  margin: auto 0 0;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: var(--surface);
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.25);
+}
+.tafsir-panel::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+@media (min-width: 48rem) {
+  .tafsir-panel {
+    height: 100dvh;
+    max-height: 100dvh;
+    width: min(32rem, 100vw);
+    margin: 0;
+    margin-inline-start: auto;
+    border-radius: 0;
+    padding: 1.25rem 1.5rem;
+  }
+}
+.tafsir-ayah {
+  font-family: var(--quran-family);
+  font-size: 1.5rem;
+  line-height: 2.1;
+}
+.tafsir-text {
+  font-size: 1.05rem;
+  line-height: 2;
+}
+
+/* Search results: the Uthmani text with matched words marked (text unchanged, D-050). */
+.search-ayah {
+  margin-top: 0.5rem;
+  font-family: var(--quran-family);
+  font-size: 1.5rem;
+  line-height: 2.1;
+}
+.search-ayah mark {
+  border-radius: 0.3em;
+  background: var(--accent-soft);
+  color: inherit;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Command palette (Ctrl/Cmd + K). */
+.palette {
+  margin: 10dvh auto auto;
+  width: min(36rem, calc(100vw - 1.5rem));
+  max-height: 75dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 0;
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+}
+.palette:not([open]) {
+  display: none;
+}
+.palette::backdrop {
+  background: rgb(0 0 0 / 0.35);
+}
+.palette-input {
+  min-height: 3.25rem;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding-inline: 1rem;
+  font-size: 1.05rem;
+  color: var(--ink);
+  outline: none;
+}
+.palette-input::placeholder {
+  color: var(--ink-muted);
+}
+.palette-list {
+  overflow-y: auto;
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+.palette-group {
+  padding: 0.6rem 0.5rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.palette-option {
+  display: flex;
+  min-height: 2.75rem;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 0.6rem;
+  padding: 0.25rem 0.75rem;
+}
+.palette-option[aria-selected='true'] {
+  background: var(--accent-soft);
+  outline: 1px solid var(--accent);
+}
+.palette-hint {
+  border-top: 1px solid var(--line);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+/* Saved ayahs outside the reader (verbatim text, clamped by CSS only). */
+/* Statistics heatmap (SPEC §7.13): one column per week, one row per weekday. */
+.heatmap {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  gap: 3px;
+}
+.heat-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--surface-raised);
+}
+.heat-cell:not([data-level]) {
+  background: transparent;
+}
+.heat-cell[data-level='1'] {
+  background: color-mix(in srgb, var(--accent) 25%, var(--surface));
+}
+.heat-cell[data-level='2'] {
+  background: color-mix(in srgb, var(--accent) 50%, var(--surface));
+}
+.heat-cell[data-level='3'] {
+  background: color-mix(in srgb, var(--accent) 75%, var(--surface));
+}
+.heat-cell[data-level='4'] {
+  background: var(--accent);
+}
+
+/* Memorization practice (SPEC §7.12, D-066): the mask is presentation only — hidden parts keep
+ * their text in the DOM, drawn transparent over a soft block, and flow inline so Arabic letters
+ * still join across the boundary. */
+.memorize-ayah {
+  font-family: var(--quran-family);
+  font-size: 1.85rem;
+  line-height: 2.3;
+  text-align: start;
+}
+.mask-word {
+  border-radius: 0.3em;
+  background: var(--surface-raised);
+  box-shadow: inset 0 -0.12em 0 var(--line);
+  color: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mask-word:hover {
+  background: var(--accent-soft);
+}
+.mask-word:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.mask-revealed {
+  color: var(--accent);
+}
+
+.saved-ayah {
+  font-family: var(--quran-family);
+  font-size: 1.6rem;
+  line-height: 2.1;
+}
+.saved-ayah.is-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 .ayah-end::before {
   content: '\06DD' counter(ayah, arabic-indic);

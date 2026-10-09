@@ -18,7 +18,18 @@ export interface Check {
 const readJson = async <T>(file: string): Promise<T> => JSON.parse(await readFile(file, 'utf8')) as T;
 
 /** Files in the Quran data path; none may call String.prototype.normalize — see CLAUDE.md. */
-export const QURAN_DATA_PATH = ['scripts/import-quran.ts', 'scripts/verify-content.ts', 'scripts/quran', 'src/lib/quran'];
+export const QURAN_DATA_PATH = [
+  'scripts/import-quran.ts',
+  'scripts/import-tafsir.ts',
+  'scripts/import-adhkar.ts',
+  'scripts/adhkar',
+  'scripts/verify-content.ts',
+  'scripts/quran',
+  'scripts/tafsir',
+  'src/lib/quran',
+  'src/lib/tafsir',
+  'src/lib/adhkar',
+];
 
 async function listFiles(p: string): Promise<string[]> {
   const abs = path.join(ROOT, p);

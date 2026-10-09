@@ -23,7 +23,10 @@ describe('reading settings (SPEC §7.4)', () => {
       lineHeight: 2.5,
       width: 'wide',
       numerals: 'western',
+      translation: null,
     });
+    expect(parseReaderSettings({ translation: 'quranenc-english_saheeh' }).translation).toBe('quranenc-english_saheeh');
+    expect(parseReaderSettings({ translation: '../../x' }).translation).toBeNull();
   });
 
   it('boot script applies stored settings before paint and ignores invalid ones', () => {

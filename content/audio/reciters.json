@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Islamic Network (alquran.cloud)",
+    "url": "https://alquran.cloud",
+    "terms": "https://alquran.cloud/terms-and-conditions",
+    "urlTemplate": "https://cdn.islamic.network/quran/audio/{bitrate}/{id}/{ayah}.mp3",
+    "files": [
+      {"path":"data/sources/audio/islamic-network/editions.versebyverse.json","sha256":"1b5fccae43ec65d2ca8da6b607cff45261b0e977f9e9bb1d5b932c4684135305"}
+    ],
+    "bitratesProbedAt": "2026-10-09"
+  },
+  "defaultReciter": "ar.alafasy",
+  "reciters": [
+    {"id":"ar.abdullahbasfar","name":{"ar":"عبد الله بصفر","en":"Abdullah Basfar"},"bitrate":64},
+    {"id":"ar.abdurrahmaansudais","name":{"ar":"عبدالرحمن السديس","en":"Abdurrahmaan As-Sudais"},"bitrate":64},
+    {"id":"ar.abdulsamad","name":{"ar":"عبدالباسط عبدالصمد","en":"Abdul Samad"},"bitrate":64},
+    {"id":"ar.shaatree","name":{"ar":"أبو بكر الشاطري","en":"Abu Bakr Ash-Shaatree"},"bitrate":128},
+    {"id":"ar.ahmedajamy","name":{"ar":"أحمد بن علي العجمي","en":"Ahmed ibn Ali al-Ajamy"},"bitrate":128},
+    {"id":"ar.alafasy","name":{"ar":"مشاري العفاسي","en":"Alafasy"},"bitrate":128},
+    {"id":"ar.hanirifai","name":{"ar":"هاني الرفاعي","en":"Hani Rifai"},"bitrate":64},
+    {"id":"ar.husary","name":{"ar":"محمود خليل الحصري","en":"Husary"},"bitrate":128},
+    {"id":"ar.husarymujawwad","name":{"ar":"محمود خليل الحصري (المجود)","en":"Husary (Mujawwad)"},"bitrate":128},
+    {"id":"ar.hudhaify","name":{"ar":"علي بن عبدالرحمن الحذيفي","en":"Hudhaify"},"bitrate":128},
+    {"id":"ar.ibrahimakhbar","name":{"ar":"إبراهيم الأخضر","en":"Ibrahim Akhdar"},"bitrate":32},
+    {"id":"ar.mahermuaiqly","name":{"ar":"ماهر المعيقلي","en":"Maher Al Muaiqly"},"bitrate":128},
+    {"id":"ar.muhammadayyoub","name":{"ar":"محمد أيوب","en":"Muhammad Ayyoub"},"bitrate":128},
+    {"id":"ar.muhammadjibreel","name":{"ar":"محمد جبريل","en":"Muhammad Jibreel"},"bitrate":128},
+    {"id":"ar.saoodshuraym","name":{"ar":"سعود الشريم","en":"Saood bin Ibraaheem Ash-Shuraym"},"bitrate":64},
+    {"id":"ar.parhizgar","name":{"ar":"شهریار پرهیزگار","en":"Parhizgar"},"bitrate":48},
+    {"id":"ar.aymanswoaid","name":{"ar":"أيمن سويد","en":"Ayman Sowaid"},"bitrate":64}
+  ]
+}

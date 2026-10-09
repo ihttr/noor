@@ -24,18 +24,19 @@ export function NavLink({ navKey, label, icon, variant, alsoActiveFor = [] }: Pr
       <Link
         href={href}
         aria-current={active ? 'page' : undefined}
-        className={`flex min-h-14 min-w-11 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 text-xs transition-colors ${
+        className={`flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-0.5 text-xs transition-colors ${
           active ? 'font-semibold text-accent' : 'text-ink-muted hover:text-ink'
         }`}
       >
         <span
-          className={`flex h-7 w-12 items-center justify-center rounded-full transition-colors ${
+          className={`flex h-7 w-full max-w-12 items-center justify-center rounded-full transition-colors ${
             active ? 'bg-accent-soft' : ''
           }`}
         >
           {icon}
         </span>
-        <span className="leading-none">{label}</span>
+        {/* Long labels at large text sizes wrap instead of overflowing (SPEC §10, 200 % text). */}
+        <span className="max-w-full text-center leading-none [overflow-wrap:anywhere]">{label}</span>
       </Link>
     );
   }

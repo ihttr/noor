@@ -5,7 +5,9 @@ import { QuranFlow } from '@/components/reader/QuranFlow';
 import { SourceNote, StepNav } from '@/components/reader/ReaderFooter';
 import { Reader } from '@/components/reader/Reader';
 import { permanentRedirect } from '@/i18n/navigation';
-import { allSlugs, resolveSurahParam, surahHref } from '@/lib/quran/slugs';
+import { JsonLd } from '@/components/JsonLd';
+import { allSlugs, resolveSurahParam, slugOf, surahHref } from '@/lib/quran/slugs';
+import { breadcrumbJsonLd, pageMetadata } from '@/lib/seo';
 import { readerView, surahAyahs, surahDisplayName } from '@/lib/quran/view';
 import { getMeta } from '@/lib/quran/content';
 
@@ -20,10 +22,13 @@ export async function generateMetadata({ params }: PageProps<'/[locale]/quran/[s
   if (!resolved) return {};
   const [meta, locale, t] = [await getMeta(), await getLocale(), await getTranslations('Quran')];
   const s = meta.surahs[resolved.surah - 1]!;
-  return {
-    title: t('surahTitle', { name: surahDisplayName(meta, s.number, locale) }),
-    description: `${t(`revelation.${s.revelationType}`)} · ${t('ayahCount', { count: s.ayahCount })}`,
-  };
+  const name = surahDisplayName(meta, s.number, locale);
+  return pageMetadata({
+    title: t('surahTitle', { name }),
+    description: t('surahDescription', { name, revelation: t(`revelation.${s.revelationType}`), count: s.ayahCount }),
+    path: `/quran/${slugOf(s.number)}`,
+    locale,
+  });
 }
 
 export default async function SurahPage({ params }: PageProps<'/[locale]/quran/[surah]'>) {
@@ -47,6 +52,16 @@ export default async function SurahPage({ params }: PageProps<'/[locale]/quran/[
       surahSlugs={view.surahSlugs}
     >
       <article className="reader-column">
+        <JsonLd
+          data={breadcrumbJsonLd(
+            [
+              { name: (await getTranslations('Nav'))('home'), path: '/' },
+              { name: (await getTranslations('Nav'))('quran'), path: '/quran' },
+              { name: tq('surahTitle', { name: name(n) }), path: `/quran/${slugOf(n)}` },
+            ],
+            locale
+          )}
+        />
         <QuranFlow
           ayahs={view.ayahs}
           surahs={view.meta.surahs}
@@ -54,6 +69,7 @@ export default async function SurahPage({ params }: PageProps<'/[locale]/quran/[
           quarterStarts={view.quarterStarts}
           surahHeading="h1"
           pageMarkers
+          pageAyahCounts={view.pageAyahCounts}
         />
         <StepNav
           label={t('surahNav')}

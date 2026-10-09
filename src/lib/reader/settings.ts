@@ -17,6 +17,8 @@ export interface ReaderSettings {
   width: ContentWidth;
   /** `auto`: Arabic-Indic digits in the Arabic UI, Western digits in the English UI. */
   numerals: NumeralStyle;
+  /** Translation shown under each ayah in reading mode (registry id), or null (SPEC §7.4, §7.9). */
+  translation: string | null;
 }
 
 export const SIZE = { min: 20, max: 56, step: 2 } as const;
@@ -28,6 +30,7 @@ export const DEFAULT_READER_SETTINGS: ReaderSettings = {
   lineHeight: 2.2,
   width: 'normal',
   numerals: 'auto',
+  translation: null,
 };
 
 export const READER_STORAGE_KEY = 'noor:reader';
@@ -48,6 +51,7 @@ export function parseReaderSettings(raw: unknown): ReaderSettings {
     lineHeight: Math.round(clamp(o.lineHeight, LINE_HEIGHT.min, LINE_HEIGHT.max, d.lineHeight) * 10) / 10,
     width: oneOf(CONTENT_WIDTHS, o.width, d.width),
     numerals: oneOf(NUMERAL_STYLES, o.numerals, d.numerals),
+    translation: typeof o.translation === 'string' && /^[a-z0-9._-]{1,60}$/.test(o.translation) ? o.translation : null,
   };
 }
 

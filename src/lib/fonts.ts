@@ -23,5 +23,8 @@ export const uiFont = localFont({
   ],
   variable: '--font-ui',
   display: 'swap',
+  // Not preloaded: on slow connections the page paints at once with the size-adjusted fallback
+  // and swaps when the font arrives (SPEC §11: LCP < 2.5 s; D-070).
+  preload: false,
   fallback: ['Segoe UI', 'Tahoma', 'Arial', 'sans-serif'],
 });

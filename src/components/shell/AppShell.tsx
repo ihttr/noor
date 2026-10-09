@@ -1,7 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
-import { Languages } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronUp, Languages, Pause, Play, Search, X } from 'lucide-react';
+import { AudioMount } from '@/components/audio/AudioMount';
+import { PaletteTrigger } from '@/components/palette/PaletteTrigger';
+import { OfflineBanner } from '@/components/pwa/OfflineBanner';
+import { getAdhkarIndex } from '@/lib/adhkar/content';
 import { LanguageSwitch } from './LanguageSwitch';
 import { NavIcon } from './nav-icons';
 import { NavLink } from './NavLink';
@@ -22,6 +26,13 @@ function BrandMark() {
 export async function AppShell({ children }: { children: ReactNode }) {
   const tShell = await getTranslations('Shell');
   const tNav = await getTranslations('Nav');
+  const tAdhkar = await getTranslations('Adhkar');
+  const { categories } = await getAdhkarIndex();
+  const sections = [
+    { key: 'search', href: '/search', label: tNav('search') },
+    ...NAV_ITEMS.filter((i) => i.key !== 'more' && i.key !== 'search').map((i) => ({ key: i.key, href: i.href, label: tNav(i.key) })),
+    ...categories.filter((c) => c.count > 0).map((c) => ({ key: `adhkar-${c.id}`, href: `/adhkar/${c.id}`, label: tAdhkar(`categories.${c.id}`) })),
+  ];
 
   return (
     <div className="min-h-dvh md:flex">
@@ -41,6 +52,17 @@ export async function AppShell({ children }: { children: ReactNode }) {
           <BrandMark />
           <span className="text-lg font-semibold">{tShell('brand')}</span>
         </Link>
+        <Link
+          href="/search"
+          data-open-palette
+          className="flex min-h-11 items-center gap-3 rounded-xl border border-line px-3 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+        >
+          <Search aria-hidden="true" className="size-5 shrink-0" strokeWidth={1.75} />
+          <span className="flex-1">{tShell('search')}</span>
+          <kbd className="rounded border border-line px-1.5 text-xs" dir="ltr" aria-hidden="true">
+            Ctrl K
+          </kbd>
+        </Link>
         <nav aria-label={tShell('primaryNav')} className="flex-1 overflow-y-auto">
           <ul className="flex flex-col gap-1">
             {NAV_ITEMS.filter((i) => i.sidebar).map((item) => (
@@ -59,15 +81,21 @@ export async function AppShell({ children }: { children: ReactNode }) {
           data-chrome-part
           className="sticky top-0 z-20 border-b border-line bg-canvas/90 pt-[env(safe-area-inset-top)] backdrop-blur md:hidden"
         >
-          <div className="flex h-14 items-center justify-between px-4">
+          <div className="flex min-h-14 flex-wrap items-center justify-between gap-x-2 px-4">
             <Link href="/" className="flex min-h-11 items-center gap-2 rounded-xl">
               <BrandMark />
               <span className="text-base font-semibold">{tShell('brand')}</span>
             </Link>
-            <LanguageSwitch className="-me-2" icon={<Languages aria-hidden="true" className="size-5" strokeWidth={1.75} />} />
+            <div className="-me-2 flex items-center">
+              <Link href="/search" data-open-palette className="icon-button" aria-label={tShell('search')}>
+                <Search aria-hidden="true" className="size-5" strokeWidth={1.75} />
+              </Link>
+              <LanguageSwitch icon={<Languages aria-hidden="true" className="size-5" strokeWidth={1.75} />} />
+            </div>
           </div>
         </header>
 
+        <OfflineBanner />
         <main
           id="main"
           tabIndex={-1}
@@ -77,6 +105,18 @@ export async function AppShell({ children }: { children: ReactNode }) {
         </main>
       </div>
 
+      <PaletteTrigger sections={sections} />
+      <AudioMount
+        icons={{
+          play: <Play aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.5} />,
+          pause: <Pause aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.5} />,
+          left: <ChevronLeft aria-hidden="true" className="size-5" />,
+          right: <ChevronRight aria-hidden="true" className="size-5" />,
+          expand: <ChevronUp aria-hidden="true" className="size-5" />,
+          close: <X aria-hidden="true" className="size-5" />,
+        }}
+      />
+
       {/* Mobile: bottom navigation within thumb reach (SPEC §6). */}
       <nav
         data-chrome-part
@@ -85,7 +125,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
       >
         <ul className="mx-auto flex max-w-lg items-stretch px-1 py-1">
           {NAV_ITEMS.filter((i) => i.bottomBar).map((item) => (
-            <li key={item.key} className="flex flex-1">
+            <li key={item.key} className="flex min-w-0 flex-1">
               <NavLink
                 navKey={item.key}
                 label={tNav(item.key)}

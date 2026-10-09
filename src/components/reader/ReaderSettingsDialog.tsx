@@ -18,9 +18,12 @@ const segment =
 export function ReaderSettingsDialog({
   ref,
   icons,
+  translations,
 }: {
   ref?: Ref<HTMLDialogElement>;
   icons: { close: ReactNode; minus: ReactNode; plus: ReactNode };
+  /** Imported translations; none until one is approved (D-020). */
+  translations: readonly { id: string; name: string }[];
 }) {
   const t = useTranslations('Reader');
   const s = useSyncExternalStore(subscribeReaderSettings, getReaderSettings, getServerReaderSettings);
@@ -134,6 +137,29 @@ export function ReaderSettingsDialog({
               </label>
             ))}
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend className="mb-2 text-sm font-semibold">{t('translation')}</legend>
+          {translations.length === 0 ? (
+            <p className="text-sm text-ink-muted">{t('noTranslation')}</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {[{ id: null, name: t('translationOff') }, ...translations].map((x) => (
+                <label key={x.id ?? 'off'} className={segment}>
+                  <input
+                    type="radio"
+                    name="translation"
+                    className="sr-only"
+                    checked={s.translation === x.id}
+                    onChange={() => updateReaderSettings({ translation: x.id })}
+                  />
+                  {x.name}
+                </label>
+              ))}
+              <p className="text-xs text-ink-muted">{t('translationReadingOnly')}</p>
+            </div>
+          )}
         </fieldset>
 
         <div>

@@ -107,24 +107,24 @@ Added later when their phase starts: better-auth, dexie, adhan, @serwist/turbopa
 - KFGQPC fonts: no modification at all (see D-011).
 
 ## D-016 — Sync cursor and conflict clock
-**Status:** Proposed (implementation in Phase 4/9). The sync cursor is a server-assigned monotonic sequence (`serverSeq`), not a timestamp. Last-write-wins compares a hybrid timestamp: `updatedAt = max(deviceNow, lastSeenUpdatedAt + 1)`, so a device with a slow clock cannot lose edits it makes after seeing newer data. Tombstones are kept at least 90 days.
+**Status:** Accepted — implemented (clock in Phase 4, cursor in Phase 9, see D-061). The sync cursor is a server-assigned monotonic sequence (`serverSeq`), not a timestamp. Last-write-wins compares a hybrid timestamp: `updatedAt = max(deviceNow, lastSeenUpdatedAt + 1)`, so a device with a slow clock cannot lose edits it makes after seeing newer data. Tombstones are kept at least 90 days.
 
 ## D-017 — PWA on Next 16
-**Status:** Proposed. Next 16 builds with Turbopack by default; use `@serwist/turbopack` (instead of `@serwist/next`, which needs webpack). Measure the reader's JS in Phase 3 and lazy-load Dexie, audio and the search worker to stay under 150 KB gzipped.
+**Status:** Superseded by D-068 (hand-written service worker; the JS budget part was done in Phases 3–8). Next 16 builds with Turbopack by default; use `@serwist/turbopack` (instead of `@serwist/next`, which needs webpack). Measure the reader's JS in Phase 3 and lazy-load Dexie, audio and the search worker to stay under 150 KB gzipped.
 
 ## D-018 — Repository contents for `data/sources/`
 **Status:** Proposed — partly done in Phase 1: `git init` (no commit yet) and the KFGQPC TTF files are git-ignored. Commit `data/sources/` (≈ 43 MB incl. reference data) except: KFGQPC font files (EULA, until permission) and, after the font decision, the ~11 MB `quran/quranenc-kfgqpc/` reference responses.
 
 ## D-019 — Adhkar dataset and Quranic passages inside adhkar
-**Status:** Needs decision (dataset) + Proposed (rendering).
+**Status:** Accepted by the owner on 2026-10-09 for the dataset: Seen-Arabic morning/evening only (other categories empty until a source is approved). Rendering: see D-055.
 - Rendering: a dhikr that quotes the Quran (Ayat al-Kursi, al-Ikhlas, al-Falaq, an-Nas, …) stores ayah references and renders that part from the approved Quran text, with its own reference; the dataset's simplified spelling is not shown as Quran.
 - Dataset: options in SOURCES.md §9 — none has text + count + reference + grading + clear license for the whole book.
 
 ## D-020 — English translation
-**Status:** Needs decision. Recommendation: QuranEnc distribution (explicit re-publishing permission, versioned, maintained) — Saheeh International (`english_saheeh` 1.1.2) as default, Rowwad (`english_rwwad` 1.0.19) as an alternative. Consequences: no modification (footnotes shown as provided), version shown on screen, a script that checks QuranEnc for newer versions.
+**Status:** Needs decision — the owner chose "no translation for now" on 2026-10-09; the pipeline is ready (D-052). Recommendation: QuranEnc distribution (explicit re-publishing permission, versioned, maintained) — Saheeh International (`english_saheeh` 1.1.2) as default, Rowwad (`english_rwwad` 1.0.19) as an alternative. Consequences: no modification (footnotes shown as provided), version shown on screen, a script that checks QuranEnc for newer versions.
 
 ## D-021 — Audio source
-**Status:** Needs decision. Recommendation: Islamic Network CDN (per-ayah MP3, written permission for streaming in personal/educational use; reciters keep copyright). Stream only; no offline download in v1. Attribution: reciter + Islamic Network.
+**Status:** Accepted by the owner on 2026-10-09 (Islamic Network CDN). Implementation: D-054. Recommendation: Islamic Network CDN (per-ayah MP3, written permission for streaming in personal/educational use; reciters keep copyright). Stream only; no offline download in v1. Attribution: reciter + Islamic Network.
 
 ## D-022 — Arabic city names
 **Status:** Needs decision. `cities15000` has untagged Arabic-script alternate names for 12,359 of 34,152 cities. Options: (a) use those (cheap, imprecise), (b) download `alternateNamesV2.zip` (~205 MB, not committed) and commit only a derived subset of `ar` names for the bundled cities, with the upstream hash in the lock.
@@ -155,7 +155,7 @@ IBM Plex Sans Arabic is served from IBM's own unmodified WOFF2 files (`fonts/com
 No PostgreSQL exists on the development machine and Docker is not required. The initial migration was generated with `prisma migrate diff --from-empty --to-schema` and is verified by `npm test`: it is applied to PGlite (Postgres in WebAssembly), constraints are exercised, and the SQL must equal a fresh diff of the schema (valid while there is one migration; later phases add a shadow-database check). Deployments use `prisma migrate deploy` against Neon.
 
 ## D-029 — Sync-ready columns in the schema
-**Status:** Accepted (implements SPEC §5). User-data tables use client-generated UUIDs, a client-supplied `updatedAt` (not Prisma's `@updatedAt`, which would overwrite it with server time) and a `deletedAt` tombstone; all cascade on user deletion. `MemorizationItem.repetitions` was added for the SPEC §7.12 "3 successful reviews" rule. The server-side sync cursor of D-016 is **not** in the schema yet (D-016 is still Proposed).
+**Status:** Accepted (implements SPEC §5). User-data tables use client-generated UUIDs, a client-supplied `updatedAt` (not Prisma's `@updatedAt`, which would overwrite it with server time) and a `deletedAt` tombstone; all cascade on user deletion. `MemorizationItem.repetitions` was added for the SPEC §7.12 "3 successful reviews" rule. Phase 9 added the server-side cursor of D-016: a `serverSeq` column on every user-data table, from one global sequence, bumped by a trigger on every update (migration `20261009120000_sync`, D-061).
 
 ## D-030 — `@swc/core` native cache on Windows
 **Status:** Accepted (implemented). The next-intl plugin loads `@swc/core` 1.16, whose native addon refuses its default cache folder `%LOCALAPPDATA%\swc` when that folder's ACL lets another principal replace files. On the development machine `%LOCALAPPDATA%` inherits full access for an AppContainer SID (`S-1-15-3-3557520199-…`), so `tooling/swc-native-cache.ts` (imported first by `next.config.ts`) points `SWC_NATIVE_BINDING_CACHE` to `.cache/swc` in the project unless it is already set.
@@ -213,3 +213,198 @@ No PostgreSQL exists on the development machine and Docker is not required. The 
 
 ## D-041 — No next-intl runtime in the browser
 **Status:** Proposed. The reader route ships 147.8 KiB of gzipped JS (gzip level 9), under 150 KiB but only ~2 KiB to spare; strictly in decimal kB it is 151.3 kB. React DOM and the Next.js runtime alone are ~134 KiB. Replacing next-intl's client APIs (`useTranslations`, `Link`, `useRouter`, `usePathname`, `NextIntlClientProvider`) with server-prepared labels and plain `next/link` + a small locale-prefix helper would save about 9 KiB, leaving room for the ayah menu (Phase 4) and the mini player (Phase 6). Server-side next-intl stays.
+
+---
+
+## Phase 4 — Local-first store, position, saved items and notes (2026-10-06)
+
+## D-042 — Local store: Dexie behind a repository interface
+**Status:** Accepted (implemented).
+- `src/lib/store/repository.ts` is the interface features use (`LocalStore`: preferences, position, readingDays, saved, collections, notes, sync, subscribe). `src/lib/store/dexie.ts` implements it on IndexedDB with Dexie 4.4.6 (Apache-2.0); `getStore()` loads it as a separate chunk.
+- Record shape follows `prisma/schema.prisma`: client UUID (`crypto.randomUUID`, with a `getRandomValues` fallback for plain-http LAN testing), `createdAt`, `updatedAt`, `deletedAt` tombstone. Timestamps are epoch milliseconds from a hybrid clock (D-016: `max(now, last + 1)`, persisted); the Phase 9 transport converts them to `DateTime`.
+- Every write runs in one transaction that also puts the record into `outbox` (the upload queue). `sync.pending()` / `acknowledge()` / `applyRemote()` / cursor are the transport's whole interface. Change notifications: listeners in the tab after commit, other tabs via `BroadcastChannel`.
+- Input is validated before writing (item references, note ≤ 5,000 characters, collection names ≤ 60).
+
+## D-043 — Merge rules for sync
+**Status:** Accepted (implemented and unit-tested in Phase 4; used by Phase 9). Last write wins per record by `updatedAt`, ties broken by content so every device agrees. Tables the server keeps unique per user adopt the server's record id: preferences and reading position (one row), reading days (one row per date, merged by union of pages and max of seconds, SPEC §5). Saved items (type + ref) and notes (target) created on two devices fold into the record with the smallest id; the other becomes a tombstone. Two different note texts on the same target are both kept, oldest first.
+
+## D-044 — Preferences: IndexedDB is the source of truth, localStorage a boot copy
+**Status:** Accepted (implemented). Reading settings and theme are saved to the store (debounced 400 ms); `noor:reader` and `noor:theme` in localStorage stay as a boot copy that the inline script applies before paint (no flash). When the page is idle the stored values win and refresh the boot copy; values that exist only in the boot copy (from Phase 3) are moved into the store. Other tabs follow through the store's change notifications.
+
+## D-045 — Ayah menu: opened from the ayah number
+**Status:** Accepted by the owner on 2026-10-06. Tapping the ayah number (end-of-ayah marker, ≥ 44 px touch target at the default size, `role="button"`, `aria-haspopup="dialog"`) opens the menu on every device; tapping the text still toggles the chrome (SPEC §6) and text selection keeps working. Keyboard: Enter, Space, the context-menu key or Shift+F10 on the focused ayah. The menu is a modal `<dialog>` (focus trap, Escape, focus returns to the ayah): a popover next to the number from 48 rem (768 px) wide, a bottom sheet below. Copy = the ayah text exactly as rendered + a new line + `[البقرة: ٢٥٥]` / `[Al-Baqara 2:255]` (digits follow the numeral setting). Share uses the Web Share API with the stable URL `/quran/{slug}/{ayah}`, otherwise copies text + link. Play, translation and tafsir are shown disabled ("coming soon") until their phases. A toolbar bookmark saves the current page (Mushaf mode) or surah (reading mode).
+
+## D-046 — One note per target
+**Status:** Accepted by the owner on 2026-10-06. Notes live only in the `Note` entity, one per target (ayah, page, surah, dhikr, tafsir), shown with the saved item when the target is saved; a note works without saving, and removing a saved item keeps its note. `SavedItem.note` was dropped by the Phase 9 sync migration.
+
+## D-047 — Reading position and activity definitions
+**Status:** Accepted (implemented).
+- Position = the ayah being read at the top of the text, saved 1 s after scrolling stops (and on page hide), with its page and mode. Ayahs flow inline, so the top line often holds the end of one ayah and the start of the next: the ayah that starts there wins unless the previous one still fills more than ~1.5 lines below the edge. The edge is where a jump puts an ayah (its scroll margin below the chrome), so reopening a position finds the same ayah (verified by an e2e test).
+- Page read (SPEC §7.7): Mushaf mode — the page on screen for a cumulative 15 s; reading mode — at least half of the page's ayahs (the whole Madani page) each visible for a cumulative 15 s. Screen time is kept across client-side navigation, so a page shared by two surahs can be completed in both. Counted once per local day. Constants in `src/lib/activity/page-read.ts`.
+- Reading time: only on reader routes, while the tab is visible and there was input (pointer, key, wheel, touch, scroll) in the last 60 s, or while audio plays; split at local midnight; saved every 15 s and on hide.
+
+## D-048 — JS budget with lazily loaded features
+**Status:** Accepted by the owner on 2026-10-06 (as proposed in D-017). The 150 KB limit applies to the scripts a reader route loads for its first paint (measured from its HTML, gzip level 9). The store (Dexie), tracking, preferences sync and the ayah menu load when the page is idle or on first use and are reported separately by the budget test. Phase 4: 149.6 KiB first paint (+1.8 KiB), 51.5 KiB loaded later. D-041 is still open and becomes necessary before more first-paint code is added.
+
+---
+
+## Phase 5 — Search, command palette, translations, tafsir (2026-10-09)
+
+Owner decisions on 2026-10-09 (chat, before continuing with Phases 5–12): tafsir = Tafsir al-Muyassar from QuranEnc; audio = Islamic Network CDN (D-021); adhkar = Seen-Arabic morning/evening (D-019); **no translation for now** (D-020 stays open). Approvals are recorded per file in the manifest and lock (D-032).
+
+## D-049 — Tafsir al-Muyassar (QuranEnc distribution)
+**Status:** Accepted by the owner on 2026-10-09. `scripts/import-tafsir.ts` reads only the approved SQLite file (SHA-256 verified, read with Node's built-in `node:sqlite`, no dependency) and writes `content/tafsir/muyassar/surah/{n}.json` + `content/tafsir/registry.json`. Texts are verbatim (no trimming or normalization); the import stops on gaps, duplicates or empty texts. `verify-content` re-reads the source and compares every entry code point for code point, plus a canonical SHA-256. The panel always shows «التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف», a link to QuranEnc.com and the copy date (QuranEnc publishes no version for this item, so the download date and hash identify it). The panel is a side panel from 48 rem and a bottom sheet below, opened from the ayah menu; a tafsir entry can be saved (type `TAFSIR`, ref `muyassar:2:255`).
+
+## D-050 — Quran search
+**Status:** Accepted (implements SPEC §7.8 and D-013). The normalized Simple Clean index (~200 KB gzipped) is served once by `/api/quran/search-index` with each ayah's juz, and searched in a Web Worker. Modes: whole-word phrase (default), parts of words, all words in any order; filters by surah and juz; 20 results per page. Highlighting maps matched Simple Clean word positions to the Uthmani words; the Uthmani string is only cut into consecutive pieces at spaces (they always join back to the source — tested on all 6,236 ayahs). Tokens of only marks are not words. 5,873 ayahs map word for word; for the 363 whose word counts differ, the whole ayah is highlighted. Search result pages are `noindex, follow`.
+
+## D-051 — Command palette
+**Status:** Accepted (implemented). Ctrl/Cmd + K, or the search button in the sidebar / mobile header (a link to `/search` without JavaScript). Entries: ayah references (`2:255`, `البقرة ٢٥٥`), pages (`صفحة 50`), juz (`جزء 30`), surahs (same matching as the surah index), sections, saved items and notes (from the local store), theme and language, and "search the Quran for …". ARIA combobox + listbox, arrows / Enter / Escape. The palette is loaded on first use; every page only carries the key listener.
+
+## D-052 — Translations: pipeline ready, nothing imported
+**Status:** Accepted (implements SPEC §7.9 without content, per the owner's choice). `content/translations/registry.json` is empty. `scripts/import-translation.ts <id>` reads a file only if it is approved for the use `translation:<id>` (it refuses today), parses the QuranEnc XML (CDATA, verbatim) or Tanzil XML (attribute values entity-decoded only) formats, checks the translator named in the file and full coverage, and writes per-surah chunks with translator, source, version and hash. All 8 candidate files parse completely in a unit test (nothing written). The reading settings show "no translation approved yet"; once one is imported it can be chosen there and appears under each ayah in reading mode with a credit line — **that display path cannot be tested until a translation is approved**.
+
+## D-053 — Reader dialogs load on first use
+**Status:** Accepted (implemented). The jump and reading-settings dialogs are lazy chunks (preloaded when the reader is idle) and mount on first open. The reader's first-paint JS went from 149.7 KiB to 146.6 KiB (gzip -9), which leaves room for the mini player (Phase 6) without D-041.
+
+---
+
+## Phase 6 — Audio (2026-10-09)
+
+## D-054 — Audio player (Islamic Network CDN, streaming only)
+**Status:** Accepted (implements SPEC §7.11 with D-021).
+- `scripts/import-audio.ts` builds `content/audio/reciters.json` from the approved edition list: Arabic recitations only (spoken translations are not recitations), without the "-2" editions that repeat a reciter under the same name — 17 reciters, default Mishary Alafasy. The list has no bitrates, so the available ones were probed with HTTP HEAD requests (no audio downloaded) and recorded in `data/curated/audio-bitrates.json`: 128 kbps when available, else 64, else what exists (e.g. Ibrahim Akhdar 32).
+- Per-ayah files `https://cdn.islamic.network/quran/audio/{bitrate}/{reciter}/{globalAyah}.mp3`; a surah plays by sequencing them, preloading only the next ayah; it stops at the end of the surah unless the surah or an ayah range repeats. Repeat each ayah 1/2/3/5/10/∞ times, speed 0.75–2×, reciter, and auto-scroll are in the player's options (reciter, speed and auto-scroll are saved as preferences).
+- One module-level `<audio>` element, so playback survives client-side navigation; the mini player is mounted in the root layout and loaded only after the first "Play" (no first-paint cost). It sits above the bottom navigation on phones and moves down when the reader hides its chrome.
+- The reciting ayah is marked in the reader (`data-playing`) and scrolled into view (smooth unless reduced motion). Listening counts as reading time (SPEC §7.7).
+- Media Session: title "{surah} · الآية n", reciter as artist; play, pause, previous/next ayah and stop actions.
+- Mobile autoplay rules: the tap on "Play from here" unlocks the audio element synchronously (a tiny silent WAV) before the player code loads.
+- No offline audio (SPEC §7.11, terms). The player and About page credit Islamic Network and link its terms; copyright stays with the reciters.
+- Not testable here: background playback and lock-screen controls on real phones (manual checklist, SPEC §15).
+
+---
+
+## Phase 7 — Adhkar and tasbih (2026-10-09)
+
+## D-055 — Adhkar from the Seen-Arabic dataset
+**Status:** Accepted (implements SPEC §7.14 with D-019).
+- `scripts/import-adhkar.ts` reads only the approved `ar.json`/`en.json` (SHA-256 verified), checks every entry (unique order, text, count ≥ 1, a reference, same entry in both files) and writes `content/adhkar/index.json` + `morning.json` (26) + `evening.json` (24) — type 0 belongs to both. Texts and references are verbatim; `verify-content` rebuilds from the sources and requires exact equality.
+- Reference = the dataset's `source` field as given (book, number and, where present, the grading — e.g. al-Albani's). The dataset has no separate grading field, so grading is not extracted.
+- Quranic passages (Ayat al-Kursi, al-Baqarah 285–286, al-Ikhlas, al-Falaq, an-Nas) are spelled non-Uthmani in the dataset (with added commas); they are replaced by ayah references (`data/curated/adhkar-quran.json`, awaiting owner review) and rendered from the approved Tanzil text with their own reference. The import checks each mapping (≥ 75 % of the passage's normalized words in the referenced ayahs) and stops otherwise; the text around the passage (e.g. the isti'adha) stays verbatim.
+- Not shown: `fadl` (virtue) — it has no reference of its own (SPEC §2.7); `hadith_text`, vocabulary notes, transliteration and the dataset's audio links.
+- English UI: the dataset's English translation and English reference. The other ten categories of SPEC §7.14 exist in the UI and say honestly that no approved source covers them yet.
+- Counts: saved on every tap in `AdhkarDay` (local date + category; merge = max per dhikr, completed stays completed), survive reloads, start again at local midnight (checked every minute and on return to the tab). The whole card counts a tap; −1, reset, a subtle completion state, optional auto-advance (off by default). A dhikr can be saved (type DHIKR) and get a private note. The home page shows today's state for morning, evening, after prayer and before sleep.
+
+## D-056 — Tasbih and the shared counter
+**Status:** Accepted (implements SPEC §7.15). The four preset phrases are read at build time from SPEC §7.15 itself (no dhikr text typed in code); a custom phrase (≤ 120 characters) is possible. Targets 33/99/100/custom/none with a progress ring; +1 (a large target), −1, reset with confirmation (the session stays in the history). Sessions live in `TasbihSession` (one running session; the last 30 are listed, empty ones hidden). Vibration where `navigator.vibrate` exists (the toggle is hidden otherwise, e.g. iOS Safari); a soft tone (Web Audio) is optional and off by default. Counting is enabled only after the saved count has loaded, and the latest count is kept synchronously, so quick taps are never lost (a bug found by the e2e test and fixed).
+
+---
+
+## Phase 8 — Prayer times, qibla, Hijri calendar (2026-10-09)
+
+## D-057 — Bundled city list (GeoNames cities15000)
+**Status:** Accepted (SPEC §3 default). `scripts/import-cities.ts` builds `content/cities/cities.json` (34,152 cities, ~740 KB gzipped), fetched only when the user searches; the search runs on the device. Display names are GeoNames' Latin main names; country names come from `Intl.DisplayNames`. The untagged Arabic-script alternates (Persian/Urdu spellings filtered out) are used for **search only** — D-022 (Arabic display names) is still open.
+
+## D-058 — Prayer times
+**Status:** Accepted. adhan-js 4.4.6 (MIT). Method defaults by country (SA Umm al-Qura, EG/SD/LY Egyptian, PK/IN/BD/AF Karachi, AE Dubai, KW Kuwait, QA Qatar, SG/MY/ID/BN Singapore, TR Diyanet, IR Tehran, US/CA ISNA, GB Moonsighting Committee, otherwise Muslim World League), changeable; Asr madhab, high-latitude rule, ±30 min per prayer. Unit test against the official Diyanet timetable for Istanbul (9 Oct 2026): all six times within 2 minutes. The place stays on the device (local-only store values, never synced); settings are synced preferences. Location is asked only after "Use my location" (e2e verified). Home highlights morning adhkar before Dhuhr and evening after Asr when a place is set.
+
+## D-059 — Qibla
+**Status:** Accepted. Bearing from true north (adhan `Qibla`, cross-checked with a great-circle formula) and distance to Makkah; live compass only after a tap (iOS permission + `webkitCompassHeading`, Android `deviceorientationabsolute`), fallback static dial. Both live headings are magnetic; declination is **not corrected** and the page says so. Real-device compass behaviour is untested here.
+
+## D-060 — Hijri calendar
+**Status:** Accepted. `Intl` `islamic-umalqura` (matches Diyanet's date for 9 Oct 2026), ±2-day adjustment, month grid with both calendars, six important dates, each labelled "expected — depends on moon sighting". Preferences are read with `loadPreferences()` (stored + not-yet-saved values) — a reload within the 400 ms save debounce lost a change before (found by e2e, fixed).
+
+---
+
+## Phase 9 — Accounts and sync (2026-10-09)
+
+## D-061 — Sync protocol
+**Status:** Accepted (implements SPEC §5, D-016, D-043).
+- `POST /api/sync` `{ cursor, changes[≤500] }` → `{ changes, cursor, more }`. Records travel in the local store's shape; every field is validated with Zod (UUIDs, refs, ranges, sizes; body ≤ 2 MB). Session cookie required (401), same-origin `Origin` required (403, CSRF), 60 requests/min per user (429, per server instance).
+- Server: one transaction per request holding `pg_advisory_xact_lock(hashtext(userId))`, so one user's syncs never interleave. Each pushed change is merged with the same rules as the client (`planMerge`/`newer`, merge.ts): last-write-wins by the hybrid `updatedAt`; reading days union pages and max seconds; adhkar days max counts; preferences, reading position, reading days and adhkar days are one row per natural key (the server keeps its row id; the client adopts it). A change whose id belongs to another user is ignored. The canonical rows of the pushed changes are echoed back.
+- Cursor: every user-data row has `serverSeq` from one global Postgres sequence, set on insert and on every update by a trigger; a pull returns rows with `serverSeq > cursor` in order (≤ 500, `more` for the rest). The per-user lock makes the sequence commit-ordered per user.
+- Client (`src/lib/sync/client.ts`): push the outbox in batches, apply the echo and the pull with `applyRemote`, acknowledge, store the cursor, repeat while `more`. Triggers: page load (when signed in), `online`, tab visible, and 3 s after local edits. Only loaded when an account is signed in (no cost for guests).
+
+## D-062 — Local PostgreSQL without Docker: PGlite
+**Status:** Accepted. `npm run db:dev` (`scripts/dev-db.ts`) runs PGlite (Postgres in WebAssembly) behind a Postgres wire-protocol socket (`@electric-sql/pglite-socket`) and applies the migrations with `prisma migrate deploy`; the port opens only after migrating. The e2e tests start it in memory on port 5434 (Playwright `webServer`). PGlite has a single backend shared by all socket connections, and statements of concurrent connections interleave badly ("portal does not exist"), so the app is run with `DATABASE_POOL_MAX=1` against it. Production uses Neon (pooled `DATABASE_URL`, direct `DIRECT_URL` for migrations). A unit test applies the migrations to PGlite and checks with `prisma migrate diff --exit-code` that they equal the schema exactly.
+
+## D-063 — Accounts: sign-in, sign-out and deletion on a device
+**Status:** Accepted (SPEC §5, §7.19). Better Auth 1.7 (email + password, scrypt, httpOnly cookies prefixed `noor`, built-in rate limits per IP; email verification is optional and off by default). Without `DATABASE_URL` the auth and sync routes answer 503 and the UI says accounts are unavailable — the rest of the app is unaffected.
+- **Sign-up / sign-in:** the device's guest data is uploaded and merged into the account. If the device last synced with a *different* account, that account's local copy is removed first (it is already on the server).
+- **Sign-out:** a final sync, then the data stays on the device by default; "also remove from this device" (shared devices) erases it.
+- **Delete my account:** password + "I understand" confirmation; the server deletes the user and every row (cascade). The device's data then becomes guest data again (all live records re-queued, tombstones dropped) or is erased if the user ticks the box. Exports are offered: server export (`GET /api/account/export`, JSON of everything stored for the user) and a device export (works for guests too).
+- **Password reset:** Better Auth tokens (one hour, single use) sent by Resend; without `RESEND_API_KEY` mails go to `.cache/mail-outbox.jsonl` in development and tests (production refuses unless `NOOR_DEV_MAIL_OUTBOX` is set). Auth pages are `noindex`.
+
+## D-064 — Prayer location sync is opt-in
+**Status:** Accepted (SPEC §5 "location privacy"). The place stays in local-only device storage. Settings → Account has "Sync the prayer-times location"; when on, the place is also stored in the synced preferences (`prayerPlace`) and that copy wins on every device; turning it off (or removing the place) clears it from the account.
+
+---
+
+## Phase 10 — Memorization, goals, statistics (2026-10-09)
+
+## D-065 — Spaced repetition for memorization
+**Status:** Accepted (SPEC §7.12). SM-2 with three grades: "Didn't know" = quality 1, "Hesitant" = 3, "Knew it" = 5. Successful reviews give intervals of 1 day, 6 days, then the previous interval × the ease before the review; ease changes by SM-2's formula, minimum 1.3; a failure resets the run and schedules the ayah for tomorrow. Due dates are local calendar days. **Reviewing before the due date** records the review but does not move the schedule (a failure still counts), so repeated practice cannot inflate progress. **Memorized** = 3 consecutive successful (due) reviews and an interval of at least 7 days — with these intervals that is the third successful review; a later failure removes the status. One record per ayah (unique surah + ayah, synced like the other natural-key tables, D-061). Progress: "Al-Mulk — memorized 12/30 ayahs (40%)", where 30 is the surah's ayah count.
+
+## D-066 — Practice masks are display-only
+**Status:** Accepted (SPEC §7.12, CLAUDE.md integrity rules). The ayah is split at its U+0020 spaces into tokens; joining them with single spaces gives back the stored text (unit test over all 6,236 ayahs and every mode). A token is a word when it contains a letter (`\p{L}`); tokens of pause/annotation marks only are never hidden or counted. "First letter" shows the first grapheme cluster (`Intl.Segmenter`). Hidden parts stay in the DOM as inline elements drawn transparent over a soft block (so Arabic letters keep joining across the boundary), are `aria-hidden`, and sit in a keyboard-operable "Reveal word n" control; the DOM text of the ayah always equals the source (e2e check in every mode). Modes: show all, hide all, first letter, every other word; the choice is a synced preference.
+
+## D-067 — Goals and statistics definitions
+**Status:** Accepted (SPEC §7.13).
+- Goal: pages per day (presets 2/5/10/20, custom 1–604, or none), valid from the day it is set (one goal record per start date), so past days keep the goal they had. Week and month progress compare with the sum of the daily goals of the days so far.
+- A day counts as read when at least one page was read (page tracking of SPEC §7.7). The streak counts consecutive read days up to today, or up to yesterday while today is still empty, so it never drops during a day; wording is never loss-framed and the streak can be hidden (synced preference).
+- Weeks start on the locale's first day (CLDR via `Intl.Locale#getWeekInfo`: Saturday for Arabic, Sunday for English).
+- Pages read = sum of pages per day (a page read on two days counts twice). A surah counts as completed when every Mushaf page it is on was read at least once (page-level tracking; ayah-level completion is not tracked). Reading time = sum of tracked seconds. Adhkar sessions completed = completed adhkar days per category.
+- Charts: last 7 days (a labelled list of bars) and a 26-week heatmap (`role="img"` with a summary; levels relative to the goal, or 1–2/3–5/6–10/11+ pages without one). Statistics are computed on the device; there are no leaderboards.
+
+---
+
+## Phase 11 — PWA and offline (2026-10-09)
+
+## D-068 — Hand-written service worker instead of Serwist
+**Status:** Accepted by the agent — **owner confirmation requested** (D-017 proposed `@serwist/turbopack`). The needs are four caching rules and one page-driven download; Serwist on Turbopack adds a compile route (esbuild) and a precache manifest of every route's chunks. `src/sw/service-worker.js` (~250 lines, no dependencies) is served by the static route `/sw.js`, stamped with a per-build id (`NOOR_BUILD_ID`, set in next.config.ts), registered only in production builds when the page is idle.
+- **Precache (install):** the shell pages in both languages (home, surah index, adhkar index, morning/evening adhkar, saved, search, memorization, settings, offline page), the JS/CSS/fonts they reference (found in their HTML and CSS), `/api/quran/nav`, the search index, morning/evening adhkar data, the manifest. Old shell caches are deleted on activation; the new worker takes over at once (`skipWaiting` + `clients.claim`).
+- **Runtime:** navigations network-first (6 s timeout, then the cached copy), the last 60 pages kept; `/_next/static` cache-first; content APIs (surah chunks, tafsir, translations, cities…) stale-while-revalidate, last 250. Never cached: auth, sync, account, React Server Component payloads (offline they fail and Next.js does a full navigation, which the worker answers), other origins (audio CDN). Pages not available offline get `/offline` (or `/en/offline`).
+- **"Download Quran text for offline"** (Settings): the 114 surah chunks *and* the 114 reading-mode pages of the current language, so every surah opens offline in the same server-rendered reader (no second renderer, DOM integrity unchanged). Measured on this build: about 4.5 MB to download, about 22 MB stored (the HTML pages are most of it). Progress, size, cancel, update and remove are shown; `navigator.storage.persist()` is requested. After an update the worker refreshes cached pages and the downloaded copy when online, then removes static files no cached page uses.
+- The ayah menu fetches its surah's chunk, so saved ayahs show on the Saved page offline.
+- Offline banner (exact SPEC text) and the account sync queue (outbox, flushed on `online`) cover the rest of SPEC §7.20.
+- Tests run the real worker only in `offline.spec.ts` (`serviceWorkers: 'allow'`); other e2e files block it so each context does not precache. Offline = Chromium network emulation, not a real device.
+
+---
+
+## Phase 12 — Hardening and release (2026-10-09)
+
+## D-069 — Security headers and the CSP
+**Status:** Accepted, with one **owner decision** open. Production responses carry `Content-Security-Policy` (`default-src 'self'`; scripts, styles, fonts, workers and the manifest from this origin only; audio and connections also to `https://cdn.islamic.network`; `object-src 'none'`, `frame-ancestors 'none'`, `base-uri 'self'`, `form-action 'self'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy: same-origin`, HSTS and a `Permissions-Policy` (geolocation and motion sensors for this origin only; camera, microphone, payment, USB, Bluetooth off). No `X-Powered-By`. An e2e test checks the headers and that key pages raise no CSP violation.
+- **Not "strict" in Google's sense:** `script-src` includes `'unsafe-inline'`. Statically generated Next.js pages contain inline data scripts (and the theme boot script); a nonce-based CSP requires rendering every page per request, which conflicts with SPEC §9 (statically generated surah pages) and would slow every page. Options for the owner: (a) keep this CSP (recommended — no third-party scripts are allowed at all), (b) nonces with dynamic rendering, (c) wait for hash support for static pages in Next.js.
+- CSRF: Better Auth's own checks for `/api/auth/*`; `/api/sync` requires a same-origin `Origin` header. Rate limits: Better Auth per IP (sign-in/up 3 per 10 s), sync 60/min per user.
+
+## D-070 — Performance measurements and fonts
+**Status:** Measured; **owner decision** on fonts. Lighthouse 12, mobile preset (simulated slow 4G, 4× CPU), production build on this machine:
+
+| Page | Performance | Accessibility | Best practices | SEO | LCP |
+|---|---|---|---|---|---|
+| `/` | 94 | 100 | 100 | 100 | 2.9 s |
+| `/quran/al-baqara` | 89 | 100 | 100 | 100 | 3.3 s |
+| `/quran/al-faatiha` | 92 | 100 | 100 | 100 | 3.0 s |
+| `/en/quran/yaseen` | 90 | 100 | 100 | 100 | 3.5 s |
+| `/quran/al-baqara/255` | 90 | 100 | 100 | 100 | 3.3 s |
+| `/adhkar/morning` | 85 | 100 | 100 | 100 | 3.8 s |
+| `/mushaf/page/50` | 89 | 100 | 100 | 100 | 3.1 s |
+| `/prayer` | 92 | 100 | 100 | 100 | 3.1 s |
+
+Repeated runs vary by a few points (the rows for `/`, `/en/quran/yaseen` and `/adhkar/morning` were re-measured after the last changes; an earlier run of `/` gave 87, of `/adhkar/morning` 80). SEO on `/en/...` pages was 92 until the English "More" link text was renamed "Menu".
+Reader route JS 147.7 KiB gzipped (budget 150), Al-Baqarah scrolling without long tasks under 4× CPU throttling. TBT 50–220 ms, CLS ≤ 0.044.
+- **Targets not met in this lab setting:** Performance ≥ 90 on every page and LCP < 2.5 s. The largest remaining cost is font bytes on the critical path (UI font 2 × ~75 KB, Amiri Quran 63 KB, Scheherazade New 126 KB on adhkar pages). Changes made: the UI font is no longer preloaded (size-adjusted fallback, then swap), the service worker registers after `load` + idle. Further options need the owner: subsetting IBM Plex Sans Arabic and Scheherazade New (OFL Reserved Font Names → the subset must be renamed), showing adhkar text in the already-loaded Amiri instead of Scheherazade (D-055 typography), or `font-display: optional` (first visits may show the system font). Real mid-range Android over 4G was not measured.
+
+## D-071 — SEO implementation
+**Status:** Accepted (SPEC §9).
+- Every page: canonical URL, hreflang `ar` / `en` / `x-default`, Open Graph and Twitter card from one helper (`src/lib/seo.ts`). The site URL comes from `NEXT_PUBLIC_SITE_URL`, else Vercel's production domain.
+- Ayah pages `/quran/{slug}/{n}` are real pages now (on-demand, cached; no build-time params): the ayah verbatim in `[data-ayah-text]`, page/juz, Tafsir al-Muyassar with name, author and source, previous/next ayah, links to the surah and the Mushaf page, `BreadcrumbList` JSON-LD. Share links (D-045) land here.
+- `/quran/2`, `/quran/2/255`, Arabic-Indic digits and zero-padded ayahs redirect (308) in the proxy before rendering — the page-level redirect of on-demand pages sent the `Location` header twice.
+- `sitemap.xml`: main pages, 114 surahs, 30 juz, adhkar categories that have content — Arabic and English with alternates (ayah and Mushaf pages are reachable by links; listing 12,472 ayah URLs is left to the owner). `robots.txt` disallows only `/api/`.
+- `noindex`: saved, stats, settings, memorize, auth, offline, the menu page, empty adhkar categories; search is `noindex, follow`.
+- JSON-LD: `WebSite` + `SearchAction` (`/search?q=`) on the home page, `BreadcrumbList` on surah and ayah pages.
+- Open Graph images with `next/og`: a default image and one per surah (Arabic name, transliteration, meaning, revelation, ayah count). Satori joins Arabic letters correctly but lays words out left to right, so Arabic lines are drawn word by word in a reversed row; only UI strings and surah names are drawn, never Quran text.
+
+## D-072 — Privacy page, reflow and wording
+**Status:** Accepted. `/privacy` (Arabic and English, linked from About and the menu) explains in plain language what is stored on the device, what an account stores and syncs, location handling, outside services (audio CDN, Resend, Vercel, Neon) and the user's controls. No contact address is given yet (owner decision). Accessibility additions: no horizontal scrolling at 320 px and at 200 % text size on 20 key pages (e2e), long words wrap, form fields shrink, the bottom navigation and reader toolbar wrap. The English bottom-bar label "More" is now "Menu".

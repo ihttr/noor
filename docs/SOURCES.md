@@ -2,7 +2,7 @@
 
 Human-readable companion to [`data/sources/SOURCES.lock.json`](../data/sources/SOURCES.lock.json) (machine-readable: URL, download date, options, license quote, SHA-256 of every file). The app's future "About & Sources" page is generated from this document.
 
-**Status (2026-10-04, Phase 2):** approved and imported — the Tanzil Uthmani text (tatweel=true), the Tanzil Simple Clean text (search index only) and Tanzil `quran-data.xml`. Everything else is still a _candidate_. Approvals are recorded per file in `sources.manifest.json` and `SOURCES.lock.json` (`approval` field, DECISIONS D-032); import scripts read only approved files and verify their SHA-256 first.
+**Status (2026-10-09):** approved and imported — the Tanzil Uthmani text (tatweel=true), the Tanzil Simple Clean text (search index only), Tanzil `quran-data.xml`, the Quran fonts (Amiri Quran, Scheherazade New), Tafsir al-Muyassar (QuranEnc), the Islamic Network audio list (streaming) and the Seen-Arabic morning/evening adhkar. **No translation is approved** (D-020). Everything else is still a _candidate_. Approvals are recorded per file in `sources.manifest.json` and `SOURCES.lock.json` (`approval` field, DECISIONS D-032); import scripts read only approved files and verify their SHA-256 first.
 
 ## How the files are obtained
 
@@ -100,7 +100,7 @@ Encoding comparison (Tanzil Uthmani vs the KFGQPC-encoded text served by QuranEn
 
 `data/sources/fonts/ibm-plex-sans-arabic/` (Regular, Medium, SemiBold, Bold; v1.1.0 release, font version 1.005). SIL OFL 1.1 with Reserved Font Name "Plex": SPEC 11 asks for a subset UI font, and a subset is a Modified Version under the OFL, so the subset must be renamed internally (or pick a UI font without RFN).
 
-## 6. Translations (needs owner approval)
+## 6. Translations (needs owner approval) — **none approved on 2026-10-09**; the import pipeline is ready (D-052)
 
 | ID | Translator | Distribution | Version | License / terms | Notes |
 |---|---|---|---|---|---|
@@ -123,7 +123,7 @@ Tanzil translation terms (quoted, `translations/tanzil/TERMS.trans.txt`):
 
 All 8 files contain 6,236 ayahs (verified).
 
-## 7. Tafsir — Tafsir al-Muyassar (King Fahd Complex)
+## 7. Tafsir — Tafsir al-Muyassar (King Fahd Complex) — **APPROVED: QuranEnc distribution** (2026-10-09, D-049)
 
 | Distribution | File | Version | Terms |
 |---|---|---|---|
@@ -132,7 +132,7 @@ All 8 files contain 6,236 ayahs (verified).
 
 Always display as: «التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف» + the distribution. QuranEnc term 3 (version number) cannot be met literally for this item because no version is published; record the download date instead.
 
-## 8. Audio (needs owner approval) — metadata and terms only, no audio downloaded
+## 8. Audio — **APPROVED: Islamic Network CDN, streaming only** (2026-10-09, D-021) — metadata and terms only, no audio downloaded
 
 | Source | What | Terms found (quoted) | Notes |
 |---|---|---|---|
@@ -141,7 +141,7 @@ Always display as: «التفسير الميسر — مجمع الملك فهد 
 | mp3quran.net API v3 | Surah-level MP3 + ayah timings for some reciters | None found on the API page | Per-ayah playback would need timing-based seeking. |
 | Quran Foundation (Quran.com) API | Chapter/verse audio via OAuth2 API | Developer Terms: e.g. not to "Cache or store QF Content longer than 1 week unless … Content Sync APIs"; selling/redistributing content needs a signed commercial license | Requires a developer account + client credentials; only an excerpt of the terms is stored. |
 
-## 9. Adhkar — Hisn al-Muslim (needs owner approval)
+## 9. Adhkar — Hisn al-Muslim — **APPROVED: Seen-Arabic, morning and evening only** (2026-10-09, D-019); other categories have no approved source
 
 SPEC 2.7 requires, per dhikr: text, count, reference (book + number) and grading if available. **No candidate meets this fully with a clear license.**
 

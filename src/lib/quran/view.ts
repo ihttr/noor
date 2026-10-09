@@ -1,7 +1,7 @@
 // Server-side helpers that prepare a reader view (surah, juz, Mushaf page) for rendering.
 import { getMeta, getSurah } from './content.ts';
 import { slugOf } from './slugs.ts';
-import { ayahKey } from './structure.ts';
+import { AYAH_COUNT, ayahIndex, ayahKey } from './structure.ts';
 import type { AyahWithRef, QuranMeta } from './types.ts';
 
 export interface ReaderView {
@@ -11,6 +11,8 @@ export interface ReaderView {
   quarterStarts: Map<string, number>;
   surahNames: Record<number, string>;
   surahSlugs: Record<number, string>;
+  /** Number of ayahs on each Madani page in this view (the whole page, also its part outside the view). */
+  pageAyahCounts: Record<number, number>;
   initialInfo: { surah: number; page: number; juz: number; hizb: number };
 }
 
@@ -31,8 +33,15 @@ export async function readerView(ayahs: AyahWithRef[], locale: string): Promise<
     quarterStarts: new Map(meta.hizbQuarters.map((q) => [ayahKey(q.start), q.number])),
     surahNames: Object.fromEntries(surahNumbers.map((n) => [n, surahDisplayName(meta, n, locale)])),
     surahSlugs: Object.fromEntries(surahNumbers.map((n) => [n, slugOf(n)])),
+    pageAyahCounts: Object.fromEntries([...new Set(ayahs.map((a) => a.page))].map((p) => [p, pageAyahCount(meta, p)])),
     initialInfo: { surah: first.surah, page: first.page, juz: first.juz, hizb: first.hizb },
   };
+}
+
+export function pageAyahCount(meta: QuranMeta, page: number): number {
+  const start = ayahIndex(meta, meta.pages[page - 1]!.start);
+  const next = meta.pages[page];
+  return (next ? ayahIndex(meta, next.start) : AYAH_COUNT) - start;
 }
 
 /** All ayahs of a surah with their keys. */

@@ -1,17 +1,22 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { pageMetadata } from '@/lib/seo';
 import type { ReactNode } from 'react';
 import { navItem, type NavKey } from './shell/nav-items';
 
 type PageKey = Exclude<NavKey, 'home'> | 'home';
 
+/** Title, description, canonical URL, hreflang and Open Graph of a top-level page (SPEC §9). */
 export async function placeholderMetadata(key: PageKey, { noindex = false } = {}): Promise<Metadata> {
-  const t = await getTranslations('Pages');
-  return {
-    title: key === 'home' ? { absolute: t('home.title') } : t(`${key}.title`),
+  const [t, locale] = await Promise.all([getTranslations('Pages'), getLocale()]);
+  return pageMetadata({
+    title: t(`${key}.title`),
     description: t(`${key}.description`),
-    ...(noindex ? { robots: { index: false, follow: false } } : {}),
-  };
+    path: navItem(key).href,
+    locale,
+    noindex,
+    absoluteTitle: key === 'home',
+  });
 }
 
 /** Phase 1 placeholder: title, purpose and the phase that will build the page. No content. */

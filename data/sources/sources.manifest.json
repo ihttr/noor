@@ -546,7 +546,16 @@
           "path": "tafsir/quranenc/arabic_moyassar.sqlite",
           "url": "https://quranenc.com/downloads/sqlite/arabic_moyassar.sqlite",
           "expect": "sqlite",
-          "role": "data"
+          "role": "data",
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "tafsir-muyassar",
+            "decisions": [
+              "D-049"
+            ],
+            "note": "Tafsir al-Muyassar, QuranEnc distribution. Shown verbatim with author and source; QuranEnc publishes no version for it, so the download date and SHA-256 identify it."
+          }
         }
       ]
     },
@@ -597,7 +606,17 @@
           "url": "https://api.alquran.cloud/v1/edition?format=audio&type=versebyverse",
           "expect": "json",
           "role": "reference",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "audio-islamic-network",
+            "decisions": [
+              "D-021",
+              "D-053"
+            ],
+            "note": "Reciter list for streaming per-ayah MP3 from cdn.islamic.network. Stream only, no offline download, reciter and Islamic Network credited."
+          }
         },
         {
           "path": "audio/islamic-network/TERMS.txt",
@@ -729,13 +748,33 @@
           "path": "adhkar/seen-arabic/ar.json",
           "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/ar.json",
           "expect": "json",
-          "role": "data"
+          "role": "data",
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "adhkar-seen-arabic-ar",
+            "decisions": [
+              "D-019",
+              "D-055"
+            ],
+            "note": "Morning and evening adhkar only (Arabic text, count, source reference and grading). Other categories stay empty until a source is approved."
+          }
         },
         {
           "path": "adhkar/seen-arabic/en.json",
           "url": "https://raw.githubusercontent.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB/29d7623fede52eca835a789025dfda866e8cfe44/en.json",
           "expect": "json",
-          "role": "data"
+          "role": "data",
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "adhkar-seen-arabic-en",
+            "decisions": [
+              "D-019",
+              "D-055"
+            ],
+            "note": "English rendering shipped with the same dataset; shown labelled as the dataset's translation."
+          }
         },
         {
           "path": "adhkar/seen-arabic/LICENSE",
@@ -867,7 +906,16 @@
           "url": "https://download.geonames.org/export/dump/cities15000.zip",
           "expect": "zip",
           "role": "data",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "SPEC §3 default source (owner specification); used from Phase 8",
+            "use": "cities-geonames",
+            "decisions": [
+              "D-057"
+            ],
+            "note": "Bundled city list for offline, private city search (prayer times, qibla). Attribution: City data © GeoNames, CC BY 4.0."
+          }
         },
         {
           "path": "cities/geonames/countryInfo.txt",
@@ -881,7 +929,16 @@
           "url": "https://download.geonames.org/export/dump/admin1CodesASCII.txt",
           "expect": "text",
           "role": "data",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "SPEC §3 default source (owner specification); used from Phase 8",
+            "use": "cities-geonames-admin1",
+            "decisions": [
+              "D-057"
+            ],
+            "note": "Region names to tell same-named cities apart."
+          }
         },
         {
           "path": "cities/geonames/timeZones.txt",

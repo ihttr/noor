@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "muyassar",
+  "surah": 111,
+  "source": {
+    "name": {
+      "ar": "التفسير الميسر",
+      "en": "Tafsir al-Muyassar"
+    },
+    "author": {
+      "ar": "مجمع الملك فهد لطباعة المصحف الشريف",
+      "en": "King Fahd Glorious Quran Printing Complex"
+    },
+    "distribution": {
+      "name": "QuranEnc.com",
+      "url": "https://quranenc.com/ar/browse/arabic_moyassar"
+    },
+    "version": null,
+    "downloadedAt": "2026-10-04",
+    "license": {
+      "name": "QuranEnc re-publishing terms",
+      "url": "https://quranenc.com/en/home/api/"
+    },
+    "files": [
+      {"path":"data/sources/tafsir/quranenc/arabic_moyassar.sqlite","sha256":"eb384e586487b089b826375d3f705d07e775e0019325da405e0337a9f6b3da04"}
+    ]
+  },
+  "entries": [
+    {"ayah":1,"text":"خسرت يدا أبي لهب وشقي بإيذائه رسول الله محمدا صلى الله عليه وسلم، وقد تحقق خسران أبي لهب."},
+    {"ayah":2,"text":"ما أغنى عنه ماله وولده، فلن يَرُدَّا عنه شيئًا من عذاب الله إذا نزل به."},
+    {"ayah":3,"text":"سيدخل نارًا جهنم ذات اللَّهب المشتعل، هو وامرأته التي كانت تحمل الشوك، فتطرحه في طريق النبي صلى الله عليه وسلم؛ لأذيَّته."},
+    {"ayah":4,"text":"سيدخل نارًا متأججة، هو وامرأته التي كانت تحمل الشوك، فتطرحه في طريق النبي صلى الله عليه وسلم؛ لأذيَّته."},
+    {"ayah":5,"text":"في عنقها حبل محكم الفَتْلِ مِن ليف شديد خشن، تُرْفَع به في نار جهنم، ثم تُرْمى إلى أسفلها."}
+  ]
+}

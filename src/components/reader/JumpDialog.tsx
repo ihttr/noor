@@ -3,19 +3,10 @@
 import { useTranslations } from 'next-intl';
 import { useState, type FormEvent, type ReactNode, type Ref } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
-import { jumpStart, readerHref, type JumpTarget, type NavData, type ReaderMode } from '@/lib/quran/nav';
+import { loadNav } from '@/lib/quran/client';
+import { jumpStart, readerHref, type JumpTarget, type ReaderMode } from '@/lib/quran/nav';
 import { parseAyahRef } from '@/lib/quran/refs';
 import { toAsciiDigits } from '@/lib/quran/normalize';
-
-// Navigation data (names + structure, no Quran text) is fetched once, when first needed.
-let navPromise: Promise<NavData> | undefined;
-export function loadNav(): Promise<NavData> {
-  navPromise ??= fetch('/api/quran/nav').then((r) => {
-    if (!r.ok) throw new Error(`nav ${r.status}`);
-    return r.json() as Promise<NavData>;
-  });
-  return navPromise;
-}
 
 const LIMITS = { page: 604, juz: 30, hizb: 60, quarter: 240 } as const;
 type NumberKind = keyof typeof LIMITS;

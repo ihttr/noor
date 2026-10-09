@@ -24,6 +24,8 @@ interface Props {
   surahHeading: 'h1' | 'h2';
   /** Show page dividers (reading mode); the Mushaf view frames a single page itself. */
   pageMarkers: boolean;
+  /** Ayahs on each whole Madani page (for "page read", SPEC §7.7). */
+  pageAyahCounts: Readonly<Record<number, number>>;
 }
 
 function groupByPage(ayahs: AyahWithRef[]): AyahWithRef[][] {
@@ -56,7 +58,7 @@ export async function SurahHeader({ surah, as: Heading }: { surah: SurahMeta; as
   );
 }
 
-export async function QuranFlow({ ayahs, surahs, bismillah, quarterStarts, surahHeading, pageMarkers }: Props) {
+export async function QuranFlow({ ayahs, surahs, bismillah, quarterStarts, surahHeading, pageMarkers, pageAyahCounts }: Props) {
   const locale = await getLocale();
   const t = await getTranslations('Reader');
   const tq = await getTranslations('Quran');
@@ -81,9 +83,11 @@ export async function QuranFlow({ ayahs, surahs, bismillah, quarterStarts, surah
           <span className="ayah-text" data-ayah-text={a.key}>
             {a.text}
           </span>
+          {/* Opens the ayah menu (SPEC §7.5, D-045); keyboard users press Enter on the ayah. */}
           <span
             className="ayah-end"
-            role="img"
+            role="button"
+            aria-haspopup="dialog"
             lang={locale}
             aria-label={t('ayahLabel', { n: a.number })}
             style={{ counterSet: `ayah ${a.number}` }}
@@ -121,6 +125,7 @@ export async function QuranFlow({ ayahs, surahs, bismillah, quarterStarts, surah
             data-hizb={head.hizb}
             data-quarter={head.hizbQuarter}
             data-surah={head.surah}
+            data-page-ayahs={pageAyahCounts[head.page]}
             aria-label={tq('page', { n: head.page })}
           >
             {pageMarkers && (

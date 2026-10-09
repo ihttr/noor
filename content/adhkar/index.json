@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Morning-And-Evening-Adhkar-DB (Seen-Arabic)",
+    "url": "https://github.com/Seen-Arabic/Morning-And-Evening-Adhkar-DB",
+    "version": "commit 29d7623fede52eca835a789025dfda866e8cfe44 (2026-02-14)",
+    "license": "MIT (compilation)",
+    "attribution": "Seen-Arabic, Morning-And-Evening-Adhkar-DB (MIT)",
+    "files": [
+      {"path":"data/sources/adhkar/seen-arabic/ar.json","sha256":"9e0dd6a10d26ddc0e2b36b94098c287644996c7f81b707f8ad24f1ce40b8c821"},
+      {"path":"data/sources/adhkar/seen-arabic/en.json","sha256":"eec053c4138bed6f3ec7dc3c0e06e926a935dca24663788e5b97a0bfb5f71896"}
+    ]
+  },
+  "categories": [
+    {"id":"morning","count":26},
+    {"id":"evening","count":24},
+    {"id":"after-prayer","count":0},
+    {"id":"before-sleep","count":0},
+    {"id":"upon-waking","count":0},
+    {"id":"entering-mosque","count":0},
+    {"id":"leaving-mosque","count":0},
+    {"id":"before-eating","count":0},
+    {"id":"after-eating","count":0},
+    {"id":"travel","count":0},
+    {"id":"distress","count":0},
+    {"id":"general","count":0}
+  ]
+}

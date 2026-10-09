@@ -1,0 +1,11 @@
+{
+  "description": "Quranic passages inside the approved adhkar dataset (D-019, D-055). The dataset spells them in a non-Uthmani way, so the app shows these ayahs from the approved Tanzil text instead. 'brackets': the passage is the part of the dataset text between U+FD3F and U+FD3E; 'whole': the whole dataset text is the passage. scripts/import-adhkar.ts checks every mapping against the Quran text (normalized word overlap) and stops if it does not match.",
+  "reviewedBy": "generated 2026-10-09 from the dataset's own references (e.g. [البقرة 285 - 286]) and checked automatically; awaiting owner review",
+  "items": {
+    "2": { "split": "brackets", "ayahs": { "surah": 2, "from": 255, "to": 255 } },
+    "3": { "split": "brackets", "ayahs": { "surah": 2, "from": 285, "to": 286 } },
+    "4": { "split": "whole", "ayahs": { "surah": 112, "from": 1, "to": 4 } },
+    "5": { "split": "whole", "ayahs": { "surah": 113, "from": 1, "to": 5 } },
+    "6": { "split": "whole", "ayahs": { "surah": 114, "from": 1, "to": 6 } }
+  }
+}

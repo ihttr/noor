@@ -9,7 +9,17 @@ export const LOCK_PATH = 'data/sources/SOURCES.lock.json';
 
 /** Uses of the Quran content pipeline (text, search text, structure metadata). */
 export type QuranUse = 'quran-display' | 'quran-search' | 'quran-metadata';
-export type ApprovedUse = QuranUse | 'quran-font-amiri' | 'quran-font-scheherazade';
+export type ApprovedUse =
+  | QuranUse
+  | 'quran-font-amiri'
+  | 'quran-font-scheherazade'
+  | 'tafsir-muyassar'
+  | 'audio-islamic-network'
+  | 'adhkar-seen-arabic-ar'
+  | 'adhkar-seen-arabic-en'
+  | 'cities-geonames'
+  | 'cities-geonames-admin1'
+  | `translation:${string}`;
 
 export interface LockApproval {
   use: string;
@@ -24,6 +34,7 @@ export interface LockFileEntry {
   url: string;
   sha256: string;
   bytes: number;
+  downloadedAt?: string;
   approval?: LockApproval;
 }
 

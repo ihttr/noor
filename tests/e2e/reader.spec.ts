@@ -33,13 +33,14 @@ test.describe('surah index (SPEC §7.2)', () => {
 });
 
 test.describe('reader navigation', () => {
-  test('numeric and ayah URLs redirect to the slug URL', async ({ request }) => {
+  test('numeric URLs redirect (308) to the slug URLs; ayah URLs are their own pages (Phase 12)', async ({ request }) => {
     const surah = await request.get('/quran/2', { maxRedirects: 0 });
     expect(surah.status()).toBe(308);
     expect(surah.headers().location).toMatch(new RegExp(`/quran/${slug(2)}$`));
     const ayah = await request.get('/en/quran/2/255', { maxRedirects: 0 });
-    expect([307, 308]).toContain(ayah.status());
-    expect(ayah.headers().location).toMatch(new RegExp(`/en/quran/${slug(2)}#ayah-2-255$`));
+    expect(ayah.status()).toBe(308);
+    expect(ayah.headers().location).toMatch(new RegExp(`/en/quran/${slug(2)}/255$`));
+    expect((await request.get(`/en/quran/${slug(2)}/255`, { maxRedirects: 0 })).status()).toBe(200);
   });
 
   test('arrow keys move by ayah (RTL: ← forward), PageDown by page', async ({ page }) => {
@@ -60,6 +61,8 @@ test.describe('reader navigation', () => {
 
   test('Mushaf: PageDown/PageUp and swipes turn pages like a right-to-left book', async ({ page }) => {
     await page.goto('/mushaf/page/5');
+    // Interactive once hydrated: the toolbar bookmark is enabled by an effect.
+    await expect(page.getByRole('button', { name: /^حفظ صفحة (5|٥)$/ })).toBeEnabled();
     await page.keyboard.press('PageDown');
     await expect(page).toHaveURL(/\/mushaf\/page\/6$/);
     await page.keyboard.press('PageUp');
@@ -163,5 +166,23 @@ test.describe('performance budget (SPEC §11)', () => {
     test.info().annotations.push({ type: 'reader-js', description: `gzip-9: ${gzipped} B, as served by next start: ${served} B` });
     console.log(`reader JS: gzip-9 ${gzipped} B (${(gzipped / 1024).toFixed(1)} KiB); served ${served} B`);
     expect(gzipped).toBeLessThanOrEqual(150 * 1024);
+
+    // Reported, not limited (D-048): chunks loaded after first paint — the local store (Dexie),
+    // tracking and the ayah menu load when the reader is idle.
+    await page.locator('#ayah-2-1 .ayah-end').click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect.poll(() => page.evaluate(async () => (await indexedDB.databases()).some((d) => d.name === 'noor'))).toBe(true);
+    const lazy = await page.evaluate(
+      (own) =>
+        performance
+          .getEntriesByType('resource')
+          .filter((e) => (e as PerformanceResourceTiming).initiatorType === 'script' && e.name.endsWith('.js') && !own.includes(e.name))
+          .map((e) => e.name),
+      urls
+    );
+    let lazyGzipped = 0;
+    for (const url of new Set(lazy)) lazyGzipped += gzipSync(await (await page.request.get(url)).body(), { level: 9 }).length;
+    test.info().annotations.push({ type: 'reader-js-lazy', description: `gzip-9: ${lazyGzipped} B in ${new Set(lazy).size} chunks` });
+    console.log(`reader JS loaded later: gzip-9 ${lazyGzipped} B (${(lazyGzipped / 1024).toFixed(1)} KiB) in ${new Set(lazy).size} chunks`);
   });
 });

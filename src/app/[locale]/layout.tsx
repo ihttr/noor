@@ -3,10 +3,13 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { AppShell } from '@/components/shell/AppShell';
-import { ThemeSync } from '@/components/theme/ThemeSync';
+import { SyncManager } from '@/components/account/SyncManager';
+import { PreferencesSync } from '@/components/prefs/PreferencesSync';
+import { ServiceWorker } from '@/components/pwa/ServiceWorker';
 import { directions, routing } from '@/i18n/routing';
 import { uiFont } from '@/lib/fonts';
 import { readerBootScript } from '@/lib/reader/settings';
+import { SITE_URL } from '@/lib/seo';
 import { themeBootScript } from '@/lib/theme';
 import '../globals.css';
 
@@ -17,10 +20,12 @@ export function generateStaticParams() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Shell');
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+    metadataBase: new URL(SITE_URL),
     title: { default: t('brand'), template: `%s · ${t('brand')}` },
     description: t('tagline'),
     applicationName: t('brand'),
+    // Installed on iOS ("Add to Home Screen", SPEC §7.20, §14).
+    appleWebApp: { capable: true, title: t('brand'), statusBarStyle: 'default' },
   };
 }
 
@@ -46,7 +51,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
       </head>
       <body>
         <NextIntlClientProvider>
-          <ThemeSync />
+          <PreferencesSync />
+          <SyncManager />
+          <ServiceWorker />
           <AppShell>{children}</AppShell>
         </NextIntlClientProvider>
       </body>

@@ -4,7 +4,7 @@ import { NavIcon } from '@/components/shell/nav-icons';
 import { NAV_ITEMS } from '@/components/shell/nav-items';
 import { Link } from '@/i18n/navigation';
 
-export const generateMetadata = () => placeholderMetadata('more');
+export const generateMetadata = () => placeholderMetadata('more', { noindex: true });
 
 /** Mobile hub for the sections that do not fit in the bottom bar. */
 export default async function MorePage() {

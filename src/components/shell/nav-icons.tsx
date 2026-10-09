@@ -2,6 +2,7 @@ import {
   BookHeart,
   BookOpen,
   Bookmark,
+  BrainCircuit,
   CalendarDays,
   ChartColumn,
   CircleDot,
@@ -10,7 +11,9 @@ import {
   Ellipsis,
   House,
   Info,
+  Search,
   Settings,
+  ShieldCheck,
   type LucideIcon,
 } from 'lucide-react';
 import type { NavKey } from './nav-items';
@@ -26,9 +29,12 @@ const ICONS: Record<NavKey, LucideIcon> = {
   qibla: Compass,
   calendar: CalendarDays,
   saved: Bookmark,
+  memorize: BrainCircuit,
+  search: Search,
   stats: ChartColumn,
   settings: Settings,
   about: Info,
+  privacy: ShieldCheck,
   more: Ellipsis,
 };
 

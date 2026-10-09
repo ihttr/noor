@@ -5,7 +5,8 @@
     "skipToContent": "Skip to main content",
     "primaryNav": "Main navigation",
     "switchLanguageLabel": "Switch to Arabic",
-    "otherLanguageName": "العربية"
+    "otherLanguageName": "العربية",
+    "search": "Search…"
   },
   "Nav": {
     "home": "Home",
@@ -18,8 +19,11 @@
     "saved": "Saved",
     "stats": "Statistics",
     "settings": "Settings",
-    "more": "More",
-    "about": "About & sources"
+    "more": "Menu",
+    "about": "About & sources",
+    "search": "Search",
+    "memorize": "Memorize",
+    "privacy": "Privacy"
   },
   "Pages": {
     "home": {
@@ -56,19 +60,31 @@
     },
     "stats": {
       "title": "Statistics",
-      "description": "Pages read, consistency and your personal statistics."
+      "description": "Your daily goal, consistency and personal statistics."
     },
     "settings": {
       "title": "Settings",
-      "description": "Appearance, language and reading settings."
+      "description": "Account and sync, offline use, appearance and language."
     },
     "more": {
-      "title": "More",
+      "title": "Menu",
       "description": "The rest of the app."
     },
     "about": {
       "title": "About & sources",
       "description": "Sources of the Quran text, fonts and licenses."
+    },
+    "search": {
+      "title": "Search the Quran",
+      "description": "Search the Quran text by word or phrase."
+    },
+    "memorize": {
+      "title": "Memorization",
+      "description": "Choose a surah and a range, practice with hidden words, and review what is due."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "What Noor stores, where, and who can see it — in plain language."
     }
   },
   "Placeholder": {
@@ -77,6 +93,7 @@
     "shellNotice": "Project shell (Phase {phase, number}): pages are placeholders with no content yet."
   },
   "Settings": {
+    "account": "Account & sync",
     "appearance": "Appearance",
     "theme": "Theme",
     "themes": {
@@ -90,7 +107,8 @@
     "languages": {
       "ar": "العربية",
       "en": "English"
-    }
+    },
+    "offline": "Offline"
   },
   "NotFound": {
     "title": "Page not found",
@@ -120,7 +138,13 @@
     "hizbQuarter": "Hizb quarter {n, number}",
     "page": "Page {n, number}",
     "startsAt": "from {surah} — ayah {ayah, number}",
-    "pageCount": "{count, number} pages"
+    "pageCount": "{count, number} pages",
+    "surahDescription": "Surah {name} — {revelation}, {count, plural, one {# ayah} other {# ayahs}}. The Arabic text in the Uthmani script.",
+    "juzDescription": "The Arabic text of Juz {n, number} of the Quran in the Uthmani script.",
+    "pageDescription": "Page {n, number} of the Mushaf: {surahs}.",
+    "ayahTitle": "{surah} {number}:{ayah}",
+    "ayahDescription": "Ayah {ayah, number} of Surah {surah} in the Uthmani script, with Tafsir al-Muyassar (Arabic).",
+    "ayahShort": "Ayah {n, number}"
   },
   "Reader": {
     "toolbarLabel": "Reading tools",
@@ -179,7 +203,14 @@
     "loading": "Loading…",
     "surahNav": "Surah navigation",
     "pageNav": "Page navigation",
-    "juzNav": "Juz navigation"
+    "juzNav": "Juz navigation",
+    "savePage": "Save page {n, number}",
+    "saveSurah": "Save surah {name}",
+    "translation": "Translation",
+    "noTranslation": "No translation is approved yet. It will appear here once its source is approved.",
+    "translationOff": "No translation",
+    "translationReadingOnly": "The translation appears under each ayah in reading mode.",
+    "translationCredit": "Translation: {translator} — {source}"
   },
   "About": {
     "intro": "Noor is a free, Quran-first app. This page names the source and license of every piece of content.",
@@ -191,7 +222,645 @@
     "mushafBody": "Page boundaries follow the Madani Mushaf (604 pages); the line layout inside a page is approximate and may differ from the printed Mushaf.",
     "fonts": "Fonts",
     "fontsBody": "Amiri Quran and Scheherazade New for the Quran text, IBM Plex Sans Arabic for the interface — all under the SIL Open Font License 1.1.",
-    "notYet": "No translations, tafsir or adhkar yet; they will be added once their sources are approved.",
-    "notice": "Tanzil notice"
+    "notYet": "No translation is approved yet. A translation is added once its source is approved.",
+    "notice": "Tanzil notice",
+    "tafsir": "Tafsir",
+    "tafsirBody": "“{name}” — {author}, copied verbatim, without changes, from {distribution} under the {license}. Every text is shown with the tafsir’s name, author and source.",
+    "tafsirVersion": "Version: {version}.",
+    "tafsirNoVersion": "The source publishes no version number for this tafsir; the copy used is the one of {date, date, long}, identified by its SHA-256 fingerprint.",
+    "audio": "Recitations",
+    "audioBody": "Recitations are streamed ayah by ayah directly from the {name} network — not copied to our servers and not downloaded for offline use. Its terms license them for streaming and personal and educational use; copyright stays with the reciters or their estates.",
+    "adhkar": "Adhkar",
+    "adhkarBody": "Morning and evening adhkar come from the Seen-Arabic dataset (MIT license): text, count and reference as given. Ayahs inside adhkar are shown from the Uthmani Mushaf text (Tanzil) with their reference. The “virtue” texts are not shown because they have no reference of their own. The other categories wait for an approved source.",
+    "prayer": "Prayer times, qibla and calendar",
+    "prayerBody": "Prayer times and the qibla direction are calculated on your device with adhan-js (MIT license); the Hijri calendar is the Umm al-Qura calendar of your browser. Your location is never sent to a server.",
+    "cities": "The bundled city list is GeoNames cities15000 under CC BY 4.0; city names are shown as in GeoNames (Latin script).",
+    "privacyLink": "Privacy: what is stored and where"
+  },
+  "Home": {
+    "continueReading": "Continue reading",
+    "startReading": "Start reading",
+    "noPosition": "No reading position is saved on this device yet. Your place is saved automatically while you read.",
+    "startWithFatiha": "Start with Al-Fatihah",
+    "surahIndex": "Surah index",
+    "surahTitle": "Surah {name}",
+    "position": "Ayah {ayah, number} · Page {page, number}",
+    "readingMode": "Reading mode",
+    "mushafMode": "Mushaf mode",
+    "storeError": "This browser's local storage is not available, so your last reading position cannot be shown.",
+    "retry": "Try again",
+    "dailyProgress": "Today’s progress",
+    "statistics": "Statistics",
+    "pagesOfGoal": "{n, number} of {goal, plural, one {# page} other {# pages}}",
+    "goalReached": "You reached today’s goal. May Allah bless you.",
+    "pagesToday": "{n, plural, =0 {No pages read yet today} one {# page read today} other {# pages read today}}",
+    "setGoal": "Set a daily goal",
+    "quickAccess": "Quick access",
+    "quick": {
+      "quran": "Quran",
+      "adhkar": "Adhkar",
+      "search": "Search",
+      "saved": "Saved",
+      "lastRead": "Last read",
+      "listen": "Listen"
+    }
+  },
+  "AyahMenu": {
+    "title": "{surah} · Ayah {ayah}",
+    "close": "Close",
+    "actions": "Ayah actions",
+    "copy": "Copy",
+    "share": "Share",
+    "save": "Save",
+    "saved": "Saved",
+    "addNote": "Note",
+    "editNote": "Note",
+    "play": "Play from here",
+    "translation": "Translation",
+    "tafsir": "Tafsir",
+    "soon": "Coming soon",
+    "copied": "Ayah copied with its reference.",
+    "linkCopied": "Ayah copied with its reference and link.",
+    "copyFailed": "Could not copy.",
+    "savedMessage": "Ayah saved.",
+    "removed": "Ayah removed from Saved.",
+    "collectionChanged": "Collection changed.",
+    "noteSaved": "Note saved.",
+    "noteDeleted": "Note deleted.",
+    "noteLabel": "Your note",
+    "storeError": "This browser's local storage is not available."
+  },
+  "Notes": {
+    "label": "Private note",
+    "privateHint": "Your notes are private and stored on this device.",
+    "save": "Save note",
+    "cancel": "Cancel",
+    "delete": "Delete note",
+    "saveError": "Could not save the note."
+  },
+  "Saved": {
+    "searchLabel": "Search saved items",
+    "searchPlaceholder": "Surah name, ayah number, note text…",
+    "typeFilter": "Type",
+    "filters": {
+      "ALL": "All",
+      "AYAH": "Ayahs",
+      "PAGE": "Pages",
+      "SURAH": "Surahs",
+      "DHIKR": "Adhkar",
+      "TAFSIR": "Tafsir",
+      "NOTES": "With a note"
+    },
+    "types": {
+      "AYAH": "Ayah",
+      "PAGE": "Page",
+      "SURAH": "Surah",
+      "DHIKR": "Dhikr",
+      "TAFSIR": "Tafsir"
+    },
+    "collectionFilter": "Filter by collection",
+    "allCollections": "All collections",
+    "noCollection": "No collection",
+    "manageCollections": "Manage collections",
+    "collection": "Collection",
+    "newCollectionOption": "+ New collection…",
+    "newCollectionName": "New collection name",
+    "add": "Add",
+    "collections": "Collections",
+    "close": "Close",
+    "noCollections": "No collections yet. You can create collections such as “Important” or “To memorize”.",
+    "renameCollection": "Name of collection “{name}”",
+    "moveUp": "Move “{name}” up",
+    "moveDown": "Move “{name}” down",
+    "deleteCollection": "Delete collection “{name}”",
+    "deleteConfirm": "Delete the collection “{name}”? Its items stay saved without a collection.",
+    "ayahTitle": "{surah} · Ayah {ayah, number}",
+    "pageTitle": "Page {n, number} · {surah}",
+    "surahTitle": "Surah {name}",
+    "notSaved": "Note only",
+    "noteLabel": "Your note",
+    "addNote": "Add note",
+    "editNote": "Edit note",
+    "save": "Save",
+    "remove": "Remove from Saved",
+    "savedMessage": "Saved.",
+    "removed": "“{title}” removed from Saved.",
+    "undo": "Undo",
+    "restored": "Restored to Saved.",
+    "collectionChanged": "Collection changed.",
+    "noteSaved": "Note saved.",
+    "noteDeleted": "Note deleted.",
+    "textUnavailable": "The ayah text could not be loaded. Check your connection.",
+    "showMore": "Show the whole ayah",
+    "showLess": "Show less",
+    "loading": "Loading saved items",
+    "listLabel": "Saved items",
+    "empty": "Nothing saved yet.",
+    "emptyHint": "While reading, press an ayah's number to save it or write a note on it, or use the save button in the reading toolbar to save the page or surah.",
+    "openQuran": "Open the Quran",
+    "noMatches": "No matching items.",
+    "clearFilters": "Clear filters",
+    "storeError": "This browser's local storage is not available.",
+    "retry": "Try again",
+    "tafsirTitle": "Tafsir of {surah} · Ayah {ayah, number}",
+    "dhikrTitle": "{category} · dhikr {n, number}"
+  },
+  "Search": {
+    "title": "Search the Quran",
+    "description": "Search by word or phrase in Arabic. Diacritics, hamza forms and taa marbuta do not matter.",
+    "label": "Word or phrase (Arabic)",
+    "placeholder": "e.g. الحي القيوم",
+    "hint": "Search ignores diacritics and tatweel, and treats أ إ آ ٱ as ا, ة as ه and ى as ي.",
+    "mode": "Matching",
+    "modes": {
+      "phrase": "Whole-word phrase",
+      "partial": "Parts of words",
+      "all": "All words, any order"
+    },
+    "surahFilter": "Surah",
+    "allSurahs": "All surahs",
+    "juzFilter": "Juz",
+    "allJuz": "All juz",
+    "juz": "Juz {n, number}",
+    "loading": "Searching…",
+    "count": "{count, plural, =0 {No results} one {# result} other {# results}}",
+    "results": "Search results",
+    "hitTitle": "{surah} · Ayah {ayah, number}",
+    "more": "Show more ({shown, number} of {total, number})",
+    "idle": "Type a word or phrase to search the Quran text.",
+    "none": "No matching ayahs. Try “Parts of words” or remove a filter.",
+    "error": "The search index could not be loaded. Check your connection.",
+    "retry": "Try again"
+  },
+  "Palette": {
+    "title": "Command palette",
+    "label": "Type a surah, ayah, page or command",
+    "placeholder": "Surah, 2:255, page 50, juz 30, settings…",
+    "results": "Results",
+    "empty": "No results.",
+    "hint": "↑ ↓ to move · Enter to open · Esc to close",
+    "groups": {
+      "go": "Go to",
+      "surahs": "Surahs",
+      "saved": "Saved and notes",
+      "sections": "Sections",
+      "settings": "Settings",
+      "search": "Search",
+      "adhkar": "Adhkar"
+    },
+    "ayah": "{surah} · Ayah {ayah, number}",
+    "tafsir": "Tafsir of {surah} · Ayah {ayah, number}",
+    "page": "Page {n, number}",
+    "juz": "Juz {n, number}",
+    "surah": "Surah {name}",
+    "theme": "Theme: {name}",
+    "themes": {
+      "system": "Automatic",
+      "light": "Light",
+      "dark": "Dark",
+      "sepia": "Sepia",
+      "black": "Black"
+    },
+    "language": "Language: {name}",
+    "languages": {
+      "ar": "العربية",
+      "en": "English"
+    },
+    "searchQuran": "Search the Quran for “{query}”"
+  },
+  "Tafsir": {
+    "title": "Tafsir of {surah} · Ayah {ayah}",
+    "close": "Close",
+    "choose": "Tafsir",
+    "attribution": "{name} — {author}",
+    "version": "version {version}",
+    "downloaded": "copy of {date, date, long}",
+    "previousAyah": "Previous ayah",
+    "nextAyah": "Next ayah",
+    "save": "Save tafsir",
+    "saved": "Saved",
+    "loadError": "The tafsir could not be loaded. Check your connection.",
+    "retry": "Try again"
+  },
+  "Audio": {
+    "player": "Recitation player",
+    "play": "Play",
+    "pause": "Pause",
+    "previousAyah": "Previous ayah",
+    "nextAyah": "Next ayah",
+    "options": "Recitation options",
+    "stop": "Stop and close the player",
+    "nowPlaying": "{surah} · Ayah {ayah}",
+    "loading": "Loading…",
+    "error": "The recitation could not be played. Check your connection.",
+    "ended": "End of the surah",
+    "reciter": "Reciter",
+    "speed": "Speed",
+    "speedValue": "{speed}×",
+    "repeatAyah": "Repeat each ayah",
+    "times": "{count, plural, one {Once} other {# times}}",
+    "forever": "Until stopped",
+    "repeat": "Repeat",
+    "repeatModes": {
+      "off": "No repeat",
+      "surah": "Repeat the surah",
+      "range": "Repeat a range"
+    },
+    "range": "Range",
+    "from": "From ayah",
+    "to": "To ayah",
+    "autoScroll": "Scroll the reader with the recitation",
+    "source": "Recitations are streamed from {name}; the reciters hold the copyright.",
+    "terms": "Terms"
+  },
+  "Adhkar": {
+    "categories": {
+      "morning": "Morning adhkar",
+      "evening": "Evening adhkar",
+      "after-prayer": "After prayer",
+      "before-sleep": "Before sleep",
+      "upon-waking": "Upon waking",
+      "entering-mosque": "Entering the mosque",
+      "leaving-mosque": "Leaving the mosque",
+      "before-eating": "Before eating",
+      "after-eating": "After eating",
+      "travel": "Travel",
+      "distress": "Distress and anxiety",
+      "general": "General dhikr"
+    },
+    "allCategories": "All adhkar",
+    "categoryDescription": "{name} with a counter and a reference for every dhikr.",
+    "count": "{count, plural, one {# dhikr} other {# adhkar}}",
+    "progress": "{done} of {total} complete",
+    "allDone": "All adhkar of this category are complete today.",
+    "completedToday": "Completed today",
+    "autoAdvance": "Move to the next dhikr automatically",
+    "dhikrTitle": "Dhikr {n}",
+    "reference": "Reference",
+    "ayah": "Ayah {n, number}",
+    "decrement": "Minus one",
+    "reset": "Reset the count",
+    "done": "Done",
+    "save": "Save dhikr",
+    "saved": "Dhikr saved",
+    "note": "Note on this dhikr",
+    "noteLabel": "Your note",
+    "storeError": "This browser’s local storage is not available, so counts will not be saved.",
+    "noSource": "There is no approved adhkar collection with text, count and reference for this category yet. It will be added once a source is approved.",
+    "noSourceShort": "No approved source yet",
+    "coverage": "Morning and evening adhkar come from the Seen-Arabic dataset (MIT license) with text, count and reference. The other categories wait for an approved source.",
+    "sourceNote": "Adhkar texts and references from {name}.",
+    "quranNote": "Ayahs inside adhkar are shown from the Uthmani Mushaf text (Tanzil).",
+    "today": "Today’s adhkar",
+    "tap": "Count",
+    "suggestedNow": "its time now"
+  },
+  "Tasbih": {
+    "phrase": "Phrase",
+    "custom": "Custom",
+    "customPhrase": "Your own phrase",
+    "target": "Target",
+    "customTarget": "Target count",
+    "noTarget": "No target",
+    "counter": "Counter",
+    "increment": "Plus one",
+    "decrement": "Minus one",
+    "reset": "Reset the count",
+    "resetConfirm": "Reset the count to zero? The current session stays in the history.",
+    "done": "Done",
+    "vibrate": "Vibrate on each count",
+    "sound": "Soft sound on each count",
+    "history": "Recent sessions",
+    "noHistory": "No sessions yet.",
+    "current": "Current",
+    "storeError": "This browser’s local storage is not available, so the count will not be saved."
+  },
+  "Place": {
+    "search": "Search for a city",
+    "placeholder": "e.g. Riyadh or الرياض",
+    "loadingCities": "Loading the city list…",
+    "citiesError": "The city list could not be loaded. Check your connection.",
+    "privacy": "The search runs on your device only; the city name is never sent to a server.",
+    "results": "Matching cities",
+    "useMyLocation": "Use my location",
+    "locating": "Finding your location…",
+    "denied": "Location access was not allowed or failed. Choose a city from the list.",
+    "myLocation": "My current location"
+  },
+  "Prayer": {
+    "choosePlace": "Choose your city",
+    "changePlace": "Change city",
+    "cancel": "Cancel",
+    "nextPrayer": "Next prayer",
+    "remaining": "{time} left",
+    "tableCaption": "Prayer times in {place}",
+    "names": {
+      "fajr": "Fajr",
+      "sunrise": "Sunrise",
+      "dhuhr": "Dhuhr",
+      "asr": "Asr",
+      "maghrib": "Maghrib",
+      "isha": "Isha"
+    },
+    "settings": "Calculation",
+    "method": "Method",
+    "methodAuto": "Automatic by country ({method})",
+    "methods": {
+      "MuslimWorldLeague": "Muslim World League",
+      "UmmAlQura": "Umm al-Qura (Makkah)",
+      "Egyptian": "Egyptian General Authority of Survey",
+      "Karachi": "University of Islamic Sciences, Karachi",
+      "Dubai": "Dubai",
+      "Kuwait": "Kuwait",
+      "Qatar": "Qatar",
+      "Singapore": "Singapore",
+      "Turkey": "Diyanet (Türkiye)",
+      "Tehran": "Institute of Geophysics, Tehran",
+      "NorthAmerica": "ISNA (North America)",
+      "MoonsightingCommittee": "Moonsighting Committee"
+    },
+    "madhab": "Asr time",
+    "madhabs": {
+      "shafi": "Standard (shadow = 1×)",
+      "hanafi": "Hanafi (shadow = 2×)"
+    },
+    "highLatitude": "High-latitude rule",
+    "highLatitudes": {
+      "auto": "Automatic",
+      "middle": "Middle of the night",
+      "seventh": "Seventh of the night",
+      "twilight": "Twilight angle"
+    },
+    "adjustments": "Manual adjustments (minutes)",
+    "adjustmentFor": "{prayer} adjustment in minutes",
+    "methodNote": "Times are calculated astronomically with adhan-js and may differ slightly from your country’s official timetable; use the manual adjustments if needed. The Umm al-Qura method puts Isha 90 minutes after Maghrib all year.",
+    "privacy": "Your location stays on this device and is not synced."
+  },
+  "Qibla": {
+    "choosePlace": "Choose your city to find the qibla",
+    "changePlace": "Change city",
+    "bearingTitle": "Qibla direction",
+    "bearing": "{degrees}° from true north",
+    "distance": "Distance to Makkah: {km} km",
+    "dialStatic": "Qibla arrow at {degrees} degrees from north",
+    "dialLive": "Live compass: the arrow points to the qibla",
+    "staticHint": "Point the top of the circle north; the arrow then shows the qibla.",
+    "liveHint": "Hold the device flat; the arrow points to the qibla.",
+    "startCompass": "Start the compass",
+    "unavailable": "No compass is available on this device or browser. Use the bearing in degrees with another compass.",
+    "denied": "Access to the orientation sensor was not allowed.",
+    "trueNorth": "The bearing in degrees is calculated from true (geographic) north with adhan-js.",
+    "declination": "The live compass uses a magnetic sensor that measures magnetic north; the difference from true north (magnetic declination) can be several degrees in some places, and it is not corrected.",
+    "calibrate": "If the direction is unstable, move the device in a figure 8 to calibrate the sensor, away from metal and electronics.",
+    "accuracy": "Phone compasses have limited accuracy; when it matters, check the direction with another reliable means."
+  },
+  "Calendar": {
+    "today": "Today",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "gridCaption": "Days of the Hijri month with Gregorian dates",
+    "events": "Upcoming dates",
+    "eventNames": {
+      "new-year": "Islamic New Year (1 Muharram)",
+      "ashura": "Day of Ashura (10 Muharram)",
+      "ramadan": "Start of Ramadan",
+      "eid-fitr": "Eid al-Fitr",
+      "arafah": "Day of Arafah",
+      "eid-adha": "Eid al-Adha"
+    },
+    "expected": "Expected date — depends on moon sighting",
+    "adjustment": "Hijri date adjustment (days)",
+    "adjustmentHint": "Based on the Umm al-Qura calendar; adjust it if your country’s announcement differs."
+  },
+  "Account": {
+    "email": "Email",
+    "password": "Password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordHint": "At least eight characters.",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signOut": "Sign out",
+    "haveAccount": "Have an account? Sign in",
+    "noAccount": "No account? Create one",
+    "forgot": "Forgot your password?",
+    "optional": "An account is optional: the app works fully without one. An account only syncs your data between your devices.",
+    "disabled": "Accounts are not available on this server. Your data is saved on this device.",
+    "guest": "You are using Noor without an account; your data is saved on this device. When you create an account or sign in, this device’s data is uploaded and merged into the account.",
+    "resetSent": "If this email is registered, you will receive a message with a link to reset your password.",
+    "resetDone": "Your password was changed. Sign in with the new password.",
+    "signedInAs": "Account",
+    "signedOut": "You are signed out.",
+    "deleted": "The account and all its data were deleted from the server.",
+    "exportAccount": "Export account data (JSON)",
+    "exportDevice": "Export this device’s data (JSON)",
+    "placeShare": "Sync the prayer-times location",
+    "placeShareHint": "By default the location stays on this device. When on, it is saved in your account and used on your other devices.",
+    "placeMissing": "Choose your city on the prayer times page first.",
+    "signOutWipe": "Also remove the account’s data from this device (shared device)",
+    "titles": {
+      "sign-in": "Sign in",
+      "sign-up": "Create account",
+      "forgot-password": "Forgot password",
+      "reset-password": "Set a new password"
+    },
+    "intros": {
+      "sign-in": "Sign in to sync saved items, notes and your reading position between your devices.",
+      "sign-up": "Create an account to sync your data between your devices. This device’s data is added to the account.",
+      "forgot-password": "Enter your email and we will send you a link to set a new password.",
+      "reset-password": "Choose a new password for your account."
+    },
+    "submit": {
+      "sign-in": "Sign in",
+      "sign-up": "Create account",
+      "forgot-password": "Send link",
+      "reset-password": "Save password"
+    },
+    "sync": {
+      "title": "Sync",
+      "now": "Sync now",
+      "syncing": "Syncing…",
+      "error": "Sync failed. It will be retried automatically.",
+      "offline": "Offline. Sync will run when you are back online.",
+      "never": "Not synced yet",
+      "last": "Last synced: {when}"
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "Permanently deletes the account and all its data from the server. This cannot be undone. Export your data first if you want a copy.",
+      "wipe": "Also erase the data on this device",
+      "confirm": "I understand that deletion is permanent",
+      "submit": "Delete my account permanently"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "credentials": "Incorrect email or password.",
+      "exists": "An account with this email exists. Sign in instead.",
+      "mismatch": "The passwords do not match.",
+      "token": "This reset link is invalid or has expired. Ask for a new one.",
+      "password": "Incorrect password."
+    }
+  },
+  "Memorize": {
+    "storeError": "This browser’s local storage is not available.",
+    "retry": "Try again",
+    "dueTitle": "Due today",
+    "dueCount": "{n, plural, one {# ayah is} other {# ayahs are}} due for review.",
+    "startReview": "Start review",
+    "nothingDue": "Nothing is due today.",
+    "empty": "No ayahs in memorization yet. Choose a surah and a range below.",
+    "addTitle": "Add ayahs to memorize",
+    "surah": "Surah",
+    "from": "From ayah",
+    "to": "To ayah",
+    "add": "Add",
+    "ayahCount": "This surah has {n, number} ayahs",
+    "added": "Added {n, plural, one {# ayah} other {# ayahs}} of {surah}.",
+    "alreadyAdded": "These ayahs are already in memorization.",
+    "removeConfirm": "Remove {surah} and its progress from memorization?",
+    "removed": "{surah} was removed from memorization.",
+    "progressTitle": "Your progress",
+    "surahProgress": "{surah} — memorized {done, number}/{total, number} ayahs ({percent, number, ::percent})",
+    "memorizedOf": "Memorized of {surah}",
+    "inPractice": "In memorization: ayahs {ayahs} ({n, plural, one {# ayah} other {# ayahs}})",
+    "dueHere": "due today: {n, number}",
+    "practice": "Practice",
+    "remove": "Remove",
+    "rule": "An ayah counts as memorized after 3 successful reviews in a row with an interval of at least 7 days. Reviewing before the due date does not move the schedule forward.",
+    "sessionDone": "Session complete",
+    "sessionSummary": "You reviewed {n, plural, one {# ayah} other {# ayahs}}.",
+    "back": "Back",
+    "ayahOf": "{surah} · Ayah {ayah, number}",
+    "progress": "{n, number} of {total, number}",
+    "endSession": "End session",
+    "maskLabel": "Practice mask",
+    "masks": {
+      "none": "Show all",
+      "all": "Hide all",
+      "first": "First letter",
+      "alternate": "Every other word"
+    },
+    "maskNote": "The mask only changes what is displayed; the stored ayah text is untouched. Pause marks are not words and are never hidden.",
+    "revealWord": "Reveal word {n, number}",
+    "loadError": "The ayah text could not be loaded. Check your connection and try again.",
+    "showAnswer": "Show answer",
+    "assess": "How well did you know it?",
+    "grades": {
+      "again": "Didn’t know",
+      "hard": "Hesitant",
+      "good": "Knew it"
+    }
+  },
+  "Stats": {
+    "storeError": "This browser’s local storage is not available.",
+    "retry": "Try again",
+    "goalTitle": "Daily goal",
+    "noGoal": "No goal",
+    "pages": "{n, plural, one {# page} other {# pages}}",
+    "customGoal": "Other number of pages",
+    "setGoal": "Save goal",
+    "goalNow": "Your goal: {n, plural, one {# page} other {# pages}} a day",
+    "goalNone": "No daily goal",
+    "juzHint": "1 Juz ≈ {n, number} pages",
+    "progressTitle": "Progress",
+    "periods": {
+      "today": "Today",
+      "week": "This week",
+      "month": "This month"
+    },
+    "goalProgress": "Progress towards the goal: {period}",
+    "ofGoal": "of {n, plural, one {# page} other {# pages}}",
+    "daysRead": "Read on {n, plural, one {# day} other {# days}} of {total, number}",
+    "consistencyTitle": "Consistency",
+    "streak": "Days in a row: {n, number}",
+    "streakStart": "Read a page today to start a streak.",
+    "showStreak": "Show days in a row",
+    "weekTitle": "Last 7 days",
+    "heatTitle": "Reading map",
+    "heatSummary": "Read on {n, plural, one {# day} other {# days}} in the last {weeks, number} weeks",
+    "less": "Less",
+    "more": "More",
+    "totalsTitle": "Statistics",
+    "duration": "{h, number} h {m, number} min",
+    "totals": {
+      "pagesRead": "Pages read",
+      "readingTime": "Reading time",
+      "surahsCompleted": "Surahs completed",
+      "itemsSaved": "Items saved",
+      "adhkarCompleted": "Adhkar sessions completed",
+      "ayahsMemorized": "Ayahs memorized"
+    },
+    "private": "These statistics are for you alone, for self-improvement. There are no comparisons with anyone."
+  },
+  "Offline": {
+    "banner": "No internet connection. Your saved items and recent reading are still available.",
+    "pageTitle": "You are offline",
+    "pageBody": "This page is not saved on this device yet. Still available offline: your saved items and notes, the surahs you opened or downloaded, and the adhkar.",
+    "retry": "Try again",
+    "links": {
+      "home": "Home",
+      "saved": "Saved",
+      "quran": "Surah index",
+      "adhkar": "Adhkar"
+    },
+    "checking": "Checking offline support…",
+    "workerActive": "Offline use is active in this browser.",
+    "workerInactive": "Offline use is not active in this browser yet (it turns on by itself after the first visit).",
+    "availableTitle": "Available offline",
+    "available": {
+      "pages": "The main pages: Home, Surah index, Adhkar, Search, Saved, Memorization, Settings.",
+      "device": "Everything stored on this device: saved items, notes, reading position and progress.",
+      "recent": "The pages you opened most recently (up to 60).",
+      "adhkar": "Morning and evening adhkar, and the search index."
+    },
+    "quranTitle": "Quran text offline",
+    "quranBody": "Download all 114 surahs to read offline in the current interface language: about {size} to download and about {stored} on this device.",
+    "download": "Download Quran text for offline",
+    "update": "Update the downloaded copy",
+    "cancel": "Cancel",
+    "remove": "Remove the downloaded copy",
+    "notDownloaded": "The Quran text is not downloaded yet.",
+    "downloading": "Downloading… {done, number} of {total, number} surahs · {size}",
+    "downloaded": "Downloaded: {n, number} surahs · {size} · {date, date, medium}",
+    "downloadFailed": "The download failed. Check your connection and try again.",
+    "storage": "Used on this device: {used} of {quota} available",
+    "iosNote": "On iPhone and iPad, add Noor to the Home Screen so the browser keeps this copy; Safari may delete data of sites that are not installed."
+  },
+  "Ayah": {
+    "breadcrumb": "Breadcrumb",
+    "previous": "Previous ayah",
+    "next": "Next ayah",
+    "readInSurah": "Read it in the surah",
+    "openMushaf": "In the Mushaf (page {n, number})",
+    "ayahNav": "Ayah navigation"
+  },
+  "Privacy": {
+    "intro": "Noor works fully without an account. Everything you save stays in this browser on this device, and nothing is sent to a server unless you create an optional account to sync.",
+    "sections": {
+      "device": {
+        "title": "What is stored on your device",
+        "body": "Your reading position, saved items, notes and collections, reading activity (pages read per day and reading time), adhkar and tasbih counts, memorization progress, your daily goal and your settings. They live in the browser’s storage (IndexedDB); you can export or delete them at any time."
+      },
+      "account": {
+        "title": "The optional account",
+        "body": "If you create an account we store your email address and a hash of your password (we never know the password itself), and sync between your devices: saved items, notes, reading position and activity, goals, settings, adhkar and memorization progress, and tasbih history. Notes are private and never shown to anyone. We do not ask for your name or anything else."
+      },
+      "location": {
+        "title": "Location",
+        "body": "Your location or city is used to compute prayer times and the Qibla on your device only. Location permission is asked only when you tap “Use my location”. It is sent to our server only if you turn on “Sync the prayer-times location” in Settings."
+      },
+      "thirdParties": {
+        "title": "Outside services",
+        "body": "Audio recitations stream directly from the Islamic Network CDN (cdn.islamic.network), which receives your IP address and the requested file. Password-reset emails are sent through Resend to your address. The site is hosted on Vercel and the account database on Neon."
+      },
+      "none": {
+        "title": "What we do not do",
+        "body": "No ads, no third-party trackers or analytics, no selling or sharing of data. Fonts and content are served from our own site."
+      },
+      "control": {
+        "title": "Your control",
+        "body": "In Settings you can export this device’s data or your account’s data as JSON, permanently delete your account and all its data from the server, remove the data from the device when signing out, and remove the downloaded Quran copy. You can also clear the site’s data in your browser settings."
+      }
+    }
   }
 }

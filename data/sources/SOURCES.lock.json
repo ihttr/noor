@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/sources/fetch-sources.mjs",
-  "generatedAt": "2026-10-05T13:49:17.315Z",
+  "generatedAt": "2026-10-09T07:51:59.387Z",
   "note": "Content sources. A file may be imported only if it carries an `approval` from the project owner; source status: candidate | partially-approved | approved. Paths are relative to the repository root. downloadedAt = first download of this exact content (same SHA-256); verifiedAt = last re-download.",
   "sources": [
     {
@@ -1034,7 +1034,7 @@
       },
       "attribution": "التفسير الميسر — مجمع الملك فهد لطباعة المصحف الشريف، عبر QuranEnc.com",
       "notes": "The QuranEnc XML endpoint returns nothing for arabic_moyassar; the SQLite file (table translations: id, sura, aya, translation, footnotes; 6,236 rows) is the downloadable form. It carries no version metadata.",
-      "status": "candidate",
+      "status": "approved",
       "files": [
         {
           "path": "data/sources/tafsir/quranenc/arabic_moyassar.sqlite",
@@ -1047,7 +1047,16 @@
           "contentType": "application/octet-stream",
           "httpLastModified": "Tue, 25 Mar 2025 14:27:05 GMT",
           "etag": "\"67e2bd39-290000\"",
-          "volatile": false
+          "volatile": false,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "tafsir-muyassar",
+            "decisions": [
+              "D-049"
+            ],
+            "note": "Tafsir al-Muyassar, QuranEnc distribution. Shown verbatim with author and source; QuranEnc publishes no version for it, so the download date and SHA-256 identify it."
+          }
         }
       ]
     },
@@ -2337,7 +2346,7 @@
       },
       "attribution": "Recitation audio: Islamic Network / alquran.cloud — reciter named",
       "notes": "Per-ayah MP3 at https://cdn.islamic.network/quran/audio/{bitrate}/{edition}/{globalAyahNumber}.mp3. No CORS header observed (fine for <audio>, not for Web Audio). Only the edition list and terms are stored; no audio is downloaded.",
-      "status": "candidate",
+      "status": "approved",
       "files": [
         {
           "path": "data/sources/audio/islamic-network/editions.versebyverse.json",
@@ -2349,7 +2358,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "application/json",
           "etag": "4e59cb0777f2ae0fb36f5ec9ac6c4aa4-gzip\"",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "audio-islamic-network",
+            "decisions": [
+              "D-021",
+              "D-053"
+            ],
+            "note": "Reciter list for streaming per-ayah MP3 from cdn.islamic.network. Stream only, no offline download, reciter and Islamic Network credited."
+          }
         },
         {
           "path": "data/sources/audio/islamic-network/TERMS.txt",
@@ -2504,7 +2523,7 @@
       },
       "attribution": "Seen-Arabic Morning-And-Evening-Adhkar-DB (MIT); content from Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani",
       "notes": "Morning/Evening only. Fields: content, count, fadl, source (reference + grading as free text). README credits hisnmuslim.com, sunnah.com and the book. The MIT license covers the compilation; it cannot grant rights in the underlying book text or in the hisnmuslim.com/sunnah.com translations it credits.",
-      "status": "candidate",
+      "status": "approved",
       "files": [
         {
           "path": "data/sources/adhkar/seen-arabic/ar.json",
@@ -2516,7 +2535,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "text/plain; charset=utf-8",
           "etag": "W/\"102a5deaaf837192644d1a8f2429b2f971ad7a817a774dfb646054218423e3bc\"",
-          "volatile": false
+          "volatile": false,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "adhkar-seen-arabic-ar",
+            "decisions": [
+              "D-019",
+              "D-055"
+            ],
+            "note": "Morning and evening adhkar only (Arabic text, count, source reference and grading). Other categories stay empty until a source is approved."
+          }
         },
         {
           "path": "data/sources/adhkar/seen-arabic/en.json",
@@ -2528,7 +2557,17 @@
           "verifiedAt": "2026-10-04T15:42:23.280Z",
           "contentType": "text/plain; charset=utf-8",
           "etag": "W/\"cbe1c4e23b45ee121a4ac33d54baeb0e11298754d99b8bd0599d6cf16e971176\"",
-          "volatile": false
+          "volatile": false,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "project owner (chat, 2026-10-09, before Phases 5–7)",
+            "use": "adhkar-seen-arabic-en",
+            "decisions": [
+              "D-019",
+              "D-055"
+            ],
+            "note": "English rendering shipped with the same dataset; shown labelled as the dataset's translation."
+          }
         },
         {
           "path": "data/sources/adhkar/seen-arabic/LICENSE",
@@ -5870,7 +5909,7 @@
       },
       "attribution": "City data © GeoNames (https://www.geonames.org), CC BY 4.0",
       "notes": "alternateNamesV2.zip (~205 MB, language-tagged Arabic names) is NOT downloaded pending the owner's decision. Dumps are regenerated daily, so hashes change between runs.",
-      "status": "candidate",
+      "status": "partially-approved",
       "files": [
         {
           "path": "data/sources/cities/geonames/cities15000.zip",
@@ -5883,7 +5922,16 @@
           "contentType": "application/zip",
           "httpLastModified": "Sun, 04 Oct 2026 03:33:31 GMT",
           "etag": "\"334530-65cfb6df9b2e6\"",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "SPEC §3 default source (owner specification); used from Phase 8",
+            "use": "cities-geonames",
+            "decisions": [
+              "D-057"
+            ],
+            "note": "Bundled city list for offline, private city search (prayer times, qibla). Attribution: City data © GeoNames, CC BY 4.0."
+          }
         },
         {
           "path": "data/sources/cities/geonames/countryInfo.txt",
@@ -5909,7 +5957,16 @@
           "contentType": "text/plain; charset=utf-8",
           "httpLastModified": "Sun, 04 Oct 2026 03:33:31 GMT",
           "etag": "\"2501f-65cfb6df9b6ce\"",
-          "volatile": true
+          "volatile": true,
+          "approval": {
+            "approvedAt": "2026-10-09",
+            "approvedBy": "SPEC §3 default source (owner specification); used from Phase 8",
+            "use": "cities-geonames-admin1",
+            "decisions": [
+              "D-057"
+            ],
+            "note": "Region names to tell same-named cities apart."
+          }
         },
         {
           "path": "data/sources/cities/geonames/timeZones.txt",

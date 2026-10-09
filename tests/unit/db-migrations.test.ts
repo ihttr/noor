@@ -1,7 +1,9 @@
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
+import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 // Applies the committed Prisma migrations to PGlite (real Postgres compiled to WASM), so the
@@ -62,15 +64,34 @@ describe('Prisma migrations', () => {
     expect(rows[0]?.n).toBe(0);
   });
 
-  it('match the Prisma schema (initial migration == empty → schema diff)', () => {
-    // Valid while there is a single migration; later phases switch to a shadow-database check.
-    expect(migrationDirs).toHaveLength(1);
-    const cli = path.join(process.cwd(), 'node_modules', 'prisma', 'build', 'index.js');
-    const expected = execFileSync(
-      process.execPath,
-      [cli, 'migrate', 'diff', '--from-empty', '--to-schema', 'prisma/schema.prisma', '--script'],
-      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }
-    );
-    expect(readMigration(migrationDirs[0]!).trim()).toBe(expected.trim());
+  it('bump the sync sequence on every insert and update (D-016, D-061)', async () => {
+    await db.exec(`INSERT INTO "user" (id, name, email) VALUES ('u2', '', 'b@example.com')`);
+    const seq = async () => (await db.query<{ s: string }>(`SELECT "serverSeq"::text AS s FROM collection WHERE id = '00000000-0000-4000-8000-000000000001'`)).rows[0]!.s;
+    await db.exec(`INSERT INTO collection (id, "userId", name, "updatedAt") VALUES ('00000000-0000-4000-8000-000000000001', 'u2', 'a', now())`);
+    const first = BigInt(await seq());
+    await db.exec(`UPDATE collection SET name = 'b' WHERE id = '00000000-0000-4000-8000-000000000001'`);
+    expect(BigInt(await seq())).toBeGreaterThan(first);
   });
+
+  it('match the Prisma schema exactly (prisma migrate diff against the migrated database)', async () => {
+    // PGlite is served over the Postgres wire protocol so the Prisma CLI can introspect it.
+    const server = new PGLiteSocketServer({ db, port: 0, host: '127.0.0.1' });
+    await server.start();
+    try {
+      const url = `postgresql://postgres:postgres@${server.getServerConn()}/postgres?sslmode=disable`;
+      const cli = path.join(process.cwd(), 'node_modules', 'prisma', 'build', 'index.js');
+      const result = await promisify(execFile)(
+        process.execPath,
+        [cli, 'migrate', 'diff', '--from-config-datasource', '--to-schema', 'prisma/schema.prisma', '--exit-code'],
+        { env: { ...process.env, DATABASE_URL: url, DIRECT_URL: url } }
+      ).then(
+        (r) => ({ code: 0, out: r.stdout }),
+        (e: { code?: number; stdout?: string }) => ({ code: e.code ?? 1, out: e.stdout ?? '' })
+      );
+      expect(result.out).toContain('No difference detected');
+      expect(result.code).toBe(0);
+    } finally {
+      await server.stop();
+    }
+  }, 120_000);
 });
