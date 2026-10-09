@@ -52,6 +52,8 @@ test.describe('Quran search (SPEC §7.8)', () => {
 test.describe('command palette (Ctrl/Cmd + K)', () => {
   test('jumps to an ayah, a page and a surah; runs settings; Escape closes', async ({ page }) => {
     await page.goto('/');
+    // The shortcut works once the page is hydrated (the daily-progress card renders after that).
+    await expect(page.getByTestId('daily-progress')).toBeVisible();
     await page.keyboard.press('Control+k');
     const palette = page.getByRole('dialog', { name: 'لوحة الأوامر' });
     const input = palette.getByRole('combobox');
@@ -85,6 +87,8 @@ test.describe('command palette (Ctrl/Cmd + K)', () => {
 
   test('the header search button opens it; a query offers a full Quran search', async ({ page }) => {
     await page.goto('/en/quran');
+    // Hydrated (React has attached to the page), so the click opens the palette instead of navigating.
+    await page.waitForFunction(() => Object.keys(document.body).some((k) => k.startsWith('__react')));
     await page.getByRole('link', { name: /^Search/ }).filter({ visible: true }).first().click();
     const input = page.getByRole('dialog', { name: 'Command palette' }).getByRole('combobox');
     await input.fill('mercy');
@@ -94,6 +98,7 @@ test.describe('command palette (Ctrl/Cmd + K)', () => {
 
   test('axe: open palette', async ({ page }) => {
     await page.goto('/');
+    await expect(page.getByTestId('daily-progress')).toBeVisible(); // hydrated: the shortcut is active
     await page.keyboard.press('Control+k');
     await page.getByRole('combobox').fill('الفاتحة');
     await expect(page.getByRole('option').first()).toBeVisible();

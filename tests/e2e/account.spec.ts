@@ -245,7 +245,9 @@ test.describe('account pages', () => {
 
   test('the device export works for guests', async ({ page }) => {
     await page.goto('/en/mushaf/page/12');
-    await page.getByRole('button', { name: 'Save page 12' }).click();
+    const bookmark = page.getByRole('button', { name: 'Save page 12' });
+    await bookmark.click();
+    await expect(bookmark).toHaveAttribute('aria-pressed', 'true'); // saved before leaving the page
     await page.goto('/en/settings');
     const download = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Export this device’s data (JSON)' }).click();
