@@ -143,7 +143,10 @@ describe('sync (SPEC §5)', () => {
     await a.memorization.add(67, [1, 2]);
     await b.memorization.add(67, [2, 3]); // 67:2 added on both devices with different ids
     await a.goals.set(5, '2026-10-09');
-    await b.goals.set(10, '2026-10-09'); // later write wins
+    // Later write wins. Two writes in the same millisecond tie and are broken by content (merge.ts),
+    // which is deterministic but not "later" — so make the second write clearly later.
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    await b.goals.set(10, '2026-10-09');
     await sync(a);
     await sync(b);
     await sync(a);
